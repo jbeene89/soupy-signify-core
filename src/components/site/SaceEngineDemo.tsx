@@ -98,6 +98,25 @@ export function SaceEngineDemo() {
   const [tier, setTier] = useState<string>("TIER 0");
   const [interrupts, setInterrupts] = useState(0);
   const [observed, setObserved] = useState(0);
+  const [tierCrossings, setTierCrossings] = useState<Record<string, number>>({
+    "TIER 0": 0,
+    "TIER 1": 0,
+    "TIER 2": 0,
+    "TIER 3": 0,
+  });
+  const [tierPromotions, setTierPromotions] = useState<Record<string, number>>({
+    "TIER 0": 0,
+    "TIER 1": 0,
+    "TIER 2": 0,
+    "TIER 3": 0,
+  });
+  const [lastCrossing, setLastCrossing] = useState<{
+    from: string;
+    to: string;
+    direction: "up" | "down";
+    composite: number;
+  } | null>(null);
+  const prevTier = useRef<string>("TIER 0");
 
   const cursor = useRef(0);
   const lastTick = useRef<number>(Date.now());
