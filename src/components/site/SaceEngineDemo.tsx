@@ -193,12 +193,22 @@ export function SaceEngineDemo() {
             else if (comp < 0.75) t = "TIER 2";
             else t = "TIER 3";
             setTier(t);
+            // record tier crossings
+            if (t !== prevTier.current) {
+              const order = ["TIER 0", "TIER 1", "TIER 2", "TIER 3"];
+              const dir: "up" | "down" =
+                order.indexOf(t) > order.indexOf(prevTier.current) ? "up" : "down";
+              setLastCrossing({ from: prevTier.current, to: t, direction: dir, composite: Number(comp.toFixed(3)) });
+              setTierCrossings((prev) => ({ ...prev, [t]: (prev[t] ?? 0) + 1 }));
+              prevTier.current = t;
+            }
             return merged;
           });
 
           // 4. promote on threshold breach → cortex interrupt
           if (result.composite >= PROMOTE_THRESHOLD) {
             setInterrupts((n) => n + 1);
+            setTierPromotions((prev) => ({ ...prev, [result.tier]: (prev[result.tier] ?? 0) + 1 }));
             setMemories((prev) =>
               [
                 {
