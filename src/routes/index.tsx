@@ -270,9 +270,17 @@ function Index() {
               </div>
             </div>
 
-            <p className="mt-12 font-mono text-[12px] uppercase tracking-[0.14em] text-muted-foreground">
-              § FIRST BUILD-OFF DROPS [DATE TBD] · GET EARLY ACCESS BELOW TO BE NOTIFIED
-            </p>
+            <div className="mt-12 flex flex-col sm:flex-row gap-4 items-start">
+              <a
+                href="/build-off"
+                className="font-mono text-[12px] uppercase tracking-[0.14em] px-6 py-3 bg-cyan-accent text-primary-foreground hover:opacity-90 transition-opacity"
+              >
+                See Round 001 →
+              </a>
+              <p className="font-mono text-[12px] uppercase tracking-[0.14em] text-muted-foreground self-center">
+                § FIRST VERIFIED RUN DROPS [DATE TBD] · SAMPLE METHODOLOGY LIVE NOW
+              </p>
+            </div>
           </FadeIn>
         </section>
 
