@@ -3,6 +3,7 @@ import { Nav } from "@/components/site/Nav";
 import { SectionMarker } from "@/components/site/SectionMarker";
 import { FadeIn } from "@/components/site/FadeIn";
 import { EmailForm } from "@/components/site/EmailForm";
+import { SaceEngineDemo } from "@/components/site/SaceEngineDemo";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -145,35 +146,35 @@ function Index() {
                 <p className="font-body text-[18px] leading-[1.75] text-cream/90">
                   Soupy Together is built on SACE — the Significance-Aware Cognitive Engine, a published cognitive architecture that mirrors how biological nervous systems handle attention. Most processing happens in small specialized models near the sensor stream. The expensive frontier models are dormant by default and woken only on interrupt — when consensus across modalities indicates a significant event. The result is a system that handles 60% of requests for cents, escalates 30% to specialized partners, composes 9% across multiple tools, and only invokes a frontier model on the rare 1% that genuinely require it.
                 </p>
-                <a
-                  href="/architecture"
-                  className="inline-block mt-8 font-mono text-[12px] uppercase tracking-[0.14em] text-cyan-accent border-b border-cyan-accent/40 pb-1 hover:border-cyan-accent transition-colors"
-                >
-                  See the engine running →
-                </a>
+                <div className="mt-8 border border-rule">
+                  {tiers.map((t, i) => (
+                    <div
+                      key={t.tier}
+                      className={`p-5 grid grid-cols-[1fr_auto] gap-4 items-baseline ${
+                        i < tiers.length - 1 ? "border-b border-rule" : ""
+                      }`}
+                    >
+                      <div>
+                        <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
+                          {t.tier}
+                        </div>
+                        <div className="font-serif text-xl mt-1 text-cream">{t.title}</div>
+                      </div>
+                      <div className="font-serif text-3xl text-cream tabular-nums">
+                        {t.pct}
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
-              <div className="border border-rule">
-                {tiers.map((t, i) => (
-                  <div
-                    key={t.tier}
-                    className={`p-6 md:p-8 grid grid-cols-[1fr_auto] gap-4 items-baseline ${
-                      i < tiers.length - 1 ? "border-b border-rule" : ""
-                    }`}
-                  >
-                    <div>
-                      <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
-                        {t.tier}
-                      </div>
-                      <div className="font-serif text-2xl mt-1 text-cream">{t.title}</div>
-                      <div className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground mt-2">
-                        {t.desc}
-                      </div>
-                    </div>
-                    <div className="font-serif text-4xl md:text-5xl text-cream tabular-nums">
-                      {t.pct}
-                    </div>
-                  </div>
-                ))}
+              <div>
+                <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-cyan-accent mb-4">
+                  § LIVE ENGINE · DETERMINISTIC SIMULATION
+                </div>
+                <SaceEngineDemo />
+                <p className="mt-4 font-serif italic text-[14px] text-muted-foreground">
+                  Runs entirely in your browser. Same cortex synthesis logic published in the SACE paper. No LLM call, no telemetry — refresh to reset.
+                </p>
               </div>
             </div>
           </FadeIn>
