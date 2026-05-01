@@ -160,6 +160,24 @@ function BuildOffPage() {
 
         <hr className="border-rule my-20" />
 
+        {/* VISUALS */}
+        <FadeIn>
+          <SectionMarker>§ VISUALS</SectionMarker>
+          <h2 className="font-serif text-3xl md:text-4xl">The shape of the round.</h2>
+          <p className="font-serif italic text-lg text-cream/75 mt-2 max-w-3xl">
+            Three views of the same data: composite ranking, every normalized score
+            in one matrix, and the cost-vs-correctness frontier.
+          </p>
+
+          <div className="mt-10 space-y-8">
+            <CompositeBarChart runs={scored} />
+            <ScoreHeatmap runs={scored} />
+            <CostCorrectnessScatter runs={scored} />
+          </div>
+        </FadeIn>
+
+        <hr className="border-rule my-20" />
+
         {/* PER-TOOL CARDS */}
         <FadeIn>
           <SectionMarker>§ FULL RESULTS</SectionMarker>
