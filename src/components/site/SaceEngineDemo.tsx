@@ -233,6 +233,84 @@ export function SaceEngineDemo() {
   }, [running, current]);
 
   const promotionRate = observed > 0 ? (interrupts / observed) * 100 : 0;
+  const [exportState, setExportState] = useState<"idle" | "copied">("idle");
+
+  function buildReport() {
+    return {
+      schema: "sace.run-report/v1",
+      generatedAt: new Date().toISOString(),
+      scenario: {
+        id: current.id,
+        label: current.label,
+        blurb: current.blurb,
+        eventCount: current.events.length,
+        events: current.events,
+      },
+      engine: {
+        tickMs: TICK_MS,
+        ringCapacity: RING_CAPACITY,
+        promoteThreshold: PROMOTE_THRESHOLD,
+      },
+      telemetry: {
+        observed,
+        interrupts,
+        promotionRatePct: Number(promotionRate.toFixed(2)),
+        currentTier: tier,
+        composite,
+      },
+      tiers: (["TIER 0", "TIER 1", "TIER 2", "TIER 3"] as const).map((t) => ({
+        tier: t,
+        description: TIER_DESC[t],
+        entered: tierCrossings[t] ?? 0,
+        promoted: tierPromotions[t] ?? 0,
+      })),
+      lastCrossing,
+      chromatic: AXES.reduce<Record<string, number>>((acc, a) => {
+        acc[a] = Number(chromatic[a].w.toFixed(3));
+        return acc;
+      }, {}),
+      ring: ring.map((o) => ({
+        modality: o.modality,
+        payload: o.payload,
+        salience: o.salience,
+        capturedAt: new Date(o.capturedAt).toISOString(),
+        expired: o.expired,
+      })),
+      promotedMemories: memories.map((m) => ({
+        tier: m.tier,
+        summary: m.summary,
+        composite: m.composite,
+        sourceCount: m.sourceCount,
+        createdAt: new Date(m.createdAt).toISOString(),
+      })),
+    };
+  }
+
+  async function handleExport(mode: "copy" | "download") {
+    const report = buildReport();
+    const json = JSON.stringify(report, null, 2);
+    if (mode === "copy") {
+      try {
+        await navigator.clipboard.writeText(json);
+        setExportState("copied");
+        setTimeout(() => setExportState("idle"), 1600);
+      } catch {
+        // fallback: trigger download instead
+        mode = "download";
+      }
+    }
+    if (mode === "download") {
+      const blob = new Blob([json], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `sace-run-${current.id}-${Date.now()}.json`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+  }
 
   return (
     <div className="border border-rule">
