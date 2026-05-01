@@ -1,0 +1,1 @@
+DROP POLICY IF EXISTS "anyone can submit a signup" ON public.early_access_signups;
