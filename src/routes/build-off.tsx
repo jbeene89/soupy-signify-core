@@ -9,6 +9,12 @@ import {
   formatRaw,
   type ScoredRun,
 } from "@/data/build-off";
+import {
+  CompositeBarChart,
+  ScoreHeatmap,
+  RadarChart,
+  CostCorrectnessScatter,
+} from "@/components/site/BuildOffVisuals";
 
 export const Route = createFileRoute("/build-off")({
   head: () => ({
@@ -154,6 +160,24 @@ function BuildOffPage() {
 
         <hr className="border-rule my-20" />
 
+        {/* VISUALS */}
+        <FadeIn>
+          <SectionMarker>§ VISUALS</SectionMarker>
+          <h2 className="font-serif text-3xl md:text-4xl">The shape of the round.</h2>
+          <p className="font-serif italic text-lg text-cream/75 mt-2 max-w-3xl">
+            Three views of the same data: composite ranking, every normalized score
+            in one matrix, and the cost-vs-correctness frontier.
+          </p>
+
+          <div className="mt-10 space-y-8">
+            <CompositeBarChart runs={scored} />
+            <ScoreHeatmap runs={scored} />
+            <CostCorrectnessScatter runs={scored} />
+          </div>
+        </FadeIn>
+
+        <hr className="border-rule my-20" />
+
         {/* PER-TOOL CARDS */}
         <FadeIn>
           <SectionMarker>§ FULL RESULTS</SectionMarker>
@@ -251,30 +275,38 @@ function ToolCard({ run, rank }: { run: ScoredRun; rank: number }) {
         </div>
       </div>
 
-      <div className="mt-8 grid grid-cols-2 md:grid-cols-7 gap-4">
-        {MEASURES.map((m) => {
-          const score = run.scores[m.key];
-          const raw = run.raw[m.key];
-          return (
-            <div key={m.key} className="border-t border-rule pt-3">
-              <div className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground truncate">
-                {m.label}
+      <div className="mt-8 grid md:grid-cols-[1fr_240px] gap-8 items-start">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {MEASURES.map((m) => {
+            const score = run.scores[m.key];
+            const raw = run.raw[m.key];
+            return (
+              <div key={m.key} className="border-t border-rule pt-3">
+                <div className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground truncate">
+                  {m.label}
+                </div>
+                <div className="font-serif text-xl text-cream tabular-nums mt-1">
+                  {formatRaw(raw, m)}
+                </div>
+                <div className="mt-2 h-1 bg-cream/10 relative">
+                  <div
+                    className="absolute inset-y-0 left-0 bg-cyan-accent/70"
+                    style={{ width: `${score}%` }}
+                  />
+                </div>
+                <div className="font-mono text-[10px] text-muted-foreground tabular-nums mt-1">
+                  {score}/100
+                </div>
               </div>
-              <div className="font-serif text-xl text-cream tabular-nums mt-1">
-                {formatRaw(raw, m)}
-              </div>
-              <div className="mt-2 h-1 bg-cream/10 relative">
-                <div
-                  className="absolute inset-y-0 left-0 bg-cyan-accent/70"
-                  style={{ width: `${score}%` }}
-                />
-              </div>
-              <div className="font-mono text-[10px] text-muted-foreground tabular-nums mt-1">
-                {score}/100
-              </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
+        <div className="border-l border-rule pl-6 md:pl-8">
+          <div className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground mb-2">
+            PROFILE
+          </div>
+          <RadarChart run={run} highlight={isWinner} />
+        </div>
       </div>
     </article>
   );
