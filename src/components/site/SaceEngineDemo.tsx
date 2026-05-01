@@ -132,6 +132,10 @@ export function SaceEngineDemo() {
     setTier("TIER 0");
     setInterrupts(0);
     setObserved(0);
+    setTierCrossings({ "TIER 0": 0, "TIER 1": 0, "TIER 2": 0, "TIER 3": 0 });
+    setTierPromotions({ "TIER 0": 0, "TIER 1": 0, "TIER 2": 0, "TIER 3": 0 });
+    setLastCrossing(null);
+    prevTier.current = "TIER 0";
     cursor.current = 0;
     lastTick.current = Date.now();
   }, [scenario]);
