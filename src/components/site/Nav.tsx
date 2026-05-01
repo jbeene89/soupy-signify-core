@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 
 const links = [
-  { href: "#architecture", label: "Architecture" },
-  { href: "#pricing", label: "Pricing" },
-  { href: "#build-off", label: "Build-Off" },
-  { href: "#papers", label: "Papers" },
-  { href: "#access", label: "Get Access" },
+  { href: "/#architecture", label: "Architecture" },
+  { href: "/#pricing", label: "Pricing" },
+  { href: "/build-off", label: "Build-Off" },
+  { href: "/#papers", label: "Papers" },
+  { href: "/#access", label: "Get Access" },
 ];
 
 export function Nav() {
@@ -28,7 +28,7 @@ export function Nav() {
         aria-label="Primary"
         className="max-w-[1200px] mx-auto px-6 md:px-10 h-16 flex items-center justify-between"
       >
-        <a href="#top" className="font-serif text-base md:text-lg tracking-tight text-cream">
+        <a href="/" className="font-serif text-base md:text-lg tracking-tight text-cream">
           SOUPY <span className="text-muted-foreground">·</span> TOGETHER
         </a>
         <div className="hidden md:flex items-center gap-8">
@@ -42,14 +42,14 @@ export function Nav() {
             </a>
           ))}
           <a
-            href="#access"
+            href="/#access"
             className="font-mono text-[11px] uppercase tracking-[0.14em] px-4 py-2 bg-cyan-accent text-primary-foreground hover:opacity-90 transition-opacity"
           >
             Get Early Access
           </a>
         </div>
         <a
-          href="#access"
+          href="/#access"
           className="md:hidden font-mono text-[11px] uppercase tracking-[0.14em] px-3 py-2 bg-cyan-accent text-primary-foreground"
         >
           Access
