@@ -326,7 +326,111 @@ export function SaceEngineDemo() {
         </div>
       </div>
 
-      {/* RING BUFFER + MEMORIES */}
+      {/* TIER ESCALATION PANEL */}
+      <div className="p-5 border-b border-rule">
+        <div className="flex items-baseline justify-between mb-4 gap-3 flex-wrap">
+          <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
+            TIER ESCALATION · COMPOSITE GATES PROMOTION DEPTH
+          </div>
+          <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
+            {lastCrossing
+              ? `LAST CROSSING ${lastCrossing.from} ${lastCrossing.direction === "up" ? "→" : "←"} ${lastCrossing.to} @ ${lastCrossing.composite.toFixed(2)}`
+              : "§ AWAITING FIRST CROSSING"}
+          </div>
+        </div>
+
+        {/* gauge */}
+        <div className="relative h-10 border border-rule">
+          {[
+            { k: "TIER 0", lo: 0, hi: 0.25 },
+            { k: "TIER 1", lo: 0.25, hi: 0.5 },
+            { k: "TIER 2", lo: 0.5, hi: 0.75 },
+            { k: "TIER 3", lo: 0.75, hi: 1 },
+          ].map((band, i) => {
+            const active = tier === band.k;
+            return (
+              <div
+                key={band.k}
+                className={`absolute inset-y-0 border-r border-rule last:border-r-0 transition-colors ${
+                  active ? "bg-cyan-accent/15" : "bg-transparent"
+                }`}
+                style={{
+                  left: `${band.lo * 100}%`,
+                  width: `${(band.hi - band.lo) * 100}%`,
+                }}
+              >
+                <div className="absolute top-1 left-1 font-mono text-[9px] uppercase tracking-[0.12em] text-cream/70">
+                  {band.k}
+                </div>
+                <div className="absolute bottom-1 right-1 font-mono text-[9px] tabular-nums text-muted-foreground">
+                  {band.hi.toFixed(2)}
+                </div>
+              </div>
+            );
+          })}
+          {/* promote threshold marker */}
+          <div
+            className="absolute inset-y-0 w-px bg-cyan-accent/70"
+            style={{ left: `${PROMOTE_THRESHOLD * 100}%` }}
+            title="Promotion threshold"
+          />
+          {/* live composite cursor */}
+          <div
+            className="absolute -top-1 -bottom-1 w-[2px] bg-cream transition-all duration-500"
+            style={{ left: `calc(${Math.min(composite, 1) * 100}% - 1px)` }}
+          />
+        </div>
+
+        {/* per-tier table */}
+        <div className="grid grid-cols-4 mt-4 border border-rule">
+          {(["TIER 0", "TIER 1", "TIER 2", "TIER 3"] as const).map((t, i) => {
+            const active = tier === t;
+            return (
+              <div
+                key={t}
+                className={`p-3 ${i < 3 ? "border-r border-rule" : ""} ${
+                  active ? "bg-cyan-accent/[0.06]" : ""
+                }`}
+              >
+                <div
+                  className={`font-mono text-[10px] uppercase tracking-[0.14em] ${
+                    active ? "text-cyan-accent" : "text-muted-foreground"
+                  }`}
+                >
+                  {t}
+                </div>
+                <div className="font-body text-[12px] text-cream/75 leading-snug mt-1 min-h-[32px]">
+                  {TIER_DESC[t]}
+                </div>
+                <div className="grid grid-cols-2 gap-2 mt-3">
+                  <div>
+                    <div className="font-mono text-[9px] uppercase tracking-[0.12em] text-muted-foreground">
+                      ENTERED
+                    </div>
+                    <div className="font-serif text-lg text-cream tabular-nums leading-none mt-1">
+                      {tierCrossings[t]}
+                    </div>
+                  </div>
+                  <div>
+                    <div className="font-mono text-[9px] uppercase tracking-[0.12em] text-muted-foreground">
+                      PROMOTED
+                    </div>
+                    <div className="font-serif text-lg text-cream tabular-nums leading-none mt-1">
+                      {tierPromotions[t]}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
+          § COMPOSITE CROSSES A BAND → CORTEX TARGETS THAT TIER · PROMOTION FIRES ONLY WHEN INSTANT COMPOSITE ≥ {PROMOTE_THRESHOLD.toFixed(2)}
+        </p>
+      </div>
+
+
       <div className="grid md:grid-cols-2">
         <div className="p-5 border-b md:border-b-0 md:border-r border-rule">
           <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground mb-4">
