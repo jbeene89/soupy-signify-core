@@ -9,6 +9,12 @@ import {
   formatRaw,
   type ScoredRun,
 } from "@/data/build-off";
+import {
+  CompositeBarChart,
+  ScoreHeatmap,
+  RadarChart,
+  CostCorrectnessScatter,
+} from "@/components/site/BuildOffVisuals";
 
 export const Route = createFileRoute("/build-off")({
   head: () => ({
