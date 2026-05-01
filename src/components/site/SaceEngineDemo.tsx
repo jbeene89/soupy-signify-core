@@ -331,16 +331,32 @@ export function SaceEngineDemo() {
             </button>
           ))}
         </div>
-        <button
-          onClick={() => setRunning((r) => !r)}
-          className={`font-mono text-[11px] uppercase tracking-[0.14em] px-4 py-2 transition-opacity ${
-            running
-              ? "border border-cream/40 text-cream hover:opacity-80"
-              : "bg-cyan-accent text-primary-foreground hover:opacity-90"
-          }`}
-        >
-          {running ? "Pause" : "Start engine"}
-        </button>
+        <div className="flex flex-wrap gap-2">
+          <button
+            onClick={() => handleExport("copy")}
+            className="font-mono text-[11px] uppercase tracking-[0.14em] px-3 py-2 border border-rule text-cream/80 hover:text-cream transition-colors"
+            title="Copy run report JSON to clipboard"
+          >
+            {exportState === "copied" ? "Copied ✓" : "Copy report"}
+          </button>
+          <button
+            onClick={() => handleExport("download")}
+            className="font-mono text-[11px] uppercase tracking-[0.14em] px-3 py-2 border border-rule text-cream/80 hover:text-cream transition-colors"
+            title="Download run report JSON"
+          >
+            Export run report
+          </button>
+          <button
+            onClick={() => setRunning((r) => !r)}
+            className={`font-mono text-[11px] uppercase tracking-[0.14em] px-4 py-2 transition-opacity ${
+              running
+                ? "border border-cream/40 text-cream hover:opacity-80"
+                : "bg-cyan-accent text-primary-foreground hover:opacity-90"
+            }`}
+          >
+            {running ? "Pause" : "Start engine"}
+          </button>
+        </div>
       </div>
 
       <div className="p-5 border-b border-rule">
