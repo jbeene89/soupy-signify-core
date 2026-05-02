@@ -9,6 +9,7 @@ import {
 import { routeSacePrompt, getSaceConfig } from "@/server/sace.functions";
 import { classifyPrompt, type ClassifierResult } from "@/lib/sace/classifier";
 import type { BudgetCapError, RouteDecision } from "@/lib/sace/contract";
+import { readPicks, subscribe } from "@/lib/picks";
 
 export const Route = createFileRoute("/demo")({
   head: () => ({
@@ -117,6 +118,12 @@ function DemoPage() {
   const [error, setError] = useState<string | null>(null);
   const [savedCents, setSavedCents] = useState<number>(initialSavedCents);
   const [displayCents, setDisplayCents] = useState<number>(initialSavedCents);
+  const [picks, setPicks] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    setPicks(readPicks() as Record<string, string>);
+    return subscribe(() => setPicks(readPicks() as Record<string, string>));
+  }, []);
 
   useEffect(() => {
     if (displayCents === savedCents) return;
@@ -150,7 +157,8 @@ function DemoPage() {
     try {
       let next: DemoOutcome;
       if (sace.routerEnabled) {
-        const r = await routeViaSace({ data: { prompt } });
+        const prefs = Object.keys(picks).length > 0 ? picks : undefined;
+        const r = await routeViaSace({ data: { prompt, preferences: prefs } });
         if (r.ok) {
           next = {
             kind: "sace",
