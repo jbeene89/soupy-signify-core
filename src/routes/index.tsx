@@ -242,16 +242,16 @@ function Index() {
           <FadeIn>
             <SectionMarker>§ 05 · BUILD-OFF</SectionMarker>
             <h2 id="buildoff-heading" className="font-serif text-4xl md:text-5xl leading-tight max-w-3xl">
-              Watch the gladiators fight.
+              We're the daily driver. They're the jet packs.
             </h2>
             <p className="font-serif italic text-xl md:text-2xl text-cream/80 mt-4 max-w-3xl">
-              A public, side-by-side benchmark of every integrated AI coding tool building the same thing.
+              A public, side-by-side benchmark of every integrated AI coding tool building the same thing — so you can see exactly when to use which one.
             </p>
 
             <div className="grid md:grid-cols-2 gap-12 md:gap-20 mt-16">
               <div>
                 <p className="font-body text-[18px] leading-[1.75] text-cream/90">
-                  Every week, we run the same task through every integrated tool. Lovable, Bolt, Cursor, Claude Code, v0, Replit Agent — same prompt, same evaluation criteria. We measure cost in actual dollars, time to first preview, code quality, and visual fidelity. We publish the prompts. We publish the outputs. We publish the receipts. No tool can pay for placement. The only way to climb the rankings is to be better.
+                  Soupy Together isn't trying to out-score Cursor on refactors or out-design v0 on visuals — those tools are great at what they're great at. We're the cheap, reliable hauler that handles the 90% of work that doesn't need a specialist, and routes the rest to the right one. Every week we run the same task through every integrated tool. Same prompt, same rubric, published outputs and receipts. No tool can pay for placement. The leaderboard exists so you can see, in dollars, when paying for a jet pack is worth it.
                 </p>
               </div>
               <div className="border border-rule p-8">
