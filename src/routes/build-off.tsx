@@ -7,7 +7,9 @@ import {
   MEASURES,
   scoreBuildOff,
   formatRaw,
+  type BuildOff,
   type ScoredRun,
+  type ToolRun,
 } from "@/data/build-off";
 import {
   CompositeBarChart,
@@ -15,6 +17,8 @@ import {
   RadarChart,
   CostCorrectnessScatter,
 } from "@/components/site/BuildOffVisuals";
+import { fetchPublishedBuildOff } from "@/server/sace.functions";
+import type { PublishedBuildOff } from "@/lib/sace/contract";
 
 export const Route = createFileRoute("/build-off")({
   head: () => ({
@@ -33,12 +37,51 @@ export const Route = createFileRoute("/build-off")({
       },
     ],
   }),
+  loader: async () => {
+    const sample = BUILD_OFFS[0];
+    const published = await fetchPublishedBuildOff({ data: { id: sample.id } });
+    return { sample, published: published.result };
+  },
   component: BuildOffPage,
 });
 
+interface MergedBuildOff extends BuildOff {
+  manualByTool: Record<string, boolean>;
+  sourceUrl?: string;
+}
+
+function mergePublished(sample: BuildOff, pub: PublishedBuildOff): MergedBuildOff {
+  const runs: ToolRun[] = pub.runs.map((r) => ({
+    tool: r.tool,
+    raw: r.raw,
+    notes: r.notes,
+  }));
+  const manualByTool: Record<string, boolean> = {};
+  for (const r of pub.runs) manualByTool[r.tool] = r.mode === "manual";
+  return {
+    ...sample,
+    id: pub.id,
+    number: pub.number,
+    title: pub.title,
+    prompt: pub.prompt,
+    brief: pub.brief,
+    status: "verified",
+    date: pub.date,
+    runs,
+    manualByTool,
+    sourceUrl: pub.source_url,
+  };
+}
+
 function BuildOffPage() {
-  const current = BUILD_OFFS[0];
+  const { sample, published } = Route.useLoaderData();
+  const merged: MergedBuildOff = published
+    ? mergePublished(sample, published)
+    : { ...sample, manualByTool: {} };
+  const current = merged;
+  const manualByTool = merged.manualByTool;
   const scored = scoreBuildOff(current);
+
 
   return (
     <div id="top" className="min-h-screen text-cream">
@@ -56,13 +99,32 @@ function BuildOffPage() {
           <p className="mt-8 font-serif italic text-xl md:text-2xl text-cream/90 max-w-3xl leading-snug">
             Same prompt. Every tool. Cost in dollars, time in seconds, output in receipts.
           </p>
-          {current.status === "sample" && (
+          {current.status === "sample" ? (
             <div className="mt-10 border-l-4 border-cyan-accent pl-5 py-3 max-w-3xl">
               <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-cyan-accent">
                 § SAMPLE DATA — NOT YET A LIVE VERIFIED RUN
               </div>
               <p className="font-body text-[15px] text-cream/80 mt-2 leading-relaxed">
                 Numbers below are plausible estimates from public pricing and reported behavior, shown to demonstrate the methodology. The first verified Build-Off — same prompt run live through every tool, with screen captures and token receipts — drops shortly. Get notified at the bottom of the page.
+              </p>
+            </div>
+          ) : (
+            <div className="mt-10 border-l-4 border-cyan-accent pl-5 py-3 max-w-3xl">
+              <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-cyan-accent">
+                § VERIFIED RUN · PUBLISHED RECEIPTS
+              </div>
+              <p className="font-body text-[15px] text-cream/80 mt-2 leading-relaxed">
+                Same prompt was run through every tool below. Manual runs are flagged
+                inline. {merged.sourceUrl && (
+                  <a
+                    href={merged.sourceUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="underline decoration-cyan-accent/60 hover:text-cream"
+                  >
+                    Source JSON ↗
+                  </a>
+                )}
               </p>
             </div>
           )}
@@ -185,7 +247,7 @@ function BuildOffPage() {
 
           <div className="mt-12 space-y-6">
             {scored.map((r, i) => (
-              <ToolCard key={r.tool} run={r} rank={i + 1} />
+              <ToolCard key={r.tool} run={r} rank={i + 1} manual={!!manualByTool[r.tool]} />
             ))}
           </div>
         </FadeIn>
@@ -248,16 +310,19 @@ function BuildOffPage() {
   );
 }
 
-function ToolCard({ run, rank }: { run: ScoredRun; rank: number }) {
+function ToolCard({ run, rank, manual }: { run: ScoredRun; rank: number; manual?: boolean }) {
   const isWinner = rank === 1;
   return (
     <article
       id={slug(run.tool)}
-      className={`border ${isWinner ? "border-cyan-accent" : "border-rule"} p-6 md:p-8 scroll-mt-24`}
+      className={`border ${isWinner ? "border-cyan-accent" : "border-rule"} ${manual ? "border-dashed" : ""} p-6 md:p-8 scroll-mt-24`}
     >
       <div className="grid md:grid-cols-[auto_1fr_auto] gap-6 md:gap-10 items-start">
         <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground tabular-nums">
           RANK {String(rank).padStart(2, "0")}
+          {manual && (
+            <div className="text-amber-300 mt-1">· MANUAL</div>
+          )}
         </div>
         <div>
           <h3 className="font-serif text-2xl md:text-3xl text-cream">{run.tool}</h3>
