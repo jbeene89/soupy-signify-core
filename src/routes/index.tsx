@@ -29,15 +29,6 @@ const pricingRows = [
   { tool: "Claude Max", price: "$200", notes: "Frontier model access" },
 ];
 
-const measures = [
-  ["COST PER OUTPUT", "dollars to ship the same feature"],
-  ["TIME TO FIRST PREVIEW", "seconds from prompt to running result"],
-  ["VISUAL FIDELITY", "design quality of generated UI"],
-  ["CODE CORRECTNESS", "runtime errors, type safety, test outcomes"],
-  ["REFACTOR RELIABILITY", "preservation of correctness across changes"],
-  ["HONESTY UNDER UNCERTAINTY", "rate of confabulation on ambiguous input"],
-  ["BUNDLE SIZE", "bytes shipped per equivalent output"],
-];
 
 const papers = [
   {
