@@ -78,6 +78,14 @@ export interface PublishedToolRun {
     honesty: number;
     bundle: number;
   };
+  /**
+   * Optional latency telemetry from the external harness.
+   * - ttft_ms: time-to-first-token from the model API (when the tool exposes it)
+   * - time_to_green_s: wall-clock from prompt → preview reachable AND tests green
+   * Only populated by harness-driven runs. UI hides columns when absent.
+   */
+  ttft_ms?: number;
+  time_to_green_s?: number;
   notes?: string;
   /** "manual" runs are visually distinct from harness-driven runs. */
   mode?: "manual" | "harness";
