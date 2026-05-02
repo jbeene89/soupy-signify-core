@@ -217,6 +217,15 @@ function DemoPage() {
                 : "LOCAL ESTIMATE · SACE SERVICES NOT YET CONNECTED"}
             </span>
           </div>
+          {Object.keys(picks).length > 0 && (
+            <div className="mt-3 inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.14em] text-cyan-accent">
+              <span className="inline-block w-1.5 h-1.5 bg-cyan-accent" />
+              <span>
+                {Object.keys(picks).length} ROUTING HINT
+                {Object.keys(picks).length === 1 ? "" : "S"} FROM YOUR BUILD-OFF PICKS
+              </span>
+            </div>
+          )}
         </header>
 
         <form onSubmit={onSubmit} className="border border-rule">
