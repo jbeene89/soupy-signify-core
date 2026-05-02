@@ -86,9 +86,12 @@ function BuildOffPage() {
   const { sample, published } = Route.useLoaderData();
   const merged: MergedBuildOff = published
     ? mergePublished(sample, published)
-    : { ...sample, manualByTool: {} };
+    : { ...sample, manualByTool: {}, telemetryByTool: {} };
   const current = merged;
   const manualByTool = merged.manualByTool;
+  const telemetryByTool = merged.telemetryByTool;
+  const hasAnyTtft = Object.values(telemetryByTool).some((t) => t.ttft_ms != null);
+  const hasAnyGreen = Object.values(telemetryByTool).some((t) => t.time_to_green_s != null);
   const scored = scoreBuildOff(current);
 
 
