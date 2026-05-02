@@ -14,6 +14,7 @@ import { Route as DemoRouteImport } from './routes/demo'
 import { Route as BuildOffRouteImport } from './routes/build-off'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiSaceCompleteRouteImport } from './routes/api/sace/complete'
+import { Route as ApiBadgeCategoryRankToolRouteImport } from './routes/api/badge/$category/$rank/$tool'
 
 const PartnersRoute = PartnersRouteImport.update({
   id: '/partners',
@@ -40,6 +41,12 @@ const ApiSaceCompleteRoute = ApiSaceCompleteRouteImport.update({
   path: '/api/sace/complete',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiBadgeCategoryRankToolRoute =
+  ApiBadgeCategoryRankToolRouteImport.update({
+    id: '/api/badge/$category/$rank/$tool',
+    path: '/api/badge/$category/$rank/$tool',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -47,6 +54,7 @@ export interface FileRoutesByFullPath {
   '/demo': typeof DemoRoute
   '/partners': typeof PartnersRoute
   '/api/sace/complete': typeof ApiSaceCompleteRoute
+  '/api/badge/$category/$rank/$tool': typeof ApiBadgeCategoryRankToolRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -54,6 +62,7 @@ export interface FileRoutesByTo {
   '/demo': typeof DemoRoute
   '/partners': typeof PartnersRoute
   '/api/sace/complete': typeof ApiSaceCompleteRoute
+  '/api/badge/$category/$rank/$tool': typeof ApiBadgeCategoryRankToolRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -62,12 +71,25 @@ export interface FileRoutesById {
   '/demo': typeof DemoRoute
   '/partners': typeof PartnersRoute
   '/api/sace/complete': typeof ApiSaceCompleteRoute
+  '/api/badge/$category/$rank/$tool': typeof ApiBadgeCategoryRankToolRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/build-off' | '/demo' | '/partners' | '/api/sace/complete'
+  fullPaths:
+    | '/'
+    | '/build-off'
+    | '/demo'
+    | '/partners'
+    | '/api/sace/complete'
+    | '/api/badge/$category/$rank/$tool'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/build-off' | '/demo' | '/partners' | '/api/sace/complete'
+  to:
+    | '/'
+    | '/build-off'
+    | '/demo'
+    | '/partners'
+    | '/api/sace/complete'
+    | '/api/badge/$category/$rank/$tool'
   id:
     | '__root__'
     | '/'
@@ -75,6 +97,7 @@ export interface FileRouteTypes {
     | '/demo'
     | '/partners'
     | '/api/sace/complete'
+    | '/api/badge/$category/$rank/$tool'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -83,6 +106,7 @@ export interface RootRouteChildren {
   DemoRoute: typeof DemoRoute
   PartnersRoute: typeof PartnersRoute
   ApiSaceCompleteRoute: typeof ApiSaceCompleteRoute
+  ApiBadgeCategoryRankToolRoute: typeof ApiBadgeCategoryRankToolRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -122,6 +146,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiSaceCompleteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/badge/$category/$rank/$tool': {
+      id: '/api/badge/$category/$rank/$tool'
+      path: '/api/badge/$category/$rank/$tool'
+      fullPath: '/api/badge/$category/$rank/$tool'
+      preLoaderRoute: typeof ApiBadgeCategoryRankToolRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -131,6 +162,7 @@ const rootRouteChildren: RootRouteChildren = {
   DemoRoute: DemoRoute,
   PartnersRoute: PartnersRoute,
   ApiSaceCompleteRoute: ApiSaceCompleteRoute,
+  ApiBadgeCategoryRankToolRoute: ApiBadgeCategoryRankToolRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
