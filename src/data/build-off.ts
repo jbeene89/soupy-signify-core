@@ -68,7 +68,7 @@ export const BUILD_OFFS: BuildOff[] = [
     status: "sample",
     date: "2026-04-15",
     runs: [
-      { tool: "Soupy Together", raw: { cost: 0.41, time: 38, fidelity: 84, correctness: 92, refactor: 88, honesty: 91, bundle: 142 }, notes: "Routed scaffolding to Tier 0/1, escalated auth wiring to Tier 2. No frontier call needed." },
+      { tool: "Soupy Together", raw: { cost: 0.38, time: 52, fidelity: 76, correctness: 84, refactor: 82, honesty: 90, bundle: 150 }, notes: "Daily driver. Routed scaffolding to Tier 0/1, escalated only auth wiring to Tier 2. No frontier call needed. Doesn't top any single column — that's the point." },
       { tool: "Lovable Pro",    raw: { cost: 1.10, time: 47, fidelity: 88, correctness: 86, refactor: 78, honesty: 72, bundle: 168 }, notes: "Strong UI, occasional confident-but-wrong RLS guesses on edits." },
       { tool: "Bolt",           raw: { cost: 1.45, time: 41, fidelity: 79, correctness: 78, refactor: 64, honesty: 65, bundle: 184 }, notes: "Fast first preview, follow-up edits regressed auth twice." },
       { tool: "v0 by Vercel",   raw: { cost: 0.95, time: 32, fidelity: 91, correctness: 71, refactor: 68, honesty: 70, bundle: 156 }, notes: "Best-looking UI, no real backend wiring on first pass." },

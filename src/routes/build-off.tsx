@@ -97,7 +97,7 @@ function BuildOffPage() {
             {current.title}
           </h1>
           <p className="mt-8 font-serif italic text-xl md:text-2xl text-cream/90 max-w-3xl leading-snug">
-            Same prompt. Every tool. Cost in dollars, time in seconds, output in receipts.
+            Same prompt. Every tool. Cost in dollars, time in seconds, output in receipts. We're not trying to win — we're showing what each tool is best at, then routing your job to it.
           </p>
           {current.status === "sample" ? (
             <div className="mt-10 border-l-4 border-cyan-accent pl-5 py-3 max-w-3xl">
@@ -165,6 +165,15 @@ function BuildOffPage() {
           <p className="font-serif italic text-lg text-cream/75 mt-2 max-w-3xl">
             Each measure normalized 0–100 within this round, then weighted. See methodology below.
           </p>
+
+          <div className="mt-6 border-l-4 border-cyan-accent/70 pl-5 py-3 max-w-3xl bg-foreground/[0.02]">
+            <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-cyan-accent">
+              § HOW TO READ THIS
+            </div>
+            <p className="font-body text-[15px] text-cream/85 mt-2 leading-relaxed">
+              Soupy Together is the daily driver, not the top scorer. v0 will out-design us on visuals. Cursor and Claude Code will out-correct us on hairy refactors. That's fine — when your job needs one of those, we route to it and you pay for that call. The rest of the time, the cheapest tool that can finish the job finishes the job. Look at the <span className="text-cyan-accent">Cost</span> column, then look at <span className="text-cyan-accent">Composite</span>.
+            </p>
+          </div>
 
           <div className="mt-10 border border-rule overflow-x-auto">
             <table className="w-full min-w-[720px]">
