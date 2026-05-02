@@ -79,6 +79,7 @@ function BuildOffPage() {
     ? mergePublished(sample, published)
     : { ...sample, manualByTool: {} };
   const current = merged;
+  const manualByTool = merged.manualByTool;
   const scored = scoreBuildOff(current);
 
 
@@ -309,16 +310,19 @@ function BuildOffPage() {
   );
 }
 
-function ToolCard({ run, rank }: { run: ScoredRun; rank: number }) {
+function ToolCard({ run, rank, manual }: { run: ScoredRun; rank: number; manual?: boolean }) {
   const isWinner = rank === 1;
   return (
     <article
       id={slug(run.tool)}
-      className={`border ${isWinner ? "border-cyan-accent" : "border-rule"} p-6 md:p-8 scroll-mt-24`}
+      className={`border ${isWinner ? "border-cyan-accent" : "border-rule"} ${manual ? "border-dashed" : ""} p-6 md:p-8 scroll-mt-24`}
     >
       <div className="grid md:grid-cols-[auto_1fr_auto] gap-6 md:gap-10 items-start">
         <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground tabular-nums">
           RANK {String(rank).padStart(2, "0")}
+          {manual && (
+            <div className="text-amber-300 mt-1">· MANUAL</div>
+          )}
         </div>
         <div>
           <h3 className="font-serif text-2xl md:text-3xl text-cream">{run.tool}</h3>
