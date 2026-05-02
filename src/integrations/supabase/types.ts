@@ -14,6 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      demo_submissions: {
+        Row: {
+          baseline_cost_cents: number
+          created_at: string
+          id: string
+          ip_hash: string | null
+          partners: string[]
+          prompt_length: number
+          soupy_cost_cents: number
+          tier: number
+          user_agent: string | null
+        }
+        Insert: {
+          baseline_cost_cents: number
+          created_at?: string
+          id?: string
+          ip_hash?: string | null
+          partners?: string[]
+          prompt_length: number
+          soupy_cost_cents: number
+          tier: number
+          user_agent?: string | null
+        }
+        Update: {
+          baseline_cost_cents?: number
+          created_at?: string
+          id?: string
+          ip_hash?: string | null
+          partners?: string[]
+          prompt_length?: number
+          soupy_cost_cents?: number
+          tier?: number
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
       early_access_signups: {
         Row: {
           created_at: string
@@ -46,7 +82,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_tier0_savings_this_week: { Args: never; Returns: number }
     }
     Enums: {
       [_ in never]: never
