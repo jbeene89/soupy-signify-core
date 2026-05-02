@@ -47,6 +47,8 @@ export const Route = createFileRoute("/build-off")({
 
 interface MergedBuildOff extends BuildOff {
   manualByTool: Record<string, boolean>;
+  /** Per-tool harness telemetry (only present when published). */
+  telemetryByTool: Record<string, { ttft_ms?: number; time_to_green_s?: number }>;
   sourceUrl?: string;
 }
 
@@ -57,7 +59,13 @@ function mergePublished(sample: BuildOff, pub: PublishedBuildOff): MergedBuildOf
     notes: r.notes,
   }));
   const manualByTool: Record<string, boolean> = {};
-  for (const r of pub.runs) manualByTool[r.tool] = r.mode === "manual";
+  const telemetryByTool: Record<string, { ttft_ms?: number; time_to_green_s?: number }> = {};
+  for (const r of pub.runs) {
+    manualByTool[r.tool] = r.mode === "manual";
+    if (r.ttft_ms != null || r.time_to_green_s != null) {
+      telemetryByTool[r.tool] = { ttft_ms: r.ttft_ms, time_to_green_s: r.time_to_green_s };
+    }
+  }
   return {
     ...sample,
     id: pub.id,
@@ -69,6 +77,7 @@ function mergePublished(sample: BuildOff, pub: PublishedBuildOff): MergedBuildOf
     date: pub.date,
     runs,
     manualByTool,
+    telemetryByTool,
     sourceUrl: pub.source_url,
   };
 }
