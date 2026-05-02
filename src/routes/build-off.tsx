@@ -47,6 +47,8 @@ export const Route = createFileRoute("/build-off")({
 
 interface MergedBuildOff extends BuildOff {
   manualByTool: Record<string, boolean>;
+  /** Per-tool harness telemetry (only present when published). */
+  telemetryByTool: Record<string, { ttft_ms?: number; time_to_green_s?: number }>;
   sourceUrl?: string;
 }
 
@@ -57,7 +59,13 @@ function mergePublished(sample: BuildOff, pub: PublishedBuildOff): MergedBuildOf
     notes: r.notes,
   }));
   const manualByTool: Record<string, boolean> = {};
-  for (const r of pub.runs) manualByTool[r.tool] = r.mode === "manual";
+  const telemetryByTool: Record<string, { ttft_ms?: number; time_to_green_s?: number }> = {};
+  for (const r of pub.runs) {
+    manualByTool[r.tool] = r.mode === "manual";
+    if (r.ttft_ms != null || r.time_to_green_s != null) {
+      telemetryByTool[r.tool] = { ttft_ms: r.ttft_ms, time_to_green_s: r.time_to_green_s };
+    }
+  }
   return {
     ...sample,
     id: pub.id,
@@ -69,6 +77,7 @@ function mergePublished(sample: BuildOff, pub: PublishedBuildOff): MergedBuildOf
     date: pub.date,
     runs,
     manualByTool,
+    telemetryByTool,
     sourceUrl: pub.source_url,
   };
 }
@@ -77,9 +86,12 @@ function BuildOffPage() {
   const { sample, published } = Route.useLoaderData();
   const merged: MergedBuildOff = published
     ? mergePublished(sample, published)
-    : { ...sample, manualByTool: {} };
+    : { ...sample, manualByTool: {}, telemetryByTool: {} };
   const current = merged;
   const manualByTool = merged.manualByTool;
+  const telemetryByTool = merged.telemetryByTool;
+  const hasAnyTtft = Object.values(telemetryByTool).some((t) => t.ttft_ms != null);
+  const hasAnyGreen = Object.values(telemetryByTool).some((t) => t.time_to_green_s != null);
   const scored = scoreBuildOff(current);
 
 
@@ -183,7 +195,13 @@ function BuildOffPage() {
                   <th className="text-left font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground py-4 px-6">Tool</th>
                   <th className="text-right font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground py-4 px-6">Composite</th>
                   <th className="text-right font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground py-4 px-6">Cost</th>
-                  <th className="text-right font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground py-4 px-6">Time</th>
+                  <th className="text-right font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground py-4 px-6">TTFP</th>
+                  {hasAnyTtft && (
+                    <th className="text-right font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground py-4 px-6">TTFT</th>
+                  )}
+                  {hasAnyGreen && (
+                    <th className="text-right font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground py-4 px-6">Time→Green</th>
+                  )}
                   <th className="text-right font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground py-4 px-6">Correct</th>
                   <th className="text-right font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground py-4 px-6">Honest</th>
                 </tr>
@@ -191,6 +209,7 @@ function BuildOffPage() {
               <tbody>
                 {scored.map((r, i) => {
                   const isWinner = i === 0;
+                  const tel = telemetryByTool[r.tool];
                   return (
                     <tr
                       key={r.tool}
@@ -215,6 +234,16 @@ function BuildOffPage() {
                       <td className="font-mono text-[13px] py-5 px-6 text-right text-cream/80 tabular-nums">
                         {formatRaw(r.raw.time, MEASURES[1])}
                       </td>
+                      {hasAnyTtft && (
+                        <td className="font-mono text-[13px] py-5 px-6 text-right text-cream/80 tabular-nums">
+                          {tel?.ttft_ms != null ? `${Math.round(tel.ttft_ms)}ms` : <span className="text-muted-foreground">—</span>}
+                        </td>
+                      )}
+                      {hasAnyGreen && (
+                        <td className="font-mono text-[13px] py-5 px-6 text-right text-cream/80 tabular-nums">
+                          {tel?.time_to_green_s != null ? `${Math.round(tel.time_to_green_s)}s` : <span className="text-muted-foreground">—</span>}
+                        </td>
+                      )}
                       <td className="font-mono text-[13px] py-5 px-6 text-right text-cream/80 tabular-nums">
                         {r.raw.correctness}
                       </td>
@@ -227,6 +256,10 @@ function BuildOffPage() {
               </tbody>
             </table>
           </div>
+
+          <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground mt-3 max-w-3xl leading-relaxed">
+            TTFP = time-to-first-preview (wall-clock, prompt → reachable preview). TTFT = time-to-first-token from the model API, shown when the tool exposes it; not weighted in composite. Time→Green = wall-clock until preview reachable AND tests green. TTFT and Time→Green are populated only by harness-driven runs.
+          </p>
         </FadeIn>
 
         <hr className="border-rule my-20" />
