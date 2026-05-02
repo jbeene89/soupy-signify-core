@@ -4,6 +4,7 @@ import { SectionMarker } from "@/components/site/SectionMarker";
 import { FadeIn } from "@/components/site/FadeIn";
 import { EmailForm } from "@/components/site/EmailForm";
 import { SaceEngineDemo } from "@/components/site/SaceEngineDemo";
+import { HomeBuildOff } from "@/components/site/HomeBuildOff";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -242,45 +243,55 @@ function Index() {
           <FadeIn>
             <SectionMarker>§ 05 · BUILD-OFF</SectionMarker>
             <h2 id="buildoff-heading" className="font-serif text-4xl md:text-5xl leading-tight max-w-3xl">
-              We're the daily driver. They're the jet packs.
+              The Build-Off, by category.
             </h2>
             <p className="font-serif italic text-xl md:text-2xl text-cream/80 mt-4 max-w-3xl">
-              A public, side-by-side benchmark of every integrated AI coding tool building the same thing — so you can see exactly when to use which one.
+              A rotating, public competition. Each category is one skill — frontend
+              fidelity, backend correctness, refactor reliability, and so on. Every
+              integrated AI coding tool runs the same task. We publish the podium.
+              Brands earn a badge they can show. You pick which tool you want for
+              each kind of work, and Soupy routes there when the job calls for it.
             </p>
 
-            <div className="grid md:grid-cols-2 gap-12 md:gap-20 mt-16">
-              <div>
-                <p className="font-body text-[18px] leading-[1.75] text-cream/90">
-                  Soupy Together isn't trying to out-score Cursor on refactors or out-design v0 on visuals — those tools are great at what they're great at. We're the cheap, reliable hauler that handles the 90% of work that doesn't need a specialist, and routes the rest to the right one. Every week we run the same task through every integrated tool. Same prompt, same rubric, published outputs and receipts. No tool can pay for placement. The leaderboard exists so you can see, in dollars, when paying for a jet pack is worth it.
+            <HomeBuildOff />
+
+            <div className="mt-10 grid md:grid-cols-2 gap-6">
+              <div className="border border-rule p-6">
+                <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-cyan-accent mb-3">
+                  § HOW TO READ IT
+                </div>
+                <p className="font-body text-[15px] text-cream/85 leading-relaxed">
+                  Soupy Together is the daily driver, not the top scorer. We don't
+                  need to win — we need to know who does. When your job lands in a
+                  category where another tool ranks first, that's where we route
+                  it. You only pay for that call.
                 </p>
               </div>
-              <div className="border border-rule p-8">
-                <div className="font-mono text-[12px] uppercase tracking-[0.14em] text-muted-foreground mb-6">
-                  WHAT WE MEASURE
+              <div className="border border-rule p-6">
+                <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-cyan-accent mb-3">
+                  § FOR PARTNERS
                 </div>
-                <ul className="space-y-5">
-                  {measures.map(([label, desc]) => (
-                    <li key={label}>
-                      <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-cream">
-                        {label}
-                      </div>
-                      <div className="font-body text-[15px] text-cream/75 mt-1">{desc}</div>
-                    </li>
-                  ))}
-                </ul>
+                <p className="font-body text-[15px] text-cream/85 leading-relaxed">
+                  Rank 1st, 2nd, or 3rd in any category and you get an embeddable
+                  SVG badge for your site. No tool can pay for placement. The
+                  rubric is public; the receipts are public.
+                </p>
               </div>
             </div>
 
-            <div className="mt-12 flex flex-col sm:flex-row gap-4 items-start">
+            <div className="mt-8 flex flex-col sm:flex-row gap-4 items-start">
               <a
                 href="/build-off"
                 className="font-mono text-[12px] uppercase tracking-[0.14em] px-6 py-3 bg-cyan-accent text-primary-foreground hover:opacity-90 transition-opacity"
               >
-                See Round 001 →
+                Full leaderboard & receipts →
               </a>
-              <p className="font-mono text-[12px] uppercase tracking-[0.14em] text-muted-foreground self-center">
-                § FIRST VERIFIED RUN DROPS [DATE TBD] · SAMPLE METHODOLOGY LIVE NOW
-              </p>
+              <a
+                href="/partners"
+                className="font-mono text-[12px] uppercase tracking-[0.14em] px-6 py-3 border border-cream/40 text-cream hover:border-cyan-accent hover:text-cyan-accent transition-colors"
+              >
+                Partner with us →
+              </a>
             </div>
           </FadeIn>
         </section>
