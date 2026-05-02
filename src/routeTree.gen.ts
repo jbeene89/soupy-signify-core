@@ -9,11 +9,17 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as PartnersRouteImport } from './routes/partners'
 import { Route as DemoRouteImport } from './routes/demo'
 import { Route as BuildOffRouteImport } from './routes/build-off'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiSaceCompleteRouteImport } from './routes/api/sace/complete'
 
+const PartnersRoute = PartnersRouteImport.update({
+  id: '/partners',
+  path: '/partners',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DemoRoute = DemoRouteImport.update({
   id: '/demo',
   path: '/demo',
@@ -39,12 +45,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/build-off': typeof BuildOffRoute
   '/demo': typeof DemoRoute
+  '/partners': typeof PartnersRoute
   '/api/sace/complete': typeof ApiSaceCompleteRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/build-off': typeof BuildOffRoute
   '/demo': typeof DemoRoute
+  '/partners': typeof PartnersRoute
   '/api/sace/complete': typeof ApiSaceCompleteRoute
 }
 export interface FileRoutesById {
@@ -52,25 +60,40 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/build-off': typeof BuildOffRoute
   '/demo': typeof DemoRoute
+  '/partners': typeof PartnersRoute
   '/api/sace/complete': typeof ApiSaceCompleteRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/build-off' | '/demo' | '/api/sace/complete'
+  fullPaths: '/' | '/build-off' | '/demo' | '/partners' | '/api/sace/complete'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/build-off' | '/demo' | '/api/sace/complete'
-  id: '__root__' | '/' | '/build-off' | '/demo' | '/api/sace/complete'
+  to: '/' | '/build-off' | '/demo' | '/partners' | '/api/sace/complete'
+  id:
+    | '__root__'
+    | '/'
+    | '/build-off'
+    | '/demo'
+    | '/partners'
+    | '/api/sace/complete'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BuildOffRoute: typeof BuildOffRoute
   DemoRoute: typeof DemoRoute
+  PartnersRoute: typeof PartnersRoute
   ApiSaceCompleteRoute: typeof ApiSaceCompleteRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/partners': {
+      id: '/partners'
+      path: '/partners'
+      fullPath: '/partners'
+      preLoaderRoute: typeof PartnersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/demo': {
       id: '/demo'
       path: '/demo'
@@ -106,6 +129,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BuildOffRoute: BuildOffRoute,
   DemoRoute: DemoRoute,
+  PartnersRoute: PartnersRoute,
   ApiSaceCompleteRoute: ApiSaceCompleteRoute,
 }
 export const routeTree = rootRouteImport

@@ -101,7 +101,7 @@ function PartnersPage() {
             One-pager, profile template, integration spec, and the next Build-Off prompt.
           </p>
           <div className="mt-6 max-w-md">
-            <EmailForm source="partners" />
+            <EmailForm />
           </div>
         </section>
 
