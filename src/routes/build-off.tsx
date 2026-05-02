@@ -97,7 +97,7 @@ function BuildOffPage() {
             {current.title}
           </h1>
           <p className="mt-8 font-serif italic text-xl md:text-2xl text-cream/90 max-w-3xl leading-snug">
-            Same prompt. Every tool. Cost in dollars, time in seconds, output in receipts.
+            Same prompt. Every tool. Cost in dollars, time in seconds, output in receipts. We're not trying to win — we're showing what each tool is best at, then routing your job to it.
           </p>
           {current.status === "sample" ? (
             <div className="mt-10 border-l-4 border-cyan-accent pl-5 py-3 max-w-3xl">
