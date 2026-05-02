@@ -7,7 +7,9 @@ import {
   MEASURES,
   scoreBuildOff,
   formatRaw,
+  type BuildOff,
   type ScoredRun,
+  type ToolRun,
 } from "@/data/build-off";
 import {
   CompositeBarChart,
@@ -15,6 +17,8 @@ import {
   RadarChart,
   CostCorrectnessScatter,
 } from "@/components/site/BuildOffVisuals";
+import { fetchPublishedBuildOff } from "@/server/sace.functions";
+import type { PublishedBuildOff } from "@/lib/sace/contract";
 
 export const Route = createFileRoute("/build-off")({
   head: () => ({
@@ -33,12 +37,50 @@ export const Route = createFileRoute("/build-off")({
       },
     ],
   }),
+  loader: async () => {
+    const sample = BUILD_OFFS[0];
+    const published = await fetchPublishedBuildOff({ data: { id: sample.id } });
+    return { sample, published: published.result };
+  },
   component: BuildOffPage,
 });
 
+interface MergedBuildOff extends BuildOff {
+  manualByTool: Record<string, boolean>;
+  sourceUrl?: string;
+}
+
+function mergePublished(sample: BuildOff, pub: PublishedBuildOff): MergedBuildOff {
+  const runs: ToolRun[] = pub.runs.map((r) => ({
+    tool: r.tool,
+    raw: r.raw,
+    notes: r.notes,
+  }));
+  const manualByTool: Record<string, boolean> = {};
+  for (const r of pub.runs) manualByTool[r.tool] = r.mode === "manual";
+  return {
+    ...sample,
+    id: pub.id,
+    number: pub.number,
+    title: pub.title,
+    prompt: pub.prompt,
+    brief: pub.brief,
+    status: "verified",
+    date: pub.date,
+    runs,
+    manualByTool,
+    sourceUrl: pub.source_url,
+  };
+}
+
 function BuildOffPage() {
-  const current = BUILD_OFFS[0];
+  const { sample, published } = Route.useLoaderData();
+  const merged: MergedBuildOff = published
+    ? mergePublished(sample, published)
+    : { ...sample, manualByTool: {} };
+  const current = merged;
   const scored = scoreBuildOff(current);
+
 
   return (
     <div id="top" className="min-h-screen text-cream">
