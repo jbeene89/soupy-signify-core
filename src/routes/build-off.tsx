@@ -98,13 +98,32 @@ function BuildOffPage() {
           <p className="mt-8 font-serif italic text-xl md:text-2xl text-cream/90 max-w-3xl leading-snug">
             Same prompt. Every tool. Cost in dollars, time in seconds, output in receipts.
           </p>
-          {current.status === "sample" && (
+          {current.status === "sample" ? (
             <div className="mt-10 border-l-4 border-cyan-accent pl-5 py-3 max-w-3xl">
               <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-cyan-accent">
                 § SAMPLE DATA — NOT YET A LIVE VERIFIED RUN
               </div>
               <p className="font-body text-[15px] text-cream/80 mt-2 leading-relaxed">
                 Numbers below are plausible estimates from public pricing and reported behavior, shown to demonstrate the methodology. The first verified Build-Off — same prompt run live through every tool, with screen captures and token receipts — drops shortly. Get notified at the bottom of the page.
+              </p>
+            </div>
+          ) : (
+            <div className="mt-10 border-l-4 border-cyan-accent pl-5 py-3 max-w-3xl">
+              <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-cyan-accent">
+                § VERIFIED RUN · PUBLISHED RECEIPTS
+              </div>
+              <p className="font-body text-[15px] text-cream/80 mt-2 leading-relaxed">
+                Same prompt was run through every tool below. Manual runs are flagged
+                inline. {merged.sourceUrl && (
+                  <a
+                    href={merged.sourceUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="underline decoration-cyan-accent/60 hover:text-cream"
+                  >
+                    Source JSON ↗
+                  </a>
+                )}
               </p>
             </div>
           )}
@@ -227,7 +246,7 @@ function BuildOffPage() {
 
           <div className="mt-12 space-y-6">
             {scored.map((r, i) => (
-              <ToolCard key={r.tool} run={r} rank={i + 1} />
+              <ToolCard key={r.tool} run={r} rank={i + 1} manual={!!manualByTool[r.tool]} />
             ))}
           </div>
         </FadeIn>
