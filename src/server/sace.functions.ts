@@ -15,6 +15,7 @@ import { callRouterRoute, readSaceEnv } from "./sace-router.server";
 
 const PromptInput = z.object({
   prompt: z.string().trim().min(3).max(2000),
+  preferences: z.record(z.string().min(1).max(64), z.string().min(1).max(120)).optional(),
 });
 
 export type RouteSaceResult =
@@ -34,7 +35,7 @@ export const routeSacePrompt = createServerFn({ method: "POST" })
     const env = readSaceEnv();
     if (!env) return { ok: false, source: "fallback", reason: "missing_env" };
 
-    const result = await callRouterRoute(env, { prompt: data.prompt });
+    const result = await callRouterRoute(env, { prompt: data.prompt, preferences: data.preferences });
     if (result.ok) {
       return {
         ok: true,

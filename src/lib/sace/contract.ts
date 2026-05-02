@@ -13,6 +13,12 @@ export type Tier = 0 | 1 | 2 | 3;
 /** POST /v1/route request body */
 export interface RouteRequest {
   prompt: string;
+  /**
+   * Optional per-category tool preferences from the home-page picker.
+   * Keys are CategoryId strings, values are tool display names.
+   * The router treats these as hints — budget and availability win.
+   */
+  preferences?: Record<string, string>;
 }
 
 /** POST /v1/route 200 response body */
