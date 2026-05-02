@@ -166,6 +166,15 @@ function BuildOffPage() {
             Each measure normalized 0–100 within this round, then weighted. See methodology below.
           </p>
 
+          <div className="mt-6 border-l-4 border-cyan-accent/70 pl-5 py-3 max-w-3xl bg-foreground/[0.02]">
+            <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-cyan-accent">
+              § HOW TO READ THIS
+            </div>
+            <p className="font-body text-[15px] text-cream/85 mt-2 leading-relaxed">
+              Soupy Together is the daily driver, not the top scorer. v0 will out-design us on visuals. Cursor and Claude Code will out-correct us on hairy refactors. That's fine — when your job needs one of those, we route to it and you pay for that call. The rest of the time, the cheapest tool that can finish the job finishes the job. Look at the <span className="text-cyan-accent">Cost</span> column, then look at <span className="text-cyan-accent">Composite</span>.
+            </p>
+          </div>
+
           <div className="mt-10 border border-rule overflow-x-auto">
             <table className="w-full min-w-[720px]">
               <thead>
