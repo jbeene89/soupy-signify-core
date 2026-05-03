@@ -14,6 +14,7 @@ import { Route as DemoRouteImport } from './routes/demo'
 import { Route as BuildOffRouteImport } from './routes/build-off'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiSaceCompleteRouteImport } from './routes/api/sace/complete'
+import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
 import { Route as ApiBadgeCategoryRankToolRouteImport } from './routes/api/badge/$category/$rank/$tool'
 
 const PartnersRoute = PartnersRouteImport.update({
@@ -41,6 +42,12 @@ const ApiSaceCompleteRoute = ApiSaceCompleteRouteImport.update({
   path: '/api/sace/complete',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LovableEmailQueueProcessRoute =
+  LovableEmailQueueProcessRouteImport.update({
+    id: '/lovable/email/queue/process',
+    path: '/lovable/email/queue/process',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiBadgeCategoryRankToolRoute =
   ApiBadgeCategoryRankToolRouteImport.update({
     id: '/api/badge/$category/$rank/$tool',
@@ -54,6 +61,7 @@ export interface FileRoutesByFullPath {
   '/demo': typeof DemoRoute
   '/partners': typeof PartnersRoute
   '/api/sace/complete': typeof ApiSaceCompleteRoute
+  '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
   '/api/badge/$category/$rank/$tool': typeof ApiBadgeCategoryRankToolRoute
 }
 export interface FileRoutesByTo {
@@ -62,6 +70,7 @@ export interface FileRoutesByTo {
   '/demo': typeof DemoRoute
   '/partners': typeof PartnersRoute
   '/api/sace/complete': typeof ApiSaceCompleteRoute
+  '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
   '/api/badge/$category/$rank/$tool': typeof ApiBadgeCategoryRankToolRoute
 }
 export interface FileRoutesById {
@@ -71,6 +80,7 @@ export interface FileRoutesById {
   '/demo': typeof DemoRoute
   '/partners': typeof PartnersRoute
   '/api/sace/complete': typeof ApiSaceCompleteRoute
+  '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
   '/api/badge/$category/$rank/$tool': typeof ApiBadgeCategoryRankToolRoute
 }
 export interface FileRouteTypes {
@@ -81,6 +91,7 @@ export interface FileRouteTypes {
     | '/demo'
     | '/partners'
     | '/api/sace/complete'
+    | '/lovable/email/queue/process'
     | '/api/badge/$category/$rank/$tool'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -89,6 +100,7 @@ export interface FileRouteTypes {
     | '/demo'
     | '/partners'
     | '/api/sace/complete'
+    | '/lovable/email/queue/process'
     | '/api/badge/$category/$rank/$tool'
   id:
     | '__root__'
@@ -97,6 +109,7 @@ export interface FileRouteTypes {
     | '/demo'
     | '/partners'
     | '/api/sace/complete'
+    | '/lovable/email/queue/process'
     | '/api/badge/$category/$rank/$tool'
   fileRoutesById: FileRoutesById
 }
@@ -106,6 +119,7 @@ export interface RootRouteChildren {
   DemoRoute: typeof DemoRoute
   PartnersRoute: typeof PartnersRoute
   ApiSaceCompleteRoute: typeof ApiSaceCompleteRoute
+  LovableEmailQueueProcessRoute: typeof LovableEmailQueueProcessRoute
   ApiBadgeCategoryRankToolRoute: typeof ApiBadgeCategoryRankToolRoute
 }
 
@@ -146,6 +160,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiSaceCompleteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/lovable/email/queue/process': {
+      id: '/lovable/email/queue/process'
+      path: '/lovable/email/queue/process'
+      fullPath: '/lovable/email/queue/process'
+      preLoaderRoute: typeof LovableEmailQueueProcessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/badge/$category/$rank/$tool': {
       id: '/api/badge/$category/$rank/$tool'
       path: '/api/badge/$category/$rank/$tool'
@@ -162,6 +183,7 @@ const rootRouteChildren: RootRouteChildren = {
   DemoRoute: DemoRoute,
   PartnersRoute: PartnersRoute,
   ApiSaceCompleteRoute: ApiSaceCompleteRoute,
+  LovableEmailQueueProcessRoute: LovableEmailQueueProcessRoute,
   ApiBadgeCategoryRankToolRoute: ApiBadgeCategoryRankToolRoute,
 }
 export const routeTree = rootRouteImport
