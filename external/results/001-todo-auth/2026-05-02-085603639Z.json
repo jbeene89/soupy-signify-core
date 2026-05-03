@@ -1,0 +1,113 @@
+{
+  "adapterVersions": {
+    "soupy": "0.1.0-local-smoke",
+    "lovable": "0.0.0-empty",
+    "bolt": "0.0.0-empty",
+    "v0": "0.0.0-empty",
+    "cursor": "0.0.0-empty",
+    "replit": "0.0.0-empty",
+    "claude-code": "0.1.0-cli-detect"
+  },
+  "buildOffId": "001-todo-auth",
+  "completedAt": "2026-05-02T08:56:03.648Z",
+  "harnessGitSha": "unknown",
+  "modelVersions": {},
+  "promptSha256": "e701026f7578490437e543dc05fe8704114a60c8d2c17c2ba62e2badfb7edce3",
+  "runId": "2026-05-02-085603639Z",
+  "runs": [
+    {
+      "bundleKb": 0,
+      "correctness": 35,
+      "costUsd": 0,
+      "fidelity": 30,
+      "honesty": 95,
+      "mode": "automated",
+      "notes": "Local smoke adapter generated a deterministic placeholder artifact. Replace with router-backed Soupy adapter in PR #4.",
+      "refactor": 60,
+      "status": "completed",
+      "timeSec": 0.003,
+      "tool": "soupy",
+      "artifactPath": "artifacts/2026-05-02-085603639Z/soupy/repo/README.md",
+      "screenshotPath": "artifacts/2026-05-02-085603639Z/soupy/preview.txt"
+    },
+    {
+      "bundleKb": null,
+      "correctness": null,
+      "costUsd": null,
+      "fidelity": null,
+      "honesty": null,
+      "mode": "manual",
+      "notes": "Manual run required; no automated score was published.",
+      "refactor": null,
+      "status": "manual",
+      "timeSec": null,
+      "tool": "lovable"
+    },
+    {
+      "bundleKb": null,
+      "correctness": null,
+      "costUsd": null,
+      "fidelity": null,
+      "honesty": null,
+      "mode": "manual",
+      "notes": "Manual run required; no automated score was published.",
+      "refactor": null,
+      "status": "manual",
+      "timeSec": null,
+      "tool": "bolt"
+    },
+    {
+      "bundleKb": null,
+      "correctness": null,
+      "costUsd": null,
+      "fidelity": null,
+      "honesty": null,
+      "mode": "manual",
+      "notes": "Manual run required; no automated score was published.",
+      "refactor": null,
+      "status": "manual",
+      "timeSec": null,
+      "tool": "v0"
+    },
+    {
+      "bundleKb": null,
+      "correctness": null,
+      "costUsd": null,
+      "fidelity": null,
+      "honesty": null,
+      "mode": "manual",
+      "notes": "Manual run required; no automated score was published.",
+      "refactor": null,
+      "status": "manual",
+      "timeSec": null,
+      "tool": "cursor"
+    },
+    {
+      "bundleKb": null,
+      "correctness": null,
+      "costUsd": null,
+      "fidelity": null,
+      "honesty": null,
+      "mode": "manual",
+      "notes": "Manual run required; no automated score was published.",
+      "refactor": null,
+      "status": "manual",
+      "timeSec": null,
+      "tool": "replit"
+    },
+    {
+      "bundleKb": null,
+      "correctness": null,
+      "costUsd": null,
+      "fidelity": null,
+      "honesty": null,
+      "mode": "automated",
+      "notes": "Claude CLI not found on PATH.",
+      "refactor": null,
+      "status": "unavailable",
+      "timeSec": 0.003,
+      "tool": "claude-code"
+    }
+  ],
+  "startedAt": "2026-05-02T08:56:03.639Z"
+}
