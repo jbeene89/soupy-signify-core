@@ -77,6 +77,66 @@ export const BUILD_OFFS: BuildOff[] = [
       { tool: "Claude Code",    raw: { cost: 1.55, time: 72, fidelity: 68, correctness: 91, refactor: 89, honesty: 88, bundle: 134 }, notes: "Backend-strong, UI plain. Honest about ambiguity in prompt." },
     ],
   },
+  {
+    id: "002-crm-dashboard",
+    number: 2,
+    title: "CRM dashboard with charts",
+    prompt:
+      'Build an internal CRM dashboard. Show a sortable table of contacts (name, company, status, last touched). Above it, three KPI cards (total contacts, active deals, won this month) and a line chart of deals/week for the last 12 weeks. Filter by status. Seed with 50 fake contacts. Mobile-friendly.',
+    brief:
+      "Tests data-dense UI: tables, KPIs, charts, and filter state. Stresses layout discipline and chart-library wiring more than backend.",
+    status: "sample",
+    date: "2026-04-22",
+    runs: [
+      { tool: "Soupy Together", raw: { cost: 0.52, time: 61, fidelity: 78, correctness: 82, refactor: 80, honesty: 88, bundle: 172 }, notes: "Routed table + KPIs to Tier 1, escalated chart wiring to Tier 2." },
+      { tool: "Lovable Pro",    raw: { cost: 1.25, time: 54, fidelity: 90, correctness: 84, refactor: 76, honesty: 70, bundle: 188 }, notes: "Polished cards and chart, occasional invented column." },
+      { tool: "Bolt",           raw: { cost: 1.60, time: 48, fidelity: 80, correctness: 74, refactor: 60, honesty: 62, bundle: 204 }, notes: "Filter state regressed when chart was added." },
+      { tool: "v0 by Vercel",   raw: { cost: 1.05, time: 38, fidelity: 93, correctness: 70, refactor: 66, honesty: 68, bundle: 168 }, notes: "Best-looking dashboard, no real filter logic on first pass." },
+      { tool: "Cursor",         raw: { cost: 2.00, time: 110, fidelity: 72, correctness: 89, refactor: 84, honesty: 82, bundle: 154 }, notes: "Required dev-in-the-loop. Cleanest sort/filter code." },
+      { tool: "Replit Agent",   raw: { cost: 2.30, time: 102, fidelity: 76, correctness: 78, refactor: 68, honesty: 66, bundle: 192 }, notes: "End-to-end, slowest." },
+      { tool: "Claude Code",    raw: { cost: 1.70, time: 84, fidelity: 70, correctness: 90, refactor: 88, honesty: 87, bundle: 148 }, notes: "Strong logic, plain visuals." },
+    ],
+  },
+  {
+    id: "003-chat-widget",
+    number: 3,
+    title: "Embeddable chat widget",
+    prompt:
+      'Build an embeddable chat widget. A floating button bottom-right opens a panel with a streaming AI assistant. Persist conversation in localStorage. Provide a single <script> tag a customer can drop into any site. Mobile-friendly. No backend assumed beyond a /chat streaming endpoint.',
+    brief:
+      "Tests streaming UI, embed/iframe boundaries, and packaging discipline. Reveals which tools understand build output for distribution vs. just app rendering.",
+    status: "sample",
+    date: "2026-04-29",
+    runs: [
+      { tool: "Soupy Together", raw: { cost: 0.46, time: 58, fidelity: 74, correctness: 83, refactor: 81, honesty: 89, bundle: 96 }, notes: "Tier 1 scaffold, Tier 2 only for streaming SSE wiring. Smallest bundle." },
+      { tool: "Lovable Pro",    raw: { cost: 1.18, time: 51, fidelity: 86, correctness: 82, refactor: 75, honesty: 71, bundle: 142 }, notes: "Pretty panel, embed script needed manual fixes." },
+      { tool: "Bolt",           raw: { cost: 1.50, time: 44, fidelity: 78, correctness: 76, refactor: 62, honesty: 63, bundle: 168 }, notes: "Fast preview, streaming broke after a refactor." },
+      { tool: "v0 by Vercel",   raw: { cost: 0.98, time: 35, fidelity: 90, correctness: 68, refactor: 65, honesty: 69, bundle: 124 }, notes: "Beautiful UI, no real embed packaging." },
+      { tool: "Cursor",         raw: { cost: 1.85, time: 99, fidelity: 70, correctness: 90, refactor: 86, honesty: 84, bundle: 102 }, notes: "Cleanest streaming + embed bundle, slow." },
+      { tool: "Replit Agent",   raw: { cost: 2.20, time: 94, fidelity: 72, correctness: 79, refactor: 70, honesty: 67, bundle: 158 }, notes: "Worked end-to-end, expensive." },
+      { tool: "Claude Code",    raw: { cost: 1.60, time: 76, fidelity: 66, correctness: 92, refactor: 89, honesty: 88, bundle: 110 }, notes: "Strong streaming logic. UI minimal." },
+    ],
+  },
+  {
+    id: "004-landing-page",
+    number: 4,
+    title: "Marketing landing page",
+    prompt:
+      'Build a marketing landing page for a fictional B2B SaaS. Hero with headline + CTA, three feature cards, a customer logo strip, a pricing table with three tiers, and a footer with email signup. SEO-clean (title, description, OG, semantic HTML). Mobile-friendly. No backend beyond the email signup posting to /subscribe.',
+    brief:
+      "Tests pure design + SEO craft. Composition, typography hierarchy, semantic HTML, and OG metadata — the place where visual-first tools should shine.",
+    status: "sample",
+    date: "2026-05-02",
+    runs: [
+      { tool: "Soupy Together", raw: { cost: 0.34, time: 49, fidelity: 80, correctness: 86, refactor: 83, honesty: 90, bundle: 118 }, notes: "Routed almost entirely to Tier 0/1. Cheap and clean." },
+      { tool: "Lovable Pro",    raw: { cost: 1.05, time: 44, fidelity: 92, correctness: 87, refactor: 79, honesty: 73, bundle: 146 }, notes: "Strong type hierarchy, occasional invented social proof." },
+      { tool: "Bolt",           raw: { cost: 1.40, time: 39, fidelity: 82, correctness: 78, refactor: 65, honesty: 66, bundle: 162 }, notes: "Fast, generic AI-aesthetic gradients." },
+      { tool: "v0 by Vercel",   raw: { cost: 0.92, time: 30, fidelity: 96, correctness: 74, refactor: 70, honesty: 71, bundle: 132 }, notes: "Best visual fidelity in the round. SEO meta partial." },
+      { tool: "Cursor",         raw: { cost: 1.75, time: 92, fidelity: 68, correctness: 91, refactor: 87, honesty: 85, bundle: 108 }, notes: "Cleanest semantic HTML, plainest design." },
+      { tool: "Replit Agent",   raw: { cost: 2.05, time: 86, fidelity: 74, correctness: 80, refactor: 71, honesty: 68, bundle: 156 }, notes: "Worked end-to-end." },
+      { tool: "Claude Code",    raw: { cost: 1.50, time: 70, fidelity: 66, correctness: 92, refactor: 90, honesty: 89, bundle: 114 }, notes: "Strong semantics + OG. Visuals plain." },
+    ],
+  },
 ];
 
 // =============================
