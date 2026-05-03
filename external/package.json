@@ -8,7 +8,6 @@
   "scripts": {
     "build": "tsc -b",
     "lint": "eslint .",
-    "organizer": "tsc -b apps/desktop-organizer && node apps/desktop-organizer/dist/index.js",
     "publish:build-off": "node scripts/publish-build-off.mjs",
     "test": "vitest run",
     "typecheck": "tsc -b --pretty false"

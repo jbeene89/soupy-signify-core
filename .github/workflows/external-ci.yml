@@ -1,0 +1,59 @@
+name: External SACE CI
+
+on:
+  pull_request:
+    paths:
+      - "external/**"
+      - ".github/workflows/external-ci.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "external/**"
+      - ".github/workflows/external-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  external:
+    name: external workspace
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: external
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: pnpm
+          cache-dependency-path: external/pnpm-lock.yaml
+
+      - name: Enable pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@9.15.4 --activate
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Test
+        run: pnpm test
+
+      - name: Build
+        run: pnpm build
+
+      - name: Verify build-off publish path
+        run: |
+          pnpm --filter harness run build-off 001-todo-auth
+          pnpm publish:build-off 001-todo-auth
