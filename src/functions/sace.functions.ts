@@ -15,7 +15,7 @@ import type {
   PublishedBuildOffManifestEntry,
   RouteDecision,
 } from "@/lib/sace/contract";
-import { callRouterRoute, readSaceEnv } from "@/server/sace-router-internal";
+import { callRouterRoute, readSaceEnv } from "./sace-router-internal";
 
 const PromptInput = z.object({
   prompt: z.string().trim().min(3).max(2000),

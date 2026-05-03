@@ -10,7 +10,7 @@
 
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
-import { openCompleteStream, readSaceEnv } from "@/server/sace-router-internal";
+import { openCompleteStream, readSaceEnv } from "@/functions/sace-router-internal";
 
 const Body = z.object({
   prompt: z.string().trim().min(3).max(2000),
