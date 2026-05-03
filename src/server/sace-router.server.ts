@@ -54,35 +54,25 @@ export function readSaceEnv(): SaceEnv | null {
 }
 
 /**
- * Canonical signing string. Kept isolated — update in lockstep with the
- * external router's verifier.
- *
- * Current format (placeholder, subject to confirmation in the external PR):
- *   `${method.toUpperCase()}\n${path}\n${timestamp}\n${sha256(body)}`
+ * Canonical signing string per external SACE spec:
+ *   `${timestamp}.${rawBody}`
+ * - timestamp: same value sent in `x-soupy-timestamp` (unix seconds, string)
+ * - rawBody: exact JSON string sent over the wire
+ * - signature: base64(hmac_sha256(SACE_ROUTER_HMAC_KEY, canonical))
  */
-function canonicalSigningString(
-  method: string,
-  path: string,
-  timestamp: string,
-  bodyText: string,
-): string {
-  const bodyHash = createHmac("sha256", "soupy-canonical-body")
-    .update(bodyText)
-    .digest("hex");
-  return `${method.toUpperCase()}\n${path}\n${timestamp}\n${bodyHash}`;
+function canonicalSigningString(timestamp: string, bodyText: string): string {
+  return `${timestamp}.${bodyText}`;
 }
 
 function signHeaders(
   env: SaceEnv,
-  method: string,
-  path: string,
   bodyText: string,
 ): Record<string, string> {
   const timestamp = Math.floor(Date.now() / 1000).toString();
-  const canonical = canonicalSigningString(method, path, timestamp, bodyText);
+  const canonical = canonicalSigningString(timestamp, bodyText);
   const signature = createHmac("sha256", env.hmacKey)
     .update(canonical)
-    .digest("hex");
+    .digest("base64");
   return {
     "x-soupy-api-key": env.apiKeyId,
     "x-soupy-timestamp": timestamp,
