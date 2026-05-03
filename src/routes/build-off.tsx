@@ -126,6 +126,31 @@ function BuildOffPage() {
               </span>
             </div>
           </div>
+          {entries.length > 0 && (
+            <div className="mb-8 flex items-center gap-3 flex-wrap">
+              <label
+                htmlFor="buildoff-picker"
+                className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground"
+              >
+                § ROUND
+              </label>
+              <select
+                id="buildoff-picker"
+                value={selectedId}
+                onChange={(e) =>
+                  navigate({ search: { id: e.target.value }, replace: true })
+                }
+                className="bg-transparent border border-rule px-3 py-2 font-mono text-[12px] text-cream hover:border-cyan-accent focus:border-cyan-accent focus:outline-none"
+              >
+                {entries.map((entry: PublishedBuildOffManifestEntry) => (
+                  <option key={entry.id} value={entry.id} className="bg-background text-cream">
+                    {entry.id}
+                    {entry.runId ? ` · ${entry.runId}` : ""}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
           <h1 className="font-serif text-[44px] sm:text-[64px] md:text-[80px] leading-[1.02] tracking-tight">
             {current.title}
           </h1>
