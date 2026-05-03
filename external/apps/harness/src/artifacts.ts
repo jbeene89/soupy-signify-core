@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import { mkdir, writeFile } from "node:fs/promises";
-import { dirname, join, resolve } from "node:path";
+import { dirname, join, relative, resolve } from "node:path";
 import type { ArtifactLocation, ToolId } from "@soupy-together/shared-types";
 import { workspaceRoot } from "./paths.js";
 
@@ -24,6 +24,6 @@ export async function writeTextArtifact(
   };
 }
 
-export function relativePathFromRepo(path: string): string {
-  return path.replace(`${workspaceRoot()}\\`, "").replaceAll("\\", "/");
+export function relativePathFromRepo(absolutePath: string): string {
+  return relative(workspaceRoot(), absolutePath).replaceAll("\\", "/");
 }
