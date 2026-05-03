@@ -18,8 +18,9 @@ import {
   RadarChart,
   CostCorrectnessScatter,
 } from "@/components/site/BuildOffVisuals";
+import { VisualShowcase } from "@/components/site/VisualShowcase";
 import { fetchPublishedBuildOff, listPublishedBuildOffs } from "@/functions/sace.functions";
-import type { PublishedBuildOff, PublishedBuildOffManifestEntry } from "@/lib/sace/contract";
+import type { PublishedBuildOff, PublishedBuildOffManifestEntry, PublishedToolRun } from "@/lib/sace/contract";
 
 const SearchSchema = z.object({ id: z.string().min(1).max(64).optional() });
 
@@ -58,6 +59,9 @@ interface MergedBuildOff extends BuildOff {
   /** Per-tool harness telemetry (only present when published). */
   telemetryByTool: Record<string, { ttft_ms?: number; time_to_green_s?: number }>;
   sourceUrl?: string;
+  /** Full published run data — needed for the visual showcase iframe/previewUrl fields. */
+  publishedRuns?: PublishedToolRun[];
+  showcaseComplete?: boolean;
 }
 
 function mergePublished(sample: BuildOff, pub: PublishedBuildOff): MergedBuildOff {
@@ -87,6 +91,9 @@ function mergePublished(sample: BuildOff, pub: PublishedBuildOff): MergedBuildOf
     manualByTool,
     telemetryByTool,
     sourceUrl: pub.source_url,
+    tier: pub.tier,
+    publishedRuns: pub.runs,
+    showcaseComplete: pub.showcaseComplete,
   };
 }
 
@@ -112,8 +119,15 @@ function BuildOffPage() {
         {/* HEADER */}
         <FadeIn>
           <div className="flex items-center justify-between gap-4 flex-wrap mb-8">
-            <div className="font-mono text-[12px] uppercase tracking-[0.14em] text-muted-foreground">
-              § BUILD-OFF · ROUND {String(current.number).padStart(3, "0")}
+            <div className="flex items-center gap-4 flex-wrap">
+              <div className="font-mono text-[12px] uppercase tracking-[0.14em] text-muted-foreground">
+                § BUILD-OFF · ROUND {String(current.number).padStart(3, "0")}
+              </div>
+              {current.tier && (
+                <div className="font-mono text-[10px] uppercase tracking-[0.14em] border border-cyan-accent/35 text-cyan-accent/80 px-2.5 py-1">
+                  TIER {{ 1: "I", 2: "II", 3: "III" }[current.tier]}
+                </div>
+              )}
             </div>
             <div className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.14em]">
               <span
@@ -215,6 +229,38 @@ function BuildOffPage() {
         </FadeIn>
 
         <hr className="border-rule my-20" />
+
+        {/* VISUAL SHOWCASE — only for tiered build-offs */}
+        {current.tier && (
+          <>
+            <FadeIn>
+              <SectionMarker>§ VISUAL SHOWCASE</SectionMarker>
+              <h2 className="font-serif text-3xl md:text-4xl">What each tool built.</h2>
+              <p className="font-serif italic text-lg text-cream/75 mt-2 max-w-3xl">
+                Same prompt. Same constraints. Submissions appear as tools complete — rankings unlock once everyone is in.
+              </p>
+
+              <div className="mt-10">
+                <VisualShowcase
+                  tier={current.tier}
+                  runs={
+                    current.publishedRuns ??
+                    current.runs.map((r) => ({
+                      tool: r.tool,
+                      raw: r.raw,
+                      notes: r.notes,
+                      mode: "harness" as const,
+                    }))
+                  }
+                  scored={scored}
+                  showcaseComplete={current.showcaseComplete ?? false}
+                />
+              </div>
+            </FadeIn>
+
+            <hr className="border-rule my-20" />
+          </>
+        )}
 
         {/* LEADERBOARD */}
         <FadeIn>

@@ -89,6 +89,14 @@ export interface PublishedToolRun {
   notes?: string;
   /** "manual" runs are visually distinct from harness-driven runs. */
   mode?: "manual" | "harness";
+  /**
+   * Visual challenge fields (Tier I/II/III build-offs).
+   * previewUrl: iframe src — either the tool's native deploy URL or a harness-served path.
+   * previewHarnessServed: true when the harness built and served the output rather than
+   *   the tool deploying it natively (flagged visually so viewers know the difference).
+   */
+  previewUrl?: string;
+  previewHarnessServed?: boolean;
 }
 
 export interface PublishedBuildOffManifestEntry {
@@ -113,4 +121,11 @@ export interface PublishedBuildOff {
   date: string;
   runs: PublishedToolRun[];
   source_url?: string;
+  /** Build-off tier (1 = single-file HTML, 2 = component, 3 = deployed app). */
+  tier?: 1 | 2 | 3;
+  /**
+   * True once all participating tools have submitted (or been marked unavailable).
+   * Controls whether the visual rankings section unlocks on the page.
+   */
+  showcaseComplete?: boolean;
 }

@@ -45,6 +45,46 @@ export interface ToolRun {
   notes?: string;
 }
 
+// =============================
+// Tiered build-off definitions
+// =============================
+
+export interface BuildOffTier {
+  tier: 1 | 2 | 3;
+  label: string;
+  /** One-line constraint shown in the UI badge. */
+  constraint: string;
+  description: string;
+}
+
+export const BUILD_OFF_TIERS: BuildOffTier[] = [
+  {
+    tier: 1,
+    label: "Tier I — Single file",
+    constraint: "One index.html · CDN deps only · no build step",
+    description:
+      "The level playing field. Every tool participates. The prompt must produce a single self-contained file that runs in any browser without a build step.",
+  },
+  {
+    tier: 2,
+    label: "Tier II — Component",
+    constraint: "React/Vue component · no backend required",
+    description:
+      "Framework-native output. Tools that scaffold components naturally. No auto-deploy required — the harness builds and serves.",
+  },
+  {
+    tier: 3,
+    label: "Tier III — Deployed app",
+    constraint: "Full app · live URL required",
+    description:
+      "Tools with native hosting: the output must be a reachable URL, not just files. Harness-served entries are flagged distinctly.",
+  },
+];
+
+export function getBuildOffTier(tier: 1 | 2 | 3): BuildOffTier {
+  return BUILD_OFF_TIERS.find((t) => t.tier === tier)!;
+}
+
 export interface BuildOff {
   id: string;
   number: number;
@@ -54,6 +94,8 @@ export interface BuildOff {
   status: "sample" | "verified";
   date: string;
   runs: ToolRun[];
+  /** Present when the round is a tiered visual challenge. */
+  tier?: 1 | 2 | 3;
 }
 
 export const BUILD_OFFS: BuildOff[] = [
@@ -115,6 +157,27 @@ export const BUILD_OFFS: BuildOff[] = [
       { tool: "Cursor",         raw: { cost: 1.85, time: 99, fidelity: 70, correctness: 90, refactor: 86, honesty: 84, bundle: 102 }, notes: "Cleanest streaming + embed bundle, slow." },
       { tool: "Replit Agent",   raw: { cost: 2.20, time: 94, fidelity: 72, correctness: 79, refactor: 70, honesty: 67, bundle: 158 }, notes: "Worked end-to-end, expensive." },
       { tool: "Claude Code",    raw: { cost: 1.60, time: 76, fidelity: 66, correctness: 92, refactor: 89, honesty: 88, bundle: 110 }, notes: "Strong streaming logic. UI minimal." },
+    ],
+  },
+  {
+    id: "005-rotating-planet",
+    number: 5,
+    tier: 1,
+    title: "3D rotating planet",
+    prompt:
+      "Produce a single index.html with no build step. Load Three.js r165 from the jsDelivr CDN. Render a 3D sphere with a realistic surface: use MeshStandardMaterial with a roughness map procedurally generated from canvas noise — no external texture files. Add a soft atmospheric rim-glow using an additive backface sphere. Rotate the planet on its axis continuously. Support click-and-drag orbit. Background: deep space with at least 300 randomly placed stars rendered as Points. The result must look impressive at 600×400. No frameworks, no bundlers, no npm.",
+    brief:
+      "Tier I visual proficiency challenge. One HTML file, Three.js from CDN, no build step. Tests whether each tool can produce something genuinely impressive under tight, portable constraints — the lowest common denominator that every participant can hit.",
+    status: "sample",
+    date: "2026-05-10",
+    runs: [
+      { tool: "Soupy Together", raw: { cost: 0.09, time: 18,  fidelity: 72, correctness: 90, refactor: 40, honesty: 88, bundle: 12  }, notes: "Tier 0/1 handled the Three.js boilerplate cheaply. Atmosphere glow present, surface noise functional." },
+      { tool: "Lovable Pro",    raw: { cost: 0.28, time: 22,  fidelity: 86, correctness: 84, refactor: 35, honesty: 70, bundle: 12  }, notes: "Strong visual output. Attempted to scaffold React — needed a prompt nudge to stay single-file." },
+      { tool: "Bolt",           raw: { cost: 0.32, time: 19,  fidelity: 80, correctness: 78, refactor: 30, honesty: 62, bundle: 12  }, notes: "Fast. Surface detail thinner, glow present." },
+      { tool: "v0 by Vercel",   raw: { cost: 0.22, time: 14,  fidelity: 91, correctness: 76, refactor: 28, honesty: 66, bundle: 12  }, notes: "Best-looking sphere. Surface texture richest of the set. Drag orbit slightly jumpy." },
+      { tool: "Cursor",         raw: { cost: 0.45, time: 54,  fidelity: 70, correctness: 92, refactor: 45, honesty: 82, bundle: 12  }, notes: "Cleanest Three.js code. Visually plain — prioritized correctness over impressiveness." },
+      { tool: "Replit Agent",   raw: { cost: 0.55, time: 48,  fidelity: 74, correctness: 80, refactor: 32, honesty: 65, bundle: 12  }, notes: "Ran end-to-end. Stars sparse, atmosphere thin." },
+      { tool: "Claude Code",    raw: { cost: 0.38, time: 38,  fidelity: 68, correctness: 93, refactor: 48, honesty: 86, bundle: 12  }, notes: "Error-free, structured geometry code. Visuals minimal — no rim glow, basic star field." },
     ],
   },
   {
