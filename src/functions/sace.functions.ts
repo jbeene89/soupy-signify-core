@@ -2,6 +2,8 @@
  * Server functions exposing SACE router + build-off results to the UI.
  * These are safe to import from any component — the Vite plugin replaces
  * the implementation with an RPC stub in the client bundle.
+ *
+ * @module sace-functions
  */
 
 import { createServerFn } from "@tanstack/react-start";
