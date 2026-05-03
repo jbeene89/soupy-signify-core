@@ -13,7 +13,7 @@ import type {
   PublishedBuildOffManifestEntry,
   RouteDecision,
 } from "@/lib/sace/contract";
-import { callRouterRoute, readSaceEnv } from "./sace-router.server";
+import { callRouterRoute, readSaceEnv } from "@/functions/sace-router.server";
 
 const PromptInput = z.object({
   prompt: z.string().trim().min(3).max(2000),
