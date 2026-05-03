@@ -1,4 +1,5 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { z } from "zod";
 import { Nav } from "@/components/site/Nav";
 import { SectionMarker } from "@/components/site/SectionMarker";
 import { FadeIn } from "@/components/site/FadeIn";
@@ -17,10 +18,13 @@ import {
   RadarChart,
   CostCorrectnessScatter,
 } from "@/components/site/BuildOffVisuals";
-import { fetchPublishedBuildOff } from "@/server/sace.functions";
-import type { PublishedBuildOff } from "@/lib/sace/contract";
+import { fetchPublishedBuildOff, listPublishedBuildOffs } from "@/server/sace.functions";
+import type { PublishedBuildOff, PublishedBuildOffManifestEntry } from "@/lib/sace/contract";
+
+const SearchSchema = z.object({ id: z.string().min(1).max(64).optional() });
 
 export const Route = createFileRoute("/build-off")({
+  validateSearch: (search) => SearchSchema.parse(search),
   head: () => ({
     meta: [
       { title: "Build-Off — Soupy Together" },
@@ -37,10 +41,14 @@ export const Route = createFileRoute("/build-off")({
       },
     ],
   }),
-  loader: async () => {
+  loaderDeps: ({ search }) => ({ id: search.id }),
+  loader: async ({ deps }) => {
     const sample = BUILD_OFFS[0];
-    const published = await fetchPublishedBuildOff({ data: { id: sample.id } });
-    return { sample, published: published.result };
+    const manifest = await listPublishedBuildOffs();
+    const entries = manifest.entries;
+    const selectedId = deps.id ?? entries[0]?.id ?? sample.id;
+    const published = await fetchPublishedBuildOff({ data: { id: selectedId } });
+    return { sample, published: published.result, entries, selectedId };
   },
   component: BuildOffPage,
 });
