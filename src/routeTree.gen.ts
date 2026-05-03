@@ -15,6 +15,8 @@ import { Route as BuildOffRouteImport } from './routes/build-off'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiSaceCompleteRouteImport } from './routes/api/sace/complete'
 import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
+import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
+import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
 import { Route as ApiBadgeCategoryRankToolRouteImport } from './routes/api/badge/$category/$rank/$tool'
 
 const PartnersRoute = PartnersRouteImport.update({
@@ -48,6 +50,16 @@ const LovableEmailQueueProcessRoute =
     path: '/lovable/email/queue/process',
     getParentRoute: () => rootRouteImport,
   } as any)
+const LovableEmailAuthWebhookRoute = LovableEmailAuthWebhookRouteImport.update({
+  id: '/lovable/email/auth/webhook',
+  path: '/lovable/email/auth/webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LovableEmailAuthPreviewRoute = LovableEmailAuthPreviewRouteImport.update({
+  id: '/lovable/email/auth/preview',
+  path: '/lovable/email/auth/preview',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiBadgeCategoryRankToolRoute =
   ApiBadgeCategoryRankToolRouteImport.update({
     id: '/api/badge/$category/$rank/$tool',
@@ -61,6 +73,8 @@ export interface FileRoutesByFullPath {
   '/demo': typeof DemoRoute
   '/partners': typeof PartnersRoute
   '/api/sace/complete': typeof ApiSaceCompleteRoute
+  '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
+  '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
   '/api/badge/$category/$rank/$tool': typeof ApiBadgeCategoryRankToolRoute
 }
@@ -70,6 +84,8 @@ export interface FileRoutesByTo {
   '/demo': typeof DemoRoute
   '/partners': typeof PartnersRoute
   '/api/sace/complete': typeof ApiSaceCompleteRoute
+  '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
+  '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
   '/api/badge/$category/$rank/$tool': typeof ApiBadgeCategoryRankToolRoute
 }
@@ -80,6 +96,8 @@ export interface FileRoutesById {
   '/demo': typeof DemoRoute
   '/partners': typeof PartnersRoute
   '/api/sace/complete': typeof ApiSaceCompleteRoute
+  '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
+  '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
   '/api/badge/$category/$rank/$tool': typeof ApiBadgeCategoryRankToolRoute
 }
@@ -91,6 +109,8 @@ export interface FileRouteTypes {
     | '/demo'
     | '/partners'
     | '/api/sace/complete'
+    | '/lovable/email/auth/preview'
+    | '/lovable/email/auth/webhook'
     | '/lovable/email/queue/process'
     | '/api/badge/$category/$rank/$tool'
   fileRoutesByTo: FileRoutesByTo
@@ -100,6 +120,8 @@ export interface FileRouteTypes {
     | '/demo'
     | '/partners'
     | '/api/sace/complete'
+    | '/lovable/email/auth/preview'
+    | '/lovable/email/auth/webhook'
     | '/lovable/email/queue/process'
     | '/api/badge/$category/$rank/$tool'
   id:
@@ -109,6 +131,8 @@ export interface FileRouteTypes {
     | '/demo'
     | '/partners'
     | '/api/sace/complete'
+    | '/lovable/email/auth/preview'
+    | '/lovable/email/auth/webhook'
     | '/lovable/email/queue/process'
     | '/api/badge/$category/$rank/$tool'
   fileRoutesById: FileRoutesById
@@ -119,6 +143,8 @@ export interface RootRouteChildren {
   DemoRoute: typeof DemoRoute
   PartnersRoute: typeof PartnersRoute
   ApiSaceCompleteRoute: typeof ApiSaceCompleteRoute
+  LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
+  LovableEmailAuthWebhookRoute: typeof LovableEmailAuthWebhookRoute
   LovableEmailQueueProcessRoute: typeof LovableEmailQueueProcessRoute
   ApiBadgeCategoryRankToolRoute: typeof ApiBadgeCategoryRankToolRoute
 }
@@ -167,6 +193,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LovableEmailQueueProcessRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/lovable/email/auth/webhook': {
+      id: '/lovable/email/auth/webhook'
+      path: '/lovable/email/auth/webhook'
+      fullPath: '/lovable/email/auth/webhook'
+      preLoaderRoute: typeof LovableEmailAuthWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lovable/email/auth/preview': {
+      id: '/lovable/email/auth/preview'
+      path: '/lovable/email/auth/preview'
+      fullPath: '/lovable/email/auth/preview'
+      preLoaderRoute: typeof LovableEmailAuthPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/badge/$category/$rank/$tool': {
       id: '/api/badge/$category/$rank/$tool'
       path: '/api/badge/$category/$rank/$tool'
@@ -183,6 +223,8 @@ const rootRouteChildren: RootRouteChildren = {
   DemoRoute: DemoRoute,
   PartnersRoute: PartnersRoute,
   ApiSaceCompleteRoute: ApiSaceCompleteRoute,
+  LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
+  LovableEmailAuthWebhookRoute: LovableEmailAuthWebhookRoute,
   LovableEmailQueueProcessRoute: LovableEmailQueueProcessRoute,
   ApiBadgeCategoryRankToolRoute: ApiBadgeCategoryRankToolRoute,
 }
