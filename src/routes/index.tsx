@@ -289,66 +289,6 @@ function Index() {
 
         <hr className="border-rule" />
 
-        {/* BUILD-OFF */}
-        <section id="build-off" aria-labelledby="buildoff-heading" className="py-32 md:py-40 scroll-mt-20">
-          <FadeIn>
-            <SectionMarker>§ 05 · BUILD-OFF</SectionMarker>
-            <h2 id="buildoff-heading" className="font-serif text-4xl md:text-5xl leading-tight max-w-3xl">
-              The Build-Off, by category.
-            </h2>
-            <p className="font-serif italic text-xl md:text-2xl text-cream/80 mt-4 max-w-3xl">
-              A rotating, public competition. Each category is one skill — frontend
-              fidelity, backend correctness, refactor reliability, and so on. Every
-              integrated AI coding tool runs the same task. We publish the podium.
-              Brands earn a badge they can show. You pick which tool you want for
-              each kind of work, and Soupy routes there when the job calls for it.
-            </p>
-
-            <HomeBuildOff />
-
-            <div className="mt-10 grid md:grid-cols-2 gap-6">
-              <div className="border border-rule p-6">
-                <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-cyan-accent mb-3">
-                  § HOW TO READ IT
-                </div>
-                <p className="font-body text-[15px] text-cream/85 leading-relaxed">
-                  Soupy Together is the daily driver, not the top scorer. We don't
-                  need to win — we need to know who does. When your job lands in a
-                  category where another tool ranks first, that's where we route
-                  it. You only pay for that call.
-                </p>
-              </div>
-              <div className="border border-rule p-6">
-                <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-cyan-accent mb-3">
-                  § FOR PARTNERS
-                </div>
-                <p className="font-body text-[15px] text-cream/85 leading-relaxed">
-                  Rank 1st, 2nd, or 3rd in any category and you get an embeddable
-                  SVG badge for your site. No tool can pay for placement. The
-                  rubric is public; the receipts are public.
-                </p>
-              </div>
-            </div>
-
-            <div className="mt-8 flex flex-col sm:flex-row gap-4 items-start">
-              <a
-                href="/build-off"
-                className="font-mono text-[12px] uppercase tracking-[0.14em] px-6 py-3 bg-cyan-accent text-primary-foreground hover:opacity-90 transition-opacity"
-              >
-                Full leaderboard & receipts →
-              </a>
-              <a
-                href="/partners"
-                className="font-mono text-[12px] uppercase tracking-[0.14em] px-6 py-3 border border-cream/40 text-cream hover:border-cyan-accent hover:text-cyan-accent transition-colors"
-              >
-                Partner with us →
-              </a>
-            </div>
-          </FadeIn>
-        </section>
-
-        <hr className="border-rule" />
-
         {/* INTEGRATIONS */}
         <section id="integrations" aria-labelledby="integrations-heading" className="py-32 md:py-40 scroll-mt-20">
           <FadeIn>
