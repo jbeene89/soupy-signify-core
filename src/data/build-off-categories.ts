@@ -103,13 +103,13 @@ export interface CategoryRanks {
 export const CATEGORY_RANKS: Record<CategoryId, CategoryRanks> = {
   "frontend-fidelity": {
     categoryId: "frontend-fidelity",
-    round: 1,
-    date: "2026-04-15",
+    round: 3,
+    date: "2026-05-01",
     status: "sample",
     podium: [
-      { tool: "v0 by Vercel", note: "Best-looking UI on first pass. Spec-faithful layout." },
-      { tool: "Lovable Pro", note: "Strong design system, quick edit loop." },
-      { tool: "Bolt", note: "Fast first preview, slightly noisier markup." },
+      { tool: "v0 by Vercel", note: "Three rounds straight — spec-faithful layout, cleanest markup." },
+      { tool: "Lovable Pro", note: "Closed the gap on R3. Strong design system, fastest edit loop." },
+      { tool: "Bolt", note: "Quick first preview, regressed slightly on responsive breakpoints." },
     ],
     honorableMentions: [
       { tool: "Soupy Together", note: "Daily-driver routing — picks v0 when fidelity is the goal." },
@@ -117,63 +117,91 @@ export const CATEGORY_RANKS: Record<CategoryId, CategoryRanks> = {
   },
   "backend-correctness": {
     categoryId: "backend-correctness",
-    round: 1,
-    date: "2026-04-15",
+    round: 3,
+    date: "2026-05-01",
     status: "sample",
     podium: [
-      { tool: "Claude Code", note: "Cleanest auth wiring, correct RLS first try." },
-      { tool: "Cursor", note: "Driven correctly, ships solid backend code." },
-      { tool: "Replit Agent", note: "End-to-end working, slower." },
+      { tool: "Claude Code", note: "Three-peat. Correct RLS first try across all rounds." },
+      { tool: "Cursor", note: "Reliable when developer-driven, weaker autonomous." },
+      { tool: "Lovable Pro", note: "Up from 4th — auth wiring caught up this round." },
     ],
   },
   "refactor-reliability": {
     categoryId: "refactor-reliability",
-    round: 1,
-    date: "2026-04-15",
+    round: 3,
+    date: "2026-05-01",
     status: "sample",
     podium: [
-      { tool: "Cursor", note: "Multi-file diffs preserve correctness across edits." },
-      { tool: "Claude Code", note: "Conservative, asks before risky moves." },
-      { tool: "Lovable Pro", note: "Holds up on small refactors, slips on large ones." },
+      { tool: "Cursor", note: "Still the king of multi-file diffs. Tests stayed green R1–R3." },
+      { tool: "Claude Code", note: "Conservative, asks before risky moves. Zero regressions." },
+      { tool: "Replit Agent", note: "New entrant on the podium — held up on a 14-file rename." },
     ],
   },
   "data-and-sql": {
     categoryId: "data-and-sql",
-    round: 1,
-    date: "2026-04-15",
+    round: 3,
+    date: "2026-05-01",
     status: "sample",
     podium: [
-      { tool: "Claude Code", note: "Schema + query both correct on first pass." },
-      { tool: "Cursor", note: "Ships when developer drives the design." },
-      { tool: "Soupy Together", note: "Routes data work to GPT-5 mini cheaply." },
+      { tool: "Claude Code", note: "Schema + aggregate query correct first pass, three rounds running." },
+      { tool: "Soupy Together", note: "Up from 3rd — routes data work to GPT-5 mini at a fraction of cost." },
+      { tool: "Cursor", note: "Ships cleanly when the developer drives the schema design." },
     ],
   },
   "honesty-under-uncertainty": {
     categoryId: "honesty-under-uncertainty",
-    round: 1,
-    date: "2026-04-15",
+    round: 3,
+    date: "2026-05-01",
     status: "sample",
     podium: [
-      { tool: "Claude Code", note: "Asks clarifying questions instead of guessing." },
-      { tool: "Soupy Together", note: "Returns a labeled estimate with uncertainty bands." },
-      { tool: "Cursor", note: "Surfaces ambiguity in plan mode." },
+      { tool: "Claude Code", note: "Asked clarifying questions on every ambiguous brief. No confabulation." },
+      { tool: "Soupy Together", note: "Returns labeled estimates with uncertainty bands by default." },
+      { tool: "Cursor", note: "Surfaces ambiguity in plan mode — better than autonomous mode." },
+    ],
+    honorableMentions: [
+      { tool: "v0 by Vercel", note: "Improved R2→R3 — now flags missing brand context instead of guessing." },
     ],
   },
   "cost-per-output": {
     categoryId: "cost-per-output",
-    round: 1,
-    date: "2026-04-15",
+    round: 3,
+    date: "2026-05-01",
     status: "sample",
     podium: [
-      { tool: "Soupy Together", note: "Tier 0/1 absorbs ~90% of work for cents." },
-      { tool: "Bolt", note: "Cheap on small tasks, capped quickly." },
+      { tool: "Soupy Together", note: "Tier 0/1 absorbs ~90% of work. Cheapest by an order of magnitude." },
+      { tool: "Bolt", note: "Cheap on small tasks, capped quickly on bigger ones." },
       { tool: "v0 by Vercel", note: "Reasonable per-output cost on UI-only work." },
     ],
   },
 };
 
-/** Which category is featured in the home-page spotlight right now. */
-export const FEATURED_CATEGORY_ID: CategoryId = "frontend-fidelity";
+/** All categories, in featured-rotation order. */
+const ROTATION: CategoryId[] = [
+  "frontend-fidelity",
+  "backend-correctness",
+  "refactor-reliability",
+  "data-and-sql",
+  "honesty-under-uncertainty",
+  "cost-per-output",
+];
+
+/** Days between rotations of the home-page featured category. */
+const ROTATION_DAYS = 3;
+
+/** Deterministic day-bucket so SSR and client agree. */
+function dayBucket(now: Date = new Date()): number {
+  const ms = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
+  return Math.floor(ms / (1000 * 60 * 60 * 24));
+}
+
+/** Featured category rotates every ROTATION_DAYS days, deterministically. */
+export function getFeaturedCategoryId(now: Date = new Date()): CategoryId {
+  const idx = Math.floor(dayBucket(now) / ROTATION_DAYS) % ROTATION.length;
+  return ROTATION[idx];
+}
+
+/** Backwards-compatible static export — resolves to today's featured category. */
+export const FEATURED_CATEGORY_ID: CategoryId = getFeaturedCategoryId();
 
 export function getCategory(id: CategoryId): Category {
   const c = CATEGORIES.find((c) => c.id === id);
