@@ -95,7 +95,7 @@ export async function callRouterRoute(
   const headers = {
     "content-type": "application/json",
     accept: "application/json",
-    ...signHeaders(env, "POST", path, bodyText),
+    ...signHeaders(env, bodyText),
   };
 
   let res: Response;
@@ -162,7 +162,7 @@ export async function openCompleteStream(
   const headers = {
     "content-type": "application/json",
     accept: "application/x-ndjson",
-    ...signHeaders(env, "POST", path, bodyText),
+    ...signHeaders(env, bodyText),
   };
   return fetch(url, { method: "POST", headers, body: bodyText });
 }
