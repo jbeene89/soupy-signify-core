@@ -91,7 +91,8 @@ function mergePublished(sample: BuildOff, pub: PublishedBuildOff): MergedBuildOf
 }
 
 function BuildOffPage() {
-  const { sample, published } = Route.useLoaderData();
+  const { sample, published, entries, selectedId } = Route.useLoaderData();
+  const navigate = useNavigate({ from: "/build-off" });
   const merged: MergedBuildOff = published
     ? mergePublished(sample, published)
     : { ...sample, manualByTool: {}, telemetryByTool: {} };
