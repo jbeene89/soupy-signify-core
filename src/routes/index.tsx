@@ -289,6 +289,68 @@ function Index() {
 
         <hr className="border-rule" />
 
+        {/* INTEGRATIONS */}
+        <section id="integrations" aria-labelledby="integrations-heading" className="py-32 md:py-40 scroll-mt-20">
+          <FadeIn>
+            <SectionMarker>§ 06 · INTEGRATIONS</SectionMarker>
+            <h2 id="integrations-heading" className="font-serif text-4xl md:text-5xl leading-tight max-w-3xl">
+              Built to plug into the routing & observability stack.
+            </h2>
+            <p className="font-serif italic text-xl md:text-2xl text-cream/80 mt-4 max-w-3xl">
+              Soupy is the significance layer above the wire. If you run an LLM gateway, router, or observability platform, Soupy's tier classification, capability matrix, and signed receipts are designed to feed into yours — not replace them.
+            </p>
+
+            <div className="grid md:grid-cols-3 gap-6 mt-16">
+              {[
+                {
+                  label: "FOR LLM GATEWAYS",
+                  examples: "OpenRouter · Portkey · LiteLLM",
+                  body: "Consume Soupy's tier-0/1/2/3 classification as a routing hint. We decide what's trivial vs. frontier-worthy; you handle the wire, fallbacks, and key vaulting. Cleaner separation than re-implementing classification per gateway.",
+                },
+                {
+                  label: "FOR OBSERVABILITY",
+                  examples: "Helicone · Langfuse · Arize",
+                  body: "Every Soupy call emits a signed receipt with task, tier, partner, and cost. Ingest the receipt stream as a first-class span source — tier-tagged spend, partner attribution, and build-off provenance without instrumenting each tool.",
+                },
+                {
+                  label: "FOR ROUTERS",
+                  examples: "Martian · Not Diamond · RouteLLM",
+                  body: "Model-level routing is solved. Task-level routing across tools (Cursor vs. Lovable vs. Claude Code) isn't. Soupy's capability matrix is the missing input — license it, or compose with it.",
+                },
+              ].map((c) => (
+                <div key={c.label} className="border border-rule p-7 flex flex-col">
+                  <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-cyan-accent mb-3">
+                    {c.label}
+                  </div>
+                  <div className="font-serif text-[15px] text-cream/70 mb-5 tabular-nums">
+                    {c.examples}
+                  </div>
+                  <p className="font-body text-[15px] leading-[1.7] text-cream/90 flex-1">{c.body}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-12 border border-cyan-accent/60 p-8 grid md:grid-cols-[1fr_auto] gap-6 items-center">
+              <div>
+                <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-cyan-accent mb-3">
+                  § INTEGRATION PROGRAM · Q3 2026
+                </div>
+                <p className="font-serif italic text-xl leading-snug text-cream">
+                  Receipt schema, capability matrix export, and webhook spec are in private review. If you're building a gateway, router, or observability layer and want Soupy's signal feeding yours, get on the integration list — separate from end-user early access.
+                </p>
+              </div>
+              <a
+                href="mailto:partners@soupytogether.com?subject=Integration%20Program"
+                className="font-mono text-[12px] uppercase tracking-[0.14em] px-6 py-3 bg-cyan-accent text-primary-foreground hover:opacity-90 transition-opacity text-center whitespace-nowrap"
+              >
+                Request integration spec →
+              </a>
+            </div>
+          </FadeIn>
+        </section>
+
+        <hr className="border-rule" />
+
         {/* PAPERS */}
         <section id="papers" aria-labelledby="papers-heading" className="py-32 md:py-40 scroll-mt-20">
           <FadeIn>
