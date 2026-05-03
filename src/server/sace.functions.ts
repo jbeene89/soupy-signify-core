@@ -9,6 +9,8 @@ import { z } from "zod";
 import type {
   BudgetCapError,
   PublishedBuildOff,
+  PublishedBuildOffManifest,
+  PublishedBuildOffManifestEntry,
   RouteDecision,
 } from "@/lib/sace/contract";
 import { callRouterRoute, readSaceEnv } from "./sace-router.server";
