@@ -216,7 +216,7 @@ function Index() {
             </div>
 
             <p className="mt-6 font-serif italic text-[15px] text-muted-foreground">
-              Prices reflect publicly listed subscription rates as of April 2026. We do not accept payment for placement or rankings. Methodology and source links: <a href="/methodology" className="text-cyan-accent border-b border-cyan-accent/40 hover:border-cyan-accent">[link]</a>.
+              Prices reflect publicly listed subscription rates as of April 2026. We do not accept payment for placement or rankings. Methodology and receipts: <a href="/build-off" className="text-cyan-accent border-b border-cyan-accent/40 hover:border-cyan-accent">build-off ledger →</a>
             </p>
 
             <div className="mt-12 border border-cyan-accent p-8">
@@ -309,10 +309,10 @@ function Index() {
                   <h3 className="font-serif text-[22px] leading-snug text-cream">{p.title}</h3>
                   <p className="font-body text-[15px] text-cream/75 mt-4 flex-1">{p.desc}</p>
                   <a
-                    href="/papers"
+                    href="/#access"
                     className="font-mono text-[12px] uppercase tracking-[0.14em] text-cyan-accent mt-6 self-start border-b border-cyan-accent/40 pb-1 hover:border-cyan-accent transition-colors"
                   >
-                    Read →
+                    Request preprint →
                   </a>
                 </article>
               ))}
@@ -356,9 +356,30 @@ function Index() {
       <footer className="border-t border-rule">
         <div className="max-w-[1200px] mx-auto px-6 md:px-10 py-20 grid md:grid-cols-3 gap-12">
           {[
-            { label: "SOUPY LAB", items: ["About", "Other Projects", "Contact"] },
-            { label: "TECHNICAL", items: ["Architecture (SACE)", "Whitepapers", "Methodology"] },
-            { label: "LEGAL", items: ["Privacy", "Terms", "Editorial Neutrality Commitment"] },
+            {
+              label: "SOUPY LAB",
+              items: [
+                { label: "Try Demo", href: "/demo" },
+                { label: "Build-Off", href: "/build-off" },
+                { label: "Partners", href: "/partners" },
+              ],
+            },
+            {
+              label: "TECHNICAL",
+              items: [
+                { label: "Architecture (SACE)", href: "/#architecture" },
+                { label: "Whitepapers", href: "/#papers" },
+                { label: "Pricing", href: "/#pricing" },
+              ],
+            },
+            {
+              label: "ACCESS",
+              items: [
+                { label: "Get Early Access", href: "/#access" },
+                { label: "Contact", href: "mailto:hello@soupytogether.com" },
+                { label: "Editorial Neutrality", href: "/#build-off" },
+              ],
+            },
           ].map((col) => (
             <div key={col.label}>
               <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground mb-5">
@@ -366,9 +387,9 @@ function Index() {
               </div>
               <ul className="space-y-3">
                 {col.items.map((item) => (
-                  <li key={item}>
-                    <a href="#" className="font-serif text-[17px] text-cream hover:text-cyan-accent transition-colors">
-                      {item}
+                  <li key={item.label}>
+                    <a href={item.href} className="font-serif text-[17px] text-cream hover:text-cyan-accent transition-colors">
+                      {item.label}
                     </a>
                   </li>
                 ))}
