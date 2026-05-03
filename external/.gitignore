@@ -1,0 +1,13 @@
+node_modules/
+dist/
+coverage/
+.env
+.env.*
+!.env.example
+artifacts/
+data/
+*.tsbuildinfo
+vitest.config.js
+.turbo/
+.DS_Store
+.godot/

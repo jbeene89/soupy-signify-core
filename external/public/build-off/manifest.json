@@ -1,0 +1,10 @@
+{
+  "buildOffs": [
+    {
+      "id": "001-todo-auth",
+      "latest": "build-off/001-todo-auth.json",
+      "runId": "2026-05-03-050847558Z",
+      "sourceResultPath": "results/001-todo-auth/2026-05-03-050847558Z.json"
+    }
+  ]
+}
