@@ -356,9 +356,30 @@ function Index() {
       <footer className="border-t border-rule">
         <div className="max-w-[1200px] mx-auto px-6 md:px-10 py-20 grid md:grid-cols-3 gap-12">
           {[
-            { label: "SOUPY LAB", items: ["About", "Other Projects", "Contact"] },
-            { label: "TECHNICAL", items: ["Architecture (SACE)", "Whitepapers", "Methodology"] },
-            { label: "LEGAL", items: ["Privacy", "Terms", "Editorial Neutrality Commitment"] },
+            {
+              label: "SOUPY LAB",
+              items: [
+                { label: "Try Demo", href: "/demo" },
+                { label: "Build-Off", href: "/build-off" },
+                { label: "Partners", href: "/partners" },
+              ],
+            },
+            {
+              label: "TECHNICAL",
+              items: [
+                { label: "Architecture (SACE)", href: "/#architecture" },
+                { label: "Whitepapers", href: "/#papers" },
+                { label: "Pricing", href: "/#pricing" },
+              ],
+            },
+            {
+              label: "ACCESS",
+              items: [
+                { label: "Get Early Access", href: "/#access" },
+                { label: "Contact", href: "mailto:hello@soupytogether.com" },
+                { label: "Editorial Neutrality", href: "/#build-off" },
+              ],
+            },
           ].map((col) => (
             <div key={col.label}>
               <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground mb-5">
@@ -366,9 +387,9 @@ function Index() {
               </div>
               <ul className="space-y-3">
                 {col.items.map((item) => (
-                  <li key={item}>
-                    <a href="#" className="font-serif text-[17px] text-cream hover:text-cyan-accent transition-colors">
-                      {item}
+                  <li key={item.label}>
+                    <a href={item.href} className="font-serif text-[17px] text-cream hover:text-cyan-accent transition-colors">
+                      {item.label}
                     </a>
                   </li>
                 ))}
