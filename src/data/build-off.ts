@@ -242,6 +242,9 @@ export function scoreBuildOff(b: BuildOff): ScoredRun[] {
   return scored.sort((a, b) => b.composite - a.composite);
 }
 
+/** The build-off shown by default when no published manifest entry is selected. */
+export const FEATURED_BUILD_OFF_ID = "005-rotating-planet";
+
 export function formatRaw(value: number, measure: Measure): string {
   if (measure.unit === "USD") return `$${value.toFixed(2)}`;
   if (measure.unit === "seconds") return `${Math.round(value)}s`;

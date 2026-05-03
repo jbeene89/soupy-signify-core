@@ -5,6 +5,7 @@ import { SectionMarker } from "@/components/site/SectionMarker";
 import { FadeIn } from "@/components/site/FadeIn";
 import {
   BUILD_OFFS,
+  FEATURED_BUILD_OFF_ID,
   MEASURES,
   scoreBuildOff,
   formatRaw,
@@ -44,10 +45,11 @@ export const Route = createFileRoute("/build-off")({
   }),
   loaderDeps: ({ search }) => ({ id: search.id }),
   loader: async ({ deps }) => {
-    const sample = BUILD_OFFS[0];
     const manifest = await listPublishedBuildOffs();
     const entries = manifest.entries;
-    const selectedId = deps.id ?? entries[0]?.id ?? sample.id;
+    const defaultId = entries[0]?.id ?? FEATURED_BUILD_OFF_ID;
+    const selectedId = deps.id ?? defaultId;
+    const sample = BUILD_OFFS.find((b) => b.id === selectedId) ?? BUILD_OFFS[0];
     const published = await fetchPublishedBuildOff({ data: { id: selectedId } });
     return { sample, published: published.result, entries, selectedId };
   },
@@ -140,31 +142,42 @@ function BuildOffPage() {
               </span>
             </div>
           </div>
-          {entries.length > 0 && (
-            <div className="mb-8 flex items-center gap-3 flex-wrap">
-              <label
-                htmlFor="buildoff-picker"
-                className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground"
-              >
-                § ROUND
-              </label>
-              <select
-                id="buildoff-picker"
-                value={selectedId}
-                onChange={(e) =>
-                  navigate({ search: { id: e.target.value }, replace: true })
-                }
-                className="bg-transparent border border-rule px-3 py-2 font-mono text-[12px] text-cream hover:border-cyan-accent focus:border-cyan-accent focus:outline-none"
-              >
-                {entries.map((entry: PublishedBuildOffManifestEntry) => (
-                  <option key={entry.id} value={entry.id} className="bg-background text-cream">
-                    {entry.id}
-                    {entry.runId ? ` · ${entry.runId}` : ""}
-                  </option>
-                ))}
-              </select>
-            </div>
-          )}
+          {(() => {
+            const pickerEntries: { id: string; label: string }[] =
+              entries.length > 0
+                ? entries.map((e: PublishedBuildOffManifestEntry) => ({
+                    id: e.id,
+                    label: e.runId ? `${e.id} · ${e.runId}` : e.id,
+                  }))
+                : BUILD_OFFS.map((b) => ({
+                    id: b.id,
+                    label: `${b.id}${b.tier ? ` · TIER ${{ 1: "I", 2: "II", 3: "III" }[b.tier]}` : ""}`,
+                  }));
+            return (
+              <div className="mb-8 flex items-center gap-3 flex-wrap">
+                <label
+                  htmlFor="buildoff-picker"
+                  className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground"
+                >
+                  § ROUND
+                </label>
+                <select
+                  id="buildoff-picker"
+                  value={selectedId}
+                  onChange={(e) =>
+                    navigate({ search: { id: e.target.value }, replace: true })
+                  }
+                  className="bg-transparent border border-rule px-3 py-2 font-mono text-[12px] text-cream hover:border-cyan-accent focus:border-cyan-accent focus:outline-none"
+                >
+                  {pickerEntries.map((entry) => (
+                    <option key={entry.id} value={entry.id} className="bg-background text-cream">
+                      {entry.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            );
+          })()}
           <h1 className="font-serif text-[44px] sm:text-[64px] md:text-[80px] leading-[1.02] tracking-tight">
             {current.title}
           </h1>
