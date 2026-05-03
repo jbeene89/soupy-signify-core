@@ -102,8 +102,20 @@ function BuildOffPage() {
       <main className="max-w-[1200px] mx-auto px-6 md:px-10 pt-32 md:pt-40 pb-32">
         {/* HEADER */}
         <FadeIn>
-          <div className="font-mono text-[12px] uppercase tracking-[0.14em] text-muted-foreground mb-8">
-            § BUILD-OFF · ROUND {String(current.number).padStart(3, "0")}
+          <div className="flex items-center justify-between gap-4 flex-wrap mb-8">
+            <div className="font-mono text-[12px] uppercase tracking-[0.14em] text-muted-foreground">
+              § BUILD-OFF · ROUND {String(current.number).padStart(3, "0")}
+            </div>
+            <div className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.14em]">
+              <span
+                className={`inline-block w-1.5 h-1.5 ${
+                  published ? "bg-cyan-accent" : "bg-cream/40"
+                }`}
+              />
+              <span className={published ? "text-cyan-accent" : "text-cream/55"}>
+                {published ? "LIVE · PUBLISHED RESULTS" : "SAMPLE · IN-REPO FALLBACK"}
+              </span>
+            </div>
           </div>
           <h1 className="font-serif text-[44px] sm:text-[64px] md:text-[80px] leading-[1.02] tracking-tight">
             {current.title}
