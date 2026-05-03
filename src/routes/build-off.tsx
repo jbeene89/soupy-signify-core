@@ -18,7 +18,7 @@ import {
   RadarChart,
   CostCorrectnessScatter,
 } from "@/components/site/BuildOffVisuals";
-import { fetchPublishedBuildOff, listPublishedBuildOffs } from "@/server/sace.functions";
+import { fetchPublishedBuildOff, listPublishedBuildOffs } from "@/functions/sace.functions";
 import type { PublishedBuildOff, PublishedBuildOffManifestEntry } from "@/lib/sace/contract";
 
 const SearchSchema = z.object({ id: z.string().min(1).max(64).optional() });

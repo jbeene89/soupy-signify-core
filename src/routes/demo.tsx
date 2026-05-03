@@ -5,8 +5,8 @@ import { Nav } from "@/components/site/Nav";
 import {
   classifyDemo,
   getTier0SavingsThisWeek,
-} from "@/server/demo.functions";
-import { routeSacePrompt, getSaceConfig } from "@/server/sace.functions";
+} from "@/functions/demo.functions";
+import { routeSacePrompt, getSaceConfig } from "@/functions/sace.functions";
 import { classifyPrompt, type ClassifierResult } from "@/lib/sace/classifier";
 import type { BudgetCapError, RouteDecision } from "@/lib/sace/contract";
 import { readPicks, subscribe } from "@/lib/picks";

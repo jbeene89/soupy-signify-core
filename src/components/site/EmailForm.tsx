@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { submitEarlyAccessSignup } from "@/server/early-access.functions";
+import { submitEarlyAccessSignup } from "@/functions/early-access.functions";
 
 export function EmailForm() {
   const [email, setEmail] = useState("");
