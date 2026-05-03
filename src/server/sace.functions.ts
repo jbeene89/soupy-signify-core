@@ -9,6 +9,8 @@ import { z } from "zod";
 import type {
   BudgetCapError,
   PublishedBuildOff,
+  PublishedBuildOffManifest,
+  PublishedBuildOffManifestEntry,
   RouteDecision,
 } from "@/lib/sace/contract";
 import { callRouterRoute, readSaceEnv } from "./sace-router.server";
@@ -110,3 +112,30 @@ export const fetchPublishedBuildOff = createServerFn({ method: "GET" })
       };
     }
   });
+
+/**
+ * Fetch the published build-off manifest from `${base}/build-off/manifest.json`.
+ * Returns an empty list when env is missing, the file 404s, or the network fails.
+ * Never throws into the UI — caller treats empty list as "fall back to SAMPLE".
+ */
+export const listPublishedBuildOffs = createServerFn({ method: "GET" }).handler(
+  async (): Promise<{ entries: PublishedBuildOffManifestEntry[]; reason?: string }> => {
+    const env = readSaceEnv();
+    if (!env) return { entries: [], reason: "missing_env" };
+
+    const url = `${env.buildOffResultsBaseUrl}/build-off/manifest.json`;
+    try {
+      const res = await fetch(url, { headers: { accept: "application/json" } });
+      if (res.status === 404) return { entries: [], reason: "not_published" };
+      if (!res.ok) return { entries: [], reason: `http_${res.status}` };
+      const json = (await res.json()) as PublishedBuildOffManifest;
+      const entries = Array.isArray(json?.buildOffs) ? json.buildOffs : [];
+      return { entries };
+    } catch (err) {
+      return {
+        entries: [],
+        reason: err instanceof Error ? `fetch_failed:${err.message}` : "fetch_failed",
+      };
+    }
+  },
+);

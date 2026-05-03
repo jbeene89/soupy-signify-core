@@ -91,6 +91,18 @@ export interface PublishedToolRun {
   mode?: "manual" | "harness";
 }
 
+export interface PublishedBuildOffManifestEntry {
+  id: string;
+  /** Path relative to results base, e.g. "build-off/001-todo-auth.json". */
+  latest: string;
+  runId?: string;
+  sourceResultPath?: string;
+}
+
+export interface PublishedBuildOffManifest {
+  buildOffs: PublishedBuildOffManifestEntry[];
+}
+
 export interface PublishedBuildOff {
   id: string;
   number: number;

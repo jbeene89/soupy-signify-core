@@ -1,4 +1,5 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { z } from "zod";
 import { Nav } from "@/components/site/Nav";
 import { SectionMarker } from "@/components/site/SectionMarker";
 import { FadeIn } from "@/components/site/FadeIn";
@@ -17,10 +18,13 @@ import {
   RadarChart,
   CostCorrectnessScatter,
 } from "@/components/site/BuildOffVisuals";
-import { fetchPublishedBuildOff } from "@/server/sace.functions";
-import type { PublishedBuildOff } from "@/lib/sace/contract";
+import { fetchPublishedBuildOff, listPublishedBuildOffs } from "@/server/sace.functions";
+import type { PublishedBuildOff, PublishedBuildOffManifestEntry } from "@/lib/sace/contract";
+
+const SearchSchema = z.object({ id: z.string().min(1).max(64).optional() });
 
 export const Route = createFileRoute("/build-off")({
+  validateSearch: (search) => SearchSchema.parse(search),
   head: () => ({
     meta: [
       { title: "Build-Off — Soupy Together" },
@@ -37,10 +41,14 @@ export const Route = createFileRoute("/build-off")({
       },
     ],
   }),
-  loader: async () => {
+  loaderDeps: ({ search }) => ({ id: search.id }),
+  loader: async ({ deps }) => {
     const sample = BUILD_OFFS[0];
-    const published = await fetchPublishedBuildOff({ data: { id: sample.id } });
-    return { sample, published: published.result };
+    const manifest = await listPublishedBuildOffs();
+    const entries = manifest.entries;
+    const selectedId = deps.id ?? entries[0]?.id ?? sample.id;
+    const published = await fetchPublishedBuildOff({ data: { id: selectedId } });
+    return { sample, published: published.result, entries, selectedId };
   },
   component: BuildOffPage,
 });
@@ -83,7 +91,8 @@ function mergePublished(sample: BuildOff, pub: PublishedBuildOff): MergedBuildOf
 }
 
 function BuildOffPage() {
-  const { sample, published } = Route.useLoaderData();
+  const { sample, published, entries, selectedId } = Route.useLoaderData();
+  const navigate = useNavigate({ from: "/build-off" });
   const merged: MergedBuildOff = published
     ? mergePublished(sample, published)
     : { ...sample, manualByTool: {}, telemetryByTool: {} };
@@ -117,6 +126,31 @@ function BuildOffPage() {
               </span>
             </div>
           </div>
+          {entries.length > 0 && (
+            <div className="mb-8 flex items-center gap-3 flex-wrap">
+              <label
+                htmlFor="buildoff-picker"
+                className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground"
+              >
+                § ROUND
+              </label>
+              <select
+                id="buildoff-picker"
+                value={selectedId}
+                onChange={(e) =>
+                  navigate({ search: { id: e.target.value }, replace: true })
+                }
+                className="bg-transparent border border-rule px-3 py-2 font-mono text-[12px] text-cream hover:border-cyan-accent focus:border-cyan-accent focus:outline-none"
+              >
+                {entries.map((entry: PublishedBuildOffManifestEntry) => (
+                  <option key={entry.id} value={entry.id} className="bg-background text-cream">
+                    {entry.id}
+                    {entry.runId ? ` · ${entry.runId}` : ""}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
           <h1 className="font-serif text-[44px] sm:text-[64px] md:text-[80px] leading-[1.02] tracking-tight">
             {current.title}
           </h1>
