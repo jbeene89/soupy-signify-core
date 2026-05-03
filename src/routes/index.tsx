@@ -309,10 +309,10 @@ function Index() {
                   <h3 className="font-serif text-[22px] leading-snug text-cream">{p.title}</h3>
                   <p className="font-body text-[15px] text-cream/75 mt-4 flex-1">{p.desc}</p>
                   <a
-                    href="/papers"
+                    href="/#access"
                     className="font-mono text-[12px] uppercase tracking-[0.14em] text-cyan-accent mt-6 self-start border-b border-cyan-accent/40 pb-1 hover:border-cyan-accent transition-colors"
                   >
-                    Read →
+                    Request preprint →
                   </a>
                 </article>
               ))}
