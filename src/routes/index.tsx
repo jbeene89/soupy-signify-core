@@ -154,7 +154,7 @@ function Index() {
         {/* PROBLEM */}
         <section aria-labelledby="problem-heading" className="py-32 md:py-40">
           <FadeIn>
-            <SectionMarker>§ 02 · THE PROBLEM</SectionMarker>
+            <SectionMarker>§ 03 · THE PROBLEM</SectionMarker>
             <h2 id="problem-heading" className="font-serif text-4xl md:text-5xl leading-tight max-w-3xl">
               Every AI coding tool hits a wall.
             </h2>
@@ -189,7 +189,7 @@ function Index() {
         {/* ARCHITECTURE */}
         <section id="architecture" aria-labelledby="arch-heading" className="py-32 md:py-40 scroll-mt-20">
           <FadeIn>
-            <SectionMarker>§ 03 · ARCHITECTURE</SectionMarker>
+            <SectionMarker>§ 04 · ARCHITECTURE</SectionMarker>
             <h2 id="arch-heading" className="font-serif text-4xl md:text-5xl leading-tight max-w-3xl">
               Anatomy over monolith.
             </h2>
@@ -237,7 +237,7 @@ function Index() {
         {/* PRICING */}
         <section id="pricing" aria-labelledby="pricing-heading" className="py-32 md:py-40 scroll-mt-20">
           <FadeIn>
-            <SectionMarker>§ 04 · PRICING</SectionMarker>
+            <SectionMarker>§ 05 · PRICING</SectionMarker>
             <h2 id="pricing-heading" className="font-serif text-4xl md:text-5xl leading-tight max-w-3xl">
               What it actually costs to build with AI.
             </h2>
@@ -354,7 +354,7 @@ function Index() {
         {/* PAPERS */}
         <section id="papers" aria-labelledby="papers-heading" className="py-32 md:py-40 scroll-mt-20">
           <FadeIn>
-            <SectionMarker>§ 06 · TECHNICAL DISCLOSURE</SectionMarker>
+            <SectionMarker>§ 07 · TECHNICAL DISCLOSURE</SectionMarker>
             <h2 id="papers-heading" className="font-serif text-4xl md:text-5xl leading-tight max-w-3xl">
               Read the architecture.
             </h2>
@@ -387,7 +387,7 @@ function Index() {
         {/* EARLY ACCESS */}
         <section id="access" aria-labelledby="access-heading" className="py-32 md:py-40 scroll-mt-20">
           <FadeIn>
-            <SectionMarker>§ 07 · EARLY ACCESS</SectionMarker>
+            <SectionMarker>§ 08 · EARLY ACCESS</SectionMarker>
             <h2 id="access-heading" className="font-serif text-4xl md:text-5xl leading-tight max-w-3xl">
               Built by a guy who pays for all of them.
             </h2>
