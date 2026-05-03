@@ -2,6 +2,8 @@
  * Server functions exposing SACE router + build-off results to the UI.
  * These are safe to import from any component — the Vite plugin replaces
  * the implementation with an RPC stub in the client bundle.
+ *
+ * @module sace-functions
  */
 
 import { createServerFn } from "@tanstack/react-start";
@@ -13,7 +15,7 @@ import type {
   PublishedBuildOffManifestEntry,
   RouteDecision,
 } from "@/lib/sace/contract";
-import { callRouterRoute, readSaceEnv } from "@/server/sace-router.server";
+import { callRouterRoute, readSaceEnv } from "./sace-router-internal";
 
 const PromptInput = z.object({
   prompt: z.string().trim().min(3).max(2000),
