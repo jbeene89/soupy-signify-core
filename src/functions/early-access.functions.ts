@@ -3,6 +3,7 @@ import { z } from "zod";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
 const SignupInput = z.object({
+  name: z.string().trim().min(1, "Enter your name").max(120).optional(),
   email: z
     .string()
     .trim()
@@ -21,6 +22,7 @@ export const submitEarlyAccessSignup = createServerFn({ method: "POST" })
     const { error } = await supabaseAdmin
       .from("early_access_signups")
       .insert({
+        name: data.name ?? null,
         email: data.email,
         source: data.source ?? null,
         referrer: data.referrer ?? null,
