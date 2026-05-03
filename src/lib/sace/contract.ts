@@ -87,8 +87,13 @@ export interface PublishedToolRun {
   ttft_ms?: number;
   time_to_green_s?: number;
   notes?: string;
-  /** "manual" runs are visually distinct from harness-driven runs. */
-  mode?: "manual" | "harness";
+  /**
+   * Run mode:
+   * - "harness": automated harness-driven run
+   * - "manual": run entered by hand by a human operator
+   * - "withdrawn": tool declined to participate this round; doesn't block launch
+   */
+  mode?: "manual" | "harness" | "withdrawn";
   /**
    * Visual challenge fields (Tier I/II/III build-offs).
    * previewUrl: iframe src — either the tool's native deploy URL or a harness-served path.
@@ -97,6 +102,12 @@ export interface PublishedToolRun {
    */
   previewUrl?: string;
   previewHarnessServed?: boolean;
+  /**
+   * Operator confirmation gate. When false (or undefined), the showcase tile shows
+   * a soft "make sure this is your best work" reminder. The operator flips this to
+   * true once they've reviewed the submission and it's the final entry.
+   */
+  confirmed?: boolean;
 }
 
 export interface PublishedBuildOffManifestEntry {

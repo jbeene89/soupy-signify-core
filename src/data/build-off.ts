@@ -43,6 +43,11 @@ export interface ToolRun {
   tool: string;
   raw: Record<MeasureKey, number>;
   notes?: string;
+  /** Optional visual-showcase fields (used by tiered build-offs). */
+  previewUrl?: string;
+  previewHarnessServed?: boolean;
+  mode?: "manual" | "harness" | "withdrawn";
+  confirmed?: boolean;
 }
 
 // =============================
@@ -171,13 +176,13 @@ export const BUILD_OFFS: BuildOff[] = [
     status: "sample",
     date: "2026-05-10",
     runs: [
-      { tool: "Soupy Together", raw: { cost: 0.09, time: 18,  fidelity: 72, correctness: 90, refactor: 40, honesty: 88, bundle: 12  }, notes: "Tier 0/1 handled the Three.js boilerplate cheaply. Atmosphere glow present, surface noise functional." },
-      { tool: "Lovable Pro",    raw: { cost: 0.28, time: 22,  fidelity: 86, correctness: 84, refactor: 35, honesty: 70, bundle: 12  }, notes: "Strong visual output. Attempted to scaffold React — needed a prompt nudge to stay single-file." },
-      { tool: "Bolt",           raw: { cost: 0.32, time: 19,  fidelity: 80, correctness: 78, refactor: 30, honesty: 62, bundle: 12  }, notes: "Fast. Surface detail thinner, glow present." },
-      { tool: "v0 by Vercel",   raw: { cost: 0.22, time: 14,  fidelity: 91, correctness: 76, refactor: 28, honesty: 66, bundle: 12  }, notes: "Best-looking sphere. Surface texture richest of the set. Drag orbit slightly jumpy." },
-      { tool: "Cursor",         raw: { cost: 0.45, time: 54,  fidelity: 70, correctness: 92, refactor: 45, honesty: 82, bundle: 12  }, notes: "Cleanest Three.js code. Visually plain — prioritized correctness over impressiveness." },
-      { tool: "Replit Agent",   raw: { cost: 0.55, time: 48,  fidelity: 74, correctness: 80, refactor: 32, honesty: 65, bundle: 12  }, notes: "Ran end-to-end. Stars sparse, atmosphere thin." },
-      { tool: "Claude Code",    raw: { cost: 0.38, time: 38,  fidelity: 68, correctness: 93, refactor: 48, honesty: 86, bundle: 12  }, notes: "Error-free, structured geometry code. Visuals minimal — no rim glow, basic star field." },
+      { tool: "Soupy Together", raw: { cost: 0.09, time: 18,  fidelity: 72, correctness: 90, refactor: 40, honesty: 88, bundle: 12  }, notes: "Tier 0/1 handled the Three.js boilerplate cheaply. Atmosphere glow present, surface noise functional.", mode: "harness", confirmed: true },
+      { tool: "Lovable Pro",    raw: { cost: 0.28, time: 22,  fidelity: 86, correctness: 84, refactor: 35, honesty: 70, bundle: 12  }, notes: "Strong visual output. Attempted to scaffold React — needed a prompt nudge to stay single-file.", mode: "manual", confirmed: false },
+      { tool: "Bolt",           raw: { cost: 0.32, time: 19,  fidelity: 80, correctness: 78, refactor: 30, honesty: 62, bundle: 12  }, notes: "Fast. Surface detail thinner, glow present.", mode: "harness" },
+      { tool: "v0 by Vercel",   raw: { cost: 0.22, time: 14,  fidelity: 91, correctness: 76, refactor: 28, honesty: 66, bundle: 12  }, notes: "Best-looking sphere. Surface texture richest of the set. Drag orbit slightly jumpy.", mode: "harness" },
+      { tool: "Cursor",         raw: { cost: 0.45, time: 54,  fidelity: 70, correctness: 92, refactor: 45, honesty: 82, bundle: 12  }, notes: "Cleanest Three.js code. Visually plain — prioritized correctness over impressiveness.", mode: "withdrawn" },
+      { tool: "Replit Agent",   raw: { cost: 0.55, time: 48,  fidelity: 74, correctness: 80, refactor: 32, honesty: 65, bundle: 12  }, notes: "Ran end-to-end. Stars sparse, atmosphere thin.", mode: "harness" },
+      { tool: "Claude Code",    raw: { cost: 0.38, time: 38,  fidelity: 68, correctness: 93, refactor: 48, honesty: 86, bundle: 12  }, notes: "Error-free, structured geometry code. Visuals minimal — no rim glow, basic star field.", mode: "harness" },
     ],
   },
   {

@@ -262,11 +262,14 @@ function BuildOffPage() {
                       tool: r.tool,
                       raw: r.raw,
                       notes: r.notes,
-                      mode: "harness" as const,
+                      mode: r.mode ?? ("harness" as const),
+                      previewUrl: r.previewUrl,
+                      previewHarnessServed: r.previewHarnessServed,
+                      confirmed: r.confirmed,
                     }))
                   }
                   scored={scored}
-                  showcaseComplete={current.showcaseComplete ?? false}
+                  showcaseComplete={current.showcaseComplete}
                 />
               </div>
             </FadeIn>

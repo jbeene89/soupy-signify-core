@@ -30,7 +30,19 @@ function initialsFor(tool: string): string {
 // Sub-components
 // ────────────────────────────────────────────────────────────────────────────
 
-function PendingTile() {
+function PendingTile({ launched }: { launched: boolean }) {
+  if (launched) {
+    return (
+      <div className="aspect-video flex flex-col items-center justify-center gap-2 bg-foreground/[0.02] border-t border-rule/40">
+        <div className="font-mono text-[10px] uppercase tracking-[0.14em] text-cream/25">
+          No submission
+        </div>
+        <div className="font-serif italic text-[11px] text-cream/30">
+          Did not submit before launch
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="aspect-video flex flex-col items-center justify-center gap-3 bg-foreground/[0.02] border-dashed border-t border-rule/40">
       <div className="flex gap-1.5">
@@ -45,6 +57,26 @@ function PendingTile() {
       <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-cream/30">
         Awaiting submission
       </span>
+    </div>
+  );
+}
+
+function WithdrawnTile() {
+  return (
+    <div className="aspect-video flex flex-col items-center justify-center gap-2 bg-foreground/[0.02] border-t border-rule/40 relative overflow-hidden">
+      <div
+        className="absolute inset-0 opacity-[0.08]"
+        style={{
+          backgroundImage:
+            "repeating-linear-gradient(45deg, var(--cream) 0 1px, transparent 1px 8px)",
+        }}
+      />
+      <div className="relative font-mono text-[10px] uppercase tracking-[0.14em] text-cream/30">
+        Withdrew
+      </div>
+      <div className="relative font-serif italic text-[11px] text-cream/30">
+        Declined this round
+      </div>
     </div>
   );
 }
@@ -86,21 +118,27 @@ function PreviewFrame({ url, tool }: { url: string; tool: string }) {
 function ShowcaseTile({
   run,
   scored,
-  showcaseComplete,
+  launched,
+  showScores,
   animDelay,
 }: {
   run: PublishedToolRun;
   scored: ScoredRun | undefined;
-  showcaseComplete: boolean;
+  /** True once the round has been launched (rankings visible / final state). */
+  launched: boolean;
+  /** Whether to display the composite score in the header. */
+  showScores: boolean;
   animDelay: number;
 }) {
   const accent = accentFor(run.tool);
   const hasPreview = !!run.previewUrl;
-  const isUnavailable = !hasPreview && run.mode === "manual";
+  const isWithdrawn = run.mode === "withdrawn";
+  const isUnavailable = !hasPreview && !isWithdrawn && run.mode === "manual";
+  const needsConfirmation = hasPreview && run.confirmed === false;
 
   return (
     <div
-      className="border border-rule flex flex-col"
+      className={`border flex flex-col ${needsConfirmation ? "border-amber-400/60" : "border-rule"}`}
       style={{
         opacity: 0,
         animation: "tile-reveal 0.5s ease forwards",
@@ -131,7 +169,7 @@ function ShowcaseTile({
           )}
         </div>
 
-        {showcaseComplete && scored && (
+        {showScores && scored && hasPreview && (
           <div
             className="font-serif text-xl tabular-nums flex-shrink-0"
             style={{ color: accent }}
@@ -144,14 +182,28 @@ function ShowcaseTile({
       {/* Preview area */}
       {hasPreview ? (
         <PreviewFrame url={run.previewUrl!} tool={run.tool} />
+      ) : isWithdrawn ? (
+        <WithdrawnTile />
       ) : isUnavailable ? (
         <UnavailableTile />
       ) : (
-        <PendingTile />
+        <PendingTile launched={launched} />
       )}
 
-      {/* Notes — revealed only after showcase complete */}
-      {showcaseComplete && run.notes && (
+      {/* Operator confirmation reminder — soft prompt before going live */}
+      {needsConfirmation && (
+        <div className="px-4 py-2.5 border-t border-amber-400/30 bg-amber-400/[0.04]">
+          <div className="font-mono text-[10px] uppercase tracking-[0.14em] text-amber-300 mb-0.5">
+            Confirm submission
+          </div>
+          <p className="font-serif italic text-[12px] text-amber-100/70 leading-snug">
+            Did you enter your submission? Make sure it's as good as you can do.
+          </p>
+        </div>
+      )}
+
+      {/* Notes — revealed once the round is launched */}
+      {launched && run.notes && (
         <div className="px-4 py-3 border-t border-rule/60">
           <p className="font-serif italic text-[13px] text-cream/60 leading-snug">
             {run.notes}
@@ -252,7 +304,14 @@ interface VisualShowcaseProps {
   tier: 1 | 2 | 3;
   runs: PublishedToolRun[];
   scored: ScoredRun[];
-  showcaseComplete: boolean;
+  /**
+   * Operator-controlled "launched" flag from the published manifest.
+   * - undefined: derived from run states (auto-launch when every tool has acted)
+   * - true: force-launched even if some tools haven't submitted (the missing ones
+   *   are then displayed as "did not submit")
+   * - false: held back, even if everything looks ready
+   */
+  showcaseComplete?: boolean;
 }
 
 export function VisualShowcase({ tier, runs, scored, showcaseComplete }: VisualShowcaseProps) {
@@ -260,9 +319,17 @@ export function VisualShowcase({ tier, runs, scored, showcaseComplete }: VisualS
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const tierDef = getBuildOffTier(tier);
 
+  // A run is "settled" when it's either submitted-and-confirmed or has explicitly
+  // withdrawn. Pending tools (no previewUrl, no withdrawal) hold the launch.
+  const settled = (r: PublishedToolRun) =>
+    (!!r.previewUrl && r.confirmed !== false) || r.mode === "withdrawn";
+
+  const allSettled = runs.every(settled);
+  const launched = showcaseComplete ?? allSettled;
+
   // Delay rankings until after all tiles have finished their staggered reveal
   useEffect(() => {
-    if (!showcaseComplete) return;
+    if (!launched) return;
     timerRef.current = setTimeout(
       () => setRankingsVisible(true),
       runs.length * 300 + 900,
@@ -270,10 +337,20 @@ export function VisualShowcase({ tier, runs, scored, showcaseComplete }: VisualS
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, [showcaseComplete, runs.length]);
+  }, [launched, runs.length]);
 
   const scoreByTool = new Map(scored.map((r) => [r.tool.toLowerCase(), r]));
+
+  // Tally counts for the status indicator
   const submittedCount = runs.filter((r) => !!r.previewUrl).length;
+  const withdrawnCount = runs.filter((r) => r.mode === "withdrawn").length;
+  const pendingConfirmCount = runs.filter((r) => r.previewUrl && r.confirmed === false).length;
+
+  // Rankings exclude tools that didn't submit
+  const rankedScored = scored.filter((r) => {
+    const run = runs.find((x) => x.tool.toLowerCase() === r.tool.toLowerCase());
+    return run && !!run.previewUrl;
+  });
 
   return (
     <div>
@@ -289,17 +366,26 @@ export function VisualShowcase({ tier, runs, scored, showcaseComplete }: VisualS
           </p>
         </div>
 
-        {!showcaseComplete && (
-          <div className="font-mono text-[10px] uppercase tracking-[0.14em] text-cream/35">
-            {submittedCount} / {runs.length} submitted
-          </div>
-        )}
-        {showcaseComplete && (
-          <div className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.14em] text-cyan-accent/70">
-            <span className="inline-block w-1.5 h-1.5 bg-cyan-accent/70" />
-            All submissions in
-          </div>
-        )}
+        <div className="text-right space-y-1">
+          {launched ? (
+            <div className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.14em] text-cyan-accent/70">
+              <span className="inline-block w-1.5 h-1.5 bg-cyan-accent/70" />
+              Round launched · {submittedCount} entered
+              {withdrawnCount > 0 && ` · ${withdrawnCount} withdrew`}
+            </div>
+          ) : (
+            <>
+              <div className="font-mono text-[10px] uppercase tracking-[0.14em] text-cream/35">
+                {submittedCount} submitted · {withdrawnCount} withdrew · {runs.length - submittedCount - withdrawnCount} pending
+              </div>
+              {pendingConfirmCount > 0 && (
+                <div className="font-mono text-[10px] uppercase tracking-[0.14em] text-amber-300/80">
+                  {pendingConfirmCount} awaiting confirmation
+                </div>
+              )}
+            </>
+          )}
+        </div>
       </div>
 
       {/* Tile grid */}
@@ -309,19 +395,21 @@ export function VisualShowcase({ tier, runs, scored, showcaseComplete }: VisualS
             key={run.tool}
             run={run}
             scored={scoreByTool.get(run.tool.toLowerCase())}
-            showcaseComplete={showcaseComplete}
+            launched={launched}
+            showScores={launched}
             animDelay={i * 280}
           />
         ))}
       </div>
 
-      {/* Rankings — locked until all submissions in */}
-      {showcaseComplete ? (
-        <RankingsPodium scored={scored} visible={rankingsVisible} />
+      {/* Rankings — locked until launched */}
+      {launched ? (
+        <RankingsPodium scored={rankedScored} visible={rankingsVisible} />
       ) : (
         <div className="mt-10 border-l-2 border-rule/40 pl-5 py-2">
           <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-cream/30">
-            Rankings unlock once all submissions are in.
+            Rankings unlock when the round launches. Operators can launch early
+            if a tool won't submit — missing tools appear as "did not submit."
           </p>
         </div>
       )}
