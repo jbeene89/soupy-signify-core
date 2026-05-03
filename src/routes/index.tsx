@@ -216,7 +216,7 @@ function Index() {
             </div>
 
             <p className="mt-6 font-serif italic text-[15px] text-muted-foreground">
-              Prices reflect publicly listed subscription rates as of April 2026. We do not accept payment for placement or rankings. Methodology and source links: <a href="/methodology" className="text-cyan-accent border-b border-cyan-accent/40 hover:border-cyan-accent">[link]</a>.
+              Prices reflect publicly listed subscription rates as of April 2026. We do not accept payment for placement or rankings. Methodology and receipts: <a href="/build-off" className="text-cyan-accent border-b border-cyan-accent/40 hover:border-cyan-accent">build-off ledger →</a>
             </p>
 
             <div className="mt-12 border border-cyan-accent p-8">
