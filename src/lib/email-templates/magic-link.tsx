@@ -58,8 +58,8 @@ const text = {
   margin: '0 0 25px',
 }
 const button = {
-  backgroundColor: '#000000',
-  color: '#ffffff',
+  backgroundColor: '#22d3ee',
+  color: '#0a0a0a',
   fontSize: '14px',
   borderRadius: '8px',
   padding: '12px 20px',
