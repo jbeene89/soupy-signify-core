@@ -5,7 +5,7 @@ import { BUILD_OFFS } from "@/data/build-off";
 import { runBuildOffEntry } from "@/functions/build-off-runner.functions";
 import type { RunResult } from "@/functions/build-off-runner.functions";
 
-export const Route = createFileRoute("/build-off/operator")({
+export const Route = createFileRoute("/build-off-operator")({
   component: OperatorPage,
   head: () => ({
     meta: [
