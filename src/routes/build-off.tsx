@@ -143,7 +143,7 @@ function BuildOffPage() {
     } as PublishedToolRun));
 
     const upgraded: PublishedToolRun[] = baseRuns.map((r) => {
-      const db = dbByTool.get(r.tool.toLowerCase());
+      const db = dbByTool.get(normTool(r.tool));
       if (!db) return r;
       return {
         ...r,
