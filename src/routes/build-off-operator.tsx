@@ -213,35 +213,143 @@ function OperatorPage() {
             <div className="p-4 font-mono text-[11px] text-cream/45">No runs yet.</div>
           )}
           {runs.map((r) => (
-            <div
+            <RunRow
               key={r.id}
-              className="flex items-center justify-between gap-4 p-3 font-mono text-[11px]"
-            >
-              <div className="flex-1 min-w-0">
-                <div className="text-cream/85">
-                  {r.tool} · {r.model} · {(r.durationMs / 1000).toFixed(1)}s · {r.bytes.toLocaleString()}b
-                </div>
-                <div className="text-cream/45 truncate">{r.objectKey}</div>
-                <div className="text-cream/35">{new Date(r.createdAt).toLocaleString()}</div>
-              </div>
-              <div className="flex items-center gap-3">
-                {r.isPublished ? (
-                  <span className="text-cyan-accent uppercase tracking-[0.14em] text-[10px]">
-                    ● published
-                  </span>
-                ) : (
-                  <button
-                    onClick={() => handlePublish(r.id)}
-                    className="text-[10px] uppercase tracking-[0.14em] text-cream/70 hover:text-cyan-accent"
-                  >
-                    publish
-                  </button>
-                )}
-              </div>
-            </div>
+              row={r}
+              onPublish={() => handlePublish(r.id)}
+              onScore={async (patch) => {
+                setLogLine(`Saving scores for ${r.id.slice(0, 8)}…`);
+                const res = await score({ data: { runId: r.id, ...patch } });
+                setLogLine(res.ok ? "Scores saved." : `Save failed: ${res.reason}`);
+                refreshRuns();
+              }}
+            />
           ))}
         </div>
       </div>
+    </div>
+  );
+}
+
+function RunRow({
+  row,
+  onPublish,
+  onScore,
+}: {
+  row: RunListItem;
+  onPublish: () => void;
+  onScore: (patch: {
+    fidelity?: number | null;
+    correctness?: number | null;
+    refactor?: number | null;
+    honesty?: number | null;
+    costCents?: number | null;
+    bundleKb?: number | null;
+    judgeNotes?: string | null;
+  }) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const [fidelity, setFidelity] = useState<string>(row.fidelity?.toString() ?? "");
+  const [correctness, setCorrectness] = useState<string>(row.correctness?.toString() ?? "");
+  const [refactor, setRefactor] = useState<string>(row.refactor?.toString() ?? "");
+  const [honesty, setHonesty] = useState<string>(row.honesty?.toString() ?? "");
+  const [costCents, setCostCents] = useState<string>(row.costCents?.toString() ?? "");
+  const [bundleKb, setBundleKb] = useState<string>(row.bundleKb?.toString() ?? "");
+  const [judgeNotes, setJudgeNotes] = useState<string>(row.judgeNotes ?? "");
+
+  const num = (s: string): number | null => {
+    const n = parseInt(s, 10);
+    return Number.isFinite(n) ? n : null;
+  };
+
+  return (
+    <div className="p-3 font-mono text-[11px]">
+      <div className="flex items-center justify-between gap-4">
+        <div className="flex-1 min-w-0">
+          <div className="text-cream/85">
+            {row.tool} · {row.model} · {(row.durationMs / 1000).toFixed(1)}s · {row.bytes.toLocaleString()}b
+            {row.fidelity != null && (
+              <span className="ml-2 text-cyan-accent">
+                · F{row.fidelity} C{row.correctness ?? "—"} R{row.refactor ?? "—"} H{row.honesty ?? "—"}
+              </span>
+            )}
+          </div>
+          <div className="text-cream/45 truncate">{row.objectKey}</div>
+          <div className="text-cream/35">{new Date(row.createdAt).toLocaleString()}</div>
+        </div>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setOpen((v) => !v)}
+            className="text-[10px] uppercase tracking-[0.14em] text-cream/70 hover:text-cyan-accent"
+          >
+            {open ? "close" : "score"}
+          </button>
+          {row.isPublished ? (
+            <span className="text-cyan-accent uppercase tracking-[0.14em] text-[10px]">
+              ● published
+            </span>
+          ) : (
+            <button
+              onClick={onPublish}
+              className="text-[10px] uppercase tracking-[0.14em] text-cream/70 hover:text-cyan-accent"
+            >
+              publish
+            </button>
+          )}
+        </div>
+      </div>
+
+      {open && (
+        <div className="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-3 border-t border-rule pt-3">
+          {[
+            { label: "Fidelity (0-100)", v: fidelity, set: setFidelity },
+            { label: "Correctness (0-100)", v: correctness, set: setCorrectness },
+            { label: "Refactor (0-100)", v: refactor, set: setRefactor },
+            { label: "Honesty (0-100)", v: honesty, set: setHonesty },
+            { label: "Cost (cents)", v: costCents, set: setCostCents },
+            { label: "Bundle (kB)", v: bundleKb, set: setBundleKb },
+          ].map((f) => (
+            <label key={f.label} className="block">
+              <div className="text-[9px] uppercase tracking-[0.14em] text-cream/45 mb-1">
+                {f.label}
+              </div>
+              <input
+                type="number"
+                value={f.v}
+                onChange={(e) => f.set(e.target.value)}
+                className="w-full bg-foreground/5 border border-rule px-2 py-1 text-cream"
+              />
+            </label>
+          ))}
+          <label className="block col-span-2 sm:col-span-4">
+            <div className="text-[9px] uppercase tracking-[0.14em] text-cream/45 mb-1">
+              Judge notes
+            </div>
+            <textarea
+              value={judgeNotes}
+              onChange={(e) => setJudgeNotes(e.target.value)}
+              rows={2}
+              className="w-full bg-foreground/5 border border-rule px-2 py-1 text-cream"
+            />
+          </label>
+          <button
+            onClick={() =>
+              onScore({
+                fidelity: num(fidelity),
+                correctness: num(correctness),
+                refactor: num(refactor),
+                honesty: num(honesty),
+                costCents: num(costCents),
+                bundleKb: num(bundleKb),
+                judgeNotes: judgeNotes.trim() || null,
+              })
+            }
+            className="col-span-2 sm:col-span-4 px-3 py-1.5 bg-cyan-accent text-background uppercase tracking-[0.14em] text-[10px]"
+          >
+            Save scores
+          </button>
+        </div>
+      )}
     </div>
   );
 }
