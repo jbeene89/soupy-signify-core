@@ -11,8 +11,8 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as PartnersRouteImport } from './routes/partners'
 import { Route as DemoRouteImport } from './routes/demo'
-import { Route as BuildOffRouteImport } from './routes/build-off'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BuildOffIndexRouteImport } from './routes/build-off.index'
 import { Route as BuildOffOperatorRouteImport } from './routes/build-off.operator'
 import { Route as ApiSaceCompleteRouteImport } from './routes/api/sace/complete'
 import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
@@ -30,20 +30,20 @@ const DemoRoute = DemoRouteImport.update({
   path: '/demo',
   getParentRoute: () => rootRouteImport,
 } as any)
-const BuildOffRoute = BuildOffRouteImport.update({
-  id: '/build-off',
-  path: '/build-off',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BuildOffIndexRoute = BuildOffIndexRouteImport.update({
+  id: '/build-off/',
+  path: '/build-off/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BuildOffOperatorRoute = BuildOffOperatorRouteImport.update({
-  id: '/operator',
-  path: '/operator',
-  getParentRoute: () => BuildOffRoute,
+  id: '/build-off/operator',
+  path: '/build-off/operator',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ApiSaceCompleteRoute = ApiSaceCompleteRouteImport.update({
   id: '/api/sace/complete',
@@ -75,10 +75,10 @@ const ApiBadgeCategoryRankToolRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/build-off': typeof BuildOffRouteWithChildren
   '/demo': typeof DemoRoute
   '/partners': typeof PartnersRoute
   '/build-off/operator': typeof BuildOffOperatorRoute
+  '/build-off/': typeof BuildOffIndexRoute
   '/api/sace/complete': typeof ApiSaceCompleteRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
@@ -87,10 +87,10 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/build-off': typeof BuildOffRouteWithChildren
   '/demo': typeof DemoRoute
   '/partners': typeof PartnersRoute
   '/build-off/operator': typeof BuildOffOperatorRoute
+  '/build-off': typeof BuildOffIndexRoute
   '/api/sace/complete': typeof ApiSaceCompleteRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
@@ -100,10 +100,10 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/build-off': typeof BuildOffRouteWithChildren
   '/demo': typeof DemoRoute
   '/partners': typeof PartnersRoute
   '/build-off/operator': typeof BuildOffOperatorRoute
+  '/build-off/': typeof BuildOffIndexRoute
   '/api/sace/complete': typeof ApiSaceCompleteRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
@@ -114,10 +114,10 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/build-off'
     | '/demo'
     | '/partners'
     | '/build-off/operator'
+    | '/build-off/'
     | '/api/sace/complete'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
@@ -126,10 +126,10 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/build-off'
     | '/demo'
     | '/partners'
     | '/build-off/operator'
+    | '/build-off'
     | '/api/sace/complete'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
@@ -138,10 +138,10 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
-    | '/build-off'
     | '/demo'
     | '/partners'
     | '/build-off/operator'
+    | '/build-off/'
     | '/api/sace/complete'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
@@ -151,9 +151,10 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  BuildOffRoute: typeof BuildOffRouteWithChildren
   DemoRoute: typeof DemoRoute
   PartnersRoute: typeof PartnersRoute
+  BuildOffOperatorRoute: typeof BuildOffOperatorRoute
+  BuildOffIndexRoute: typeof BuildOffIndexRoute
   ApiSaceCompleteRoute: typeof ApiSaceCompleteRoute
   LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
   LovableEmailAuthWebhookRoute: typeof LovableEmailAuthWebhookRoute
@@ -177,13 +178,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/build-off': {
-      id: '/build-off'
-      path: '/build-off'
-      fullPath: '/build-off'
-      preLoaderRoute: typeof BuildOffRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
@@ -191,12 +185,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/build-off/': {
+      id: '/build-off/'
+      path: '/build-off'
+      fullPath: '/build-off/'
+      preLoaderRoute: typeof BuildOffIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/build-off/operator': {
       id: '/build-off/operator'
-      path: '/operator'
+      path: '/build-off/operator'
       fullPath: '/build-off/operator'
       preLoaderRoute: typeof BuildOffOperatorRouteImport
-      parentRoute: typeof BuildOffRoute
+      parentRoute: typeof rootRouteImport
     }
     '/api/sace/complete': {
       id: '/api/sace/complete'
@@ -236,23 +237,12 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface BuildOffRouteChildren {
-  BuildOffOperatorRoute: typeof BuildOffOperatorRoute
-}
-
-const BuildOffRouteChildren: BuildOffRouteChildren = {
-  BuildOffOperatorRoute: BuildOffOperatorRoute,
-}
-
-const BuildOffRouteWithChildren = BuildOffRoute._addFileChildren(
-  BuildOffRouteChildren,
-)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  BuildOffRoute: BuildOffRouteWithChildren,
   DemoRoute: DemoRoute,
   PartnersRoute: PartnersRoute,
+  BuildOffOperatorRoute: BuildOffOperatorRoute,
+  BuildOffIndexRoute: BuildOffIndexRoute,
   ApiSaceCompleteRoute: ApiSaceCompleteRoute,
   LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
   LovableEmailAuthWebhookRoute: LovableEmailAuthWebhookRoute,
