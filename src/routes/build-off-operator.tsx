@@ -27,6 +27,7 @@ function OperatorPage() {
   const run = useServerFn(runBuildOffEntry);
   const list = useServerFn(listBuildOffRuns);
   const publish = useServerFn(publishBuildOffRun);
+  const score = useServerFn(scoreBuildOffRun);
 
   const tieredRounds = BUILD_OFFS.filter((b) => b.tier);
   const [buildOffId, setBuildOffId] = useState<string>(tieredRounds[0]?.id ?? "");
