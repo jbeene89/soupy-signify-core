@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState, useCallback } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { BUILD_OFFS } from "@/data/build-off";
@@ -94,8 +94,16 @@ function OperatorPage() {
 
   return (
     <div className="min-h-screen bg-background text-cream px-6 py-12 max-w-5xl mx-auto">
-      <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-cyan-accent mb-2">
-        § Operator console
+      <div className="flex items-center justify-between mb-2">
+        <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-cyan-accent">
+          § Operator console
+        </div>
+        <Link
+          to="/build-off"
+          className="font-mono text-[11px] uppercase tracking-[0.14em] text-cream/60 hover:text-cyan-accent border border-rule px-3 py-1.5"
+        >
+          ← Back to result board
+        </Link>
       </div>
       <h1 className="font-serif text-4xl mb-2">Run a build-off entry</h1>
       <p className="font-serif italic text-cream/60 mb-10 max-w-2xl">
