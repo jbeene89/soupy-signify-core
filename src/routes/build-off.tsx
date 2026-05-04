@@ -21,6 +21,7 @@ import {
 } from "@/components/site/BuildOffVisuals";
 import { VisualShowcase } from "@/components/site/VisualShowcase";
 import { fetchPublishedBuildOff, listPublishedBuildOffs } from "@/functions/sace.functions";
+import { getPublishedRunsForRound, type PublishedRun } from "@/functions/build-off-runner.functions";
 import type { PublishedBuildOff, PublishedBuildOffManifestEntry, PublishedToolRun } from "@/lib/sace/contract";
 
 const SearchSchema = z.object({ id: z.string().min(1).max(64).optional() });
