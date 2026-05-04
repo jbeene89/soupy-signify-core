@@ -14,6 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
+      build_off_runs: {
+        Row: {
+          build_off_id: string
+          bytes: number
+          created_at: string
+          duration_ms: number
+          id: string
+          is_published: boolean
+          model: string
+          notes: string | null
+          object_key: string
+          tool: string
+        }
+        Insert: {
+          build_off_id: string
+          bytes: number
+          created_at?: string
+          duration_ms: number
+          id?: string
+          is_published?: boolean
+          model: string
+          notes?: string | null
+          object_key: string
+          tool: string
+        }
+        Update: {
+          build_off_id?: string
+          bytes?: number
+          created_at?: string
+          duration_ms?: number
+          id?: string
+          is_published?: boolean
+          model?: string
+          notes?: string | null
+          object_key?: string
+          tool?: string
+        }
+        Relationships: []
+      }
       demo_submissions: {
         Row: {
           baseline_cost_cents: number
