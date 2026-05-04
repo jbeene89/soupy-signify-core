@@ -176,6 +176,13 @@ export type RunListItem = {
   durationMs: number;
   isPublished: boolean;
   createdAt: string;
+  fidelity: number | null;
+  correctness: number | null;
+  refactor: number | null;
+  honesty: number | null;
+  costCents: number | null;
+  bundleKb: number | null;
+  judgeNotes: string | null;
 };
 
 export const listBuildOffRuns = createServerFn({ method: "GET" })
@@ -183,7 +190,9 @@ export const listBuildOffRuns = createServerFn({ method: "GET" })
   .handler(async ({ data }): Promise<RunListItem[]> => {
     const { data: rows, error } = await supabaseAdmin
       .from("build_off_runs")
-      .select("id, tool, object_key, bytes, model, duration_ms, is_published, created_at")
+      .select(
+        "id, tool, object_key, bytes, model, duration_ms, is_published, created_at, fidelity, correctness, refactor, honesty, cost_cents, bundle_kb, judge_notes",
+      )
       .eq("build_off_id", data.buildOffId)
       .order("created_at", { ascending: false })
       .limit(data.limit ?? 10);
@@ -197,6 +206,13 @@ export const listBuildOffRuns = createServerFn({ method: "GET" })
       durationMs: r.duration_ms,
       isPublished: r.is_published,
       createdAt: r.created_at,
+      fidelity: r.fidelity,
+      correctness: r.correctness,
+      refactor: r.refactor,
+      honesty: r.honesty,
+      costCents: r.cost_cents,
+      bundleKb: r.bundle_kb,
+      judgeNotes: r.judge_notes,
     }));
   });
 
