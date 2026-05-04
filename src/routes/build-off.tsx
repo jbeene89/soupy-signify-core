@@ -21,6 +21,7 @@ import {
 } from "@/components/site/BuildOffVisuals";
 import { VisualShowcase } from "@/components/site/VisualShowcase";
 import { fetchPublishedBuildOff, listPublishedBuildOffs } from "@/functions/sace.functions";
+import { getPublishedRunsForRound, type PublishedRun } from "@/functions/build-off-runner.functions";
 import type { PublishedBuildOff, PublishedBuildOffManifestEntry, PublishedToolRun } from "@/lib/sace/contract";
 
 const SearchSchema = z.object({ id: z.string().min(1).max(64).optional() });
@@ -50,8 +51,11 @@ export const Route = createFileRoute("/build-off")({
     const defaultId = entries[0]?.id ?? FEATURED_BUILD_OFF_ID;
     const selectedId = deps.id ?? defaultId;
     const sample = BUILD_OFFS.find((b) => b.id === selectedId) ?? BUILD_OFFS[0];
-    const published = await fetchPublishedBuildOff({ data: { id: selectedId } });
-    return { sample, published: published.result, entries, selectedId };
+    const [published, dbRuns] = await Promise.all([
+      fetchPublishedBuildOff({ data: { id: selectedId } }),
+      getPublishedRunsForRound({ data: { buildOffId: selectedId } }).catch(() => [] as PublishedRun[]),
+    ]);
+    return { sample, published: published.result, entries, selectedId, dbRuns };
   },
   component: BuildOffPage,
 });
@@ -100,11 +104,62 @@ function mergePublished(sample: BuildOff, pub: PublishedBuildOff): MergedBuildOf
 }
 
 function BuildOffPage() {
-  const { sample, published, entries, selectedId } = Route.useLoaderData();
+  const { sample, published, entries, selectedId, dbRuns } = Route.useLoaderData();
   const navigate = useNavigate({ from: "/build-off" });
   const merged: MergedBuildOff = published
     ? mergePublished(sample, published)
     : { ...sample, manualByTool: {}, telemetryByTool: {} };
+
+  // Merge live DB runs (from Lovable Cloud) into the showcase.
+  // DB runs override any sample/published entry for the same tool.
+  if (dbRuns && dbRuns.length > 0) {
+    const dbByTool = new Map<string, PublishedRun>(
+      dbRuns.map((r) => [r.tool.toLowerCase(), r]),
+    );
+    const baseRuns = merged.publishedRuns ?? merged.runs.map((r) => ({
+      tool: r.tool,
+      raw: r.raw,
+      notes: r.notes,
+      mode: r.mode ?? ("harness" as const),
+      previewUrl: r.previewUrl,
+      previewHarnessServed: r.previewHarnessServed,
+      confirmed: r.confirmed,
+    } as PublishedToolRun));
+
+    const upgraded: PublishedToolRun[] = baseRuns.map((r) => {
+      const db = dbByTool.get(r.tool.toLowerCase());
+      if (!db) return r;
+      return {
+        ...r,
+        previewUrl: db.previewUrl,
+        previewHarnessServed: true,
+        confirmed: true,
+        mode: "harness",
+        notes: db.judgeNotes ?? r.notes,
+        raw: {
+          cost: db.costCents != null ? db.costCents / 100 : r.raw.cost,
+          time: Math.round(db.durationMs / 1000),
+          fidelity: db.fidelity ?? r.raw.fidelity,
+          correctness: db.correctness ?? r.raw.correctness,
+          refactor: db.refactor ?? r.raw.refactor,
+          honesty: db.honesty ?? r.raw.honesty,
+          bundle: db.bundleKb ?? Math.max(1, Math.round(db.bytes / 1024)),
+        },
+      };
+    });
+
+    merged.publishedRuns = upgraded;
+    merged.runs = upgraded.map((r) => ({
+      tool: r.tool,
+      raw: r.raw,
+      notes: r.notes,
+      previewUrl: r.previewUrl,
+      previewHarnessServed: r.previewHarnessServed,
+      mode: r.mode,
+      confirmed: r.confirmed,
+    }));
+  }
+
   const current = merged;
   const manualByTool = merged.manualByTool;
   const telemetryByTool = merged.telemetryByTool;

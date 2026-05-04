@@ -176,6 +176,13 @@ export type RunListItem = {
   durationMs: number;
   isPublished: boolean;
   createdAt: string;
+  fidelity: number | null;
+  correctness: number | null;
+  refactor: number | null;
+  honesty: number | null;
+  costCents: number | null;
+  bundleKb: number | null;
+  judgeNotes: string | null;
 };
 
 export const listBuildOffRuns = createServerFn({ method: "GET" })
@@ -183,7 +190,9 @@ export const listBuildOffRuns = createServerFn({ method: "GET" })
   .handler(async ({ data }): Promise<RunListItem[]> => {
     const { data: rows, error } = await supabaseAdmin
       .from("build_off_runs")
-      .select("id, tool, object_key, bytes, model, duration_ms, is_published, created_at")
+      .select(
+        "id, tool, object_key, bytes, model, duration_ms, is_published, created_at, fidelity, correctness, refactor, honesty, cost_cents, bundle_kb, judge_notes",
+      )
       .eq("build_off_id", data.buildOffId)
       .order("created_at", { ascending: false })
       .limit(data.limit ?? 10);
@@ -196,6 +205,96 @@ export const listBuildOffRuns = createServerFn({ method: "GET" })
       model: r.model,
       durationMs: r.duration_ms,
       isPublished: r.is_published,
+      createdAt: r.created_at,
+      fidelity: r.fidelity,
+      correctness: r.correctness,
+      refactor: r.refactor,
+      honesty: r.honesty,
+      costCents: r.cost_cents,
+      bundleKb: r.bundle_kb,
+      judgeNotes: r.judge_notes,
+    }));
+  });
+
+// ── Save scores on a run ─────────────────────────────────────────────
+const ScoreInput = z.object({
+  runId: z.string().uuid(),
+  fidelity: z.number().int().min(0).max(100).nullable().optional(),
+  correctness: z.number().int().min(0).max(100).nullable().optional(),
+  refactor: z.number().int().min(0).max(100).nullable().optional(),
+  honesty: z.number().int().min(0).max(100).nullable().optional(),
+  costCents: z.number().int().min(0).nullable().optional(),
+  bundleKb: z.number().int().min(0).nullable().optional(),
+  judgeNotes: z.string().max(2000).nullable().optional(),
+});
+
+export const scoreBuildOffRun = createServerFn({ method: "POST" })
+  .inputValidator((input: unknown) => ScoreInput.parse(input))
+  .handler(async ({ data }): Promise<{ ok: true } | { ok: false; reason: string }> => {
+    const { error } = await supabaseAdmin
+      .from("build_off_runs")
+      .update({
+        fidelity: data.fidelity ?? null,
+        correctness: data.correctness ?? null,
+        refactor: data.refactor ?? null,
+        honesty: data.honesty ?? null,
+        cost_cents: data.costCents ?? null,
+        bundle_kb: data.bundleKb ?? null,
+        judge_notes: data.judgeNotes ?? null,
+      })
+      .eq("id", data.runId);
+    if (error) return { ok: false, reason: error.message };
+    return { ok: true };
+  });
+
+// ── Fetch all published runs for a round (for the public board) ──────
+const PublishedInput = z.object({
+  buildOffId: z.string().min(1).max(64),
+});
+
+export type PublishedRun = {
+  id: string;
+  tool: string;
+  previewUrl: string; // stable redirect URL
+  fidelity: number | null;
+  correctness: number | null;
+  refactor: number | null;
+  honesty: number | null;
+  costCents: number | null;
+  bundleKb: number | null;
+  durationMs: number;
+  bytes: number;
+  model: string;
+  judgeNotes: string | null;
+  createdAt: string;
+};
+
+export const getPublishedRunsForRound = createServerFn({ method: "GET" })
+  .inputValidator((input: unknown) => PublishedInput.parse(input))
+  .handler(async ({ data }): Promise<PublishedRun[]> => {
+    const { data: rows, error } = await supabaseAdmin
+      .from("build_off_runs")
+      .select(
+        "id, tool, fidelity, correctness, refactor, honesty, cost_cents, bundle_kb, duration_ms, bytes, model, judge_notes, created_at",
+      )
+      .eq("build_off_id", data.buildOffId)
+      .eq("is_published", true)
+      .order("created_at", { ascending: false });
+    if (error) throw new Error(error.message);
+    return (rows ?? []).map((r) => ({
+      id: r.id,
+      tool: r.tool,
+      previewUrl: `/api/public/build-off/preview/${data.buildOffId}/${r.tool}`,
+      fidelity: r.fidelity,
+      correctness: r.correctness,
+      refactor: r.refactor,
+      honesty: r.honesty,
+      costCents: r.cost_cents,
+      bundleKb: r.bundle_kb,
+      durationMs: r.duration_ms,
+      bytes: r.bytes,
+      model: r.model,
+      judgeNotes: r.judge_notes,
       createdAt: r.created_at,
     }));
   });

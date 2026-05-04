@@ -17,38 +17,59 @@ export type Database = {
       build_off_runs: {
         Row: {
           build_off_id: string
+          bundle_kb: number | null
           bytes: number
+          correctness: number | null
+          cost_cents: number | null
           created_at: string
           duration_ms: number
+          fidelity: number | null
+          honesty: number | null
           id: string
           is_published: boolean
+          judge_notes: string | null
           model: string
           notes: string | null
           object_key: string
+          refactor: number | null
           tool: string
         }
         Insert: {
           build_off_id: string
+          bundle_kb?: number | null
           bytes: number
+          correctness?: number | null
+          cost_cents?: number | null
           created_at?: string
           duration_ms: number
+          fidelity?: number | null
+          honesty?: number | null
           id?: string
           is_published?: boolean
+          judge_notes?: string | null
           model: string
           notes?: string | null
           object_key: string
+          refactor?: number | null
           tool: string
         }
         Update: {
           build_off_id?: string
+          bundle_kb?: number | null
           bytes?: number
+          correctness?: number | null
+          cost_cents?: number | null
           created_at?: string
           duration_ms?: number
+          fidelity?: number | null
+          honesty?: number | null
           id?: string
           is_published?: boolean
+          judge_notes?: string | null
           model?: string
           notes?: string | null
           object_key?: string
+          refactor?: number | null
           tool?: string
         }
         Relationships: []
