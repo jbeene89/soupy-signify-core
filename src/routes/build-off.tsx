@@ -112,10 +112,26 @@ function BuildOffPage() {
 
   // Merge live DB runs (from Lovable Cloud) into the showcase.
   // DB runs override any sample/published entry for the same tool.
+  // DB stores short tool slugs ("soupy"), showcase uses display names
+  // ("Soupy Together") — normalize both sides through this alias map.
+  const TOOL_ALIAS: Record<string, string> = {
+    soupy: "soupy together",
+    lovable: "lovable pro",
+    v0: "v0 by vercel",
+    replit: "replit agent",
+    claude: "claude code",
+  };
+  const normTool = (t: string) => {
+    const k = t.toLowerCase().trim();
+    return TOOL_ALIAS[k] ?? k;
+  };
   if (dbRuns && dbRuns.length > 0) {
-    const dbByTool = new Map<string, PublishedRun>(
-      dbRuns.map((r) => [r.tool.toLowerCase(), r]),
-    );
+    // Keep only the newest published run per tool (loader returns desc by created_at).
+    const dbByTool = new Map<string, PublishedRun>();
+    for (const r of dbRuns) {
+      const k = normTool(r.tool);
+      if (!dbByTool.has(k)) dbByTool.set(k, r);
+    }
     const baseRuns = merged.publishedRuns ?? merged.runs.map((r) => ({
       tool: r.tool,
       raw: r.raw,
@@ -127,7 +143,7 @@ function BuildOffPage() {
     } as PublishedToolRun));
 
     const upgraded: PublishedToolRun[] = baseRuns.map((r) => {
-      const db = dbByTool.get(r.tool.toLowerCase());
+      const db = dbByTool.get(normTool(r.tool));
       if (!db) return r;
       return {
         ...r,
