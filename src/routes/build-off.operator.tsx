@@ -2,7 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { BUILD_OFFS } from "@/data/build-off";
-import { runBuildOffEntry, type RunResult } from "@/server/build-off-runner.functions";
+import { runBuildOffEntry } from "@/server/build-off-runner.functions";
+import type { RunResult } from "@/server/build-off-runner.functions";
 
 export const Route = createFileRoute("/build-off/operator")({
   component: OperatorPage,
