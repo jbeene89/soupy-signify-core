@@ -51,8 +51,11 @@ export const Route = createFileRoute("/build-off")({
     const defaultId = entries[0]?.id ?? FEATURED_BUILD_OFF_ID;
     const selectedId = deps.id ?? defaultId;
     const sample = BUILD_OFFS.find((b) => b.id === selectedId) ?? BUILD_OFFS[0];
-    const published = await fetchPublishedBuildOff({ data: { id: selectedId } });
-    return { sample, published: published.result, entries, selectedId };
+    const [published, dbRuns] = await Promise.all([
+      fetchPublishedBuildOff({ data: { id: selectedId } }),
+      getPublishedRunsForRound({ data: { buildOffId: selectedId } }).catch(() => [] as PublishedRun[]),
+    ]);
+    return { sample, published: published.result, entries, selectedId, dbRuns };
   },
   component: BuildOffPage,
 });
