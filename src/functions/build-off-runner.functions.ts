@@ -50,7 +50,7 @@ export const runBuildOffEntry = createServerFn({ method: "POST" })
     const s3Key = process.env.AWS_S3_API_KEY;
     if (!s3Key) return { ok: false, reason: "AWS_S3_API_KEY not configured (link AWS S3 connector)" };
 
-    const model = data.model ?? "google/gemini-2.5-pro";
+    const model = data.model ?? "google/gemini-2.5-flash";
 
     // ── 1. Generate ────────────────────────────────────────────────────
     const aiRes = await fetch(AI_GATEWAY_URL, {
