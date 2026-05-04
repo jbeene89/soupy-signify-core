@@ -6,6 +6,7 @@ import {
   runBuildOffEntry,
   listBuildOffRuns,
   publishBuildOffRun,
+  scoreBuildOffRun,
 } from "@/functions/build-off-runner.functions";
 import type {
   RunResult,
