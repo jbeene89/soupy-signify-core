@@ -25,7 +25,7 @@ import type { PublishedBuildOff, PublishedBuildOffManifestEntry, PublishedToolRu
 
 const SearchSchema = z.object({ id: z.string().min(1).max(64).optional() });
 
-export const Route = createFileRoute("/build-off/")({
+export const Route = createFileRoute("/build-off")({
   validateSearch: (search) => SearchSchema.parse(search),
   head: () => ({
     meta: [
