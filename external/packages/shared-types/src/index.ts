@@ -1,14 +1,17 @@
 import { createHash, createPrivateKey, createPublicKey, sign, verify } from "node:crypto";
 
 export type PartnerId =
+  | "local-tier-0"
+  | "local-sace"
   | "claude-haiku"
   | "claude-sonnet"
   | "gemini-flash"
   | "gemini-pro"
   | "gpt-5-mini"
   | "gpt-5"
-  | "frontier-cortex"
-  | "local-tier-0";
+  | "gpt5-mini"
+  | "gpt5"
+  | "frontier-cortex";
 
 export type ToolId =
   | "soupy"

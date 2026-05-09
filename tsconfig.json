@@ -1,5 +1,15 @@
 {
-  "include": ["src/**/*.ts", "src/**/*.tsx", "vite.config.ts", "eslint.config.js"],
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "vite.config.ts",
+    "eslint.config.js",
+    "external/packages/classifier/src/**/*.ts",
+    "external/packages/shared-types/src/**/*.ts"
+  ],
+  "exclude": [
+    "external/**/*.test.ts"
+  ],
   "compilerOptions": {
     "target": "ES2022",
     "jsx": "react-jsx",
@@ -21,7 +31,9 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@soupy-together/classifier": ["./external/packages/classifier/src/index.ts"],
+      "@soupy-together/shared-types": ["./external/packages/shared-types/src/index.ts"]
     }
   }
 }
