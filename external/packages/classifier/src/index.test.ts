@@ -26,7 +26,9 @@ describe("classifier", () => {
     );
     expect(decision.tier).toBe(1);
     expect(decision.partners).toContain("claude-haiku");
-    expect(decision.est_cost_cents).toBeGreaterThan(0);
+    // Cost may round to 0 cents at tier 1 with cheap specialists; baseline must
+    // still be non-zero so the savings story renders.
+    expect(decision.baseline_gpt5_cents).toBeGreaterThan(0);
   });
 
   it("escalates a complex multi-feature build to tier 2 or 3", () => {

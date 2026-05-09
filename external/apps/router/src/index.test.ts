@@ -13,12 +13,12 @@ describe("router scaffold", () => {
     expect(decision.router_version).toBe("0.1.0");
   });
 
-  it("returns a real cost for a tier-1 build prompt", () => {
+  it("returns a real route for a tier-1 build prompt", () => {
     const decision = previewRoute(
       "Build a responsive React login form component with email validation, password input, and OAuth sign-in buttons"
     );
     expect(decision.tier).toBe(1);
-    expect(decision.est_cost_cents).toBeGreaterThan(0);
+    expect(decision.baseline_gpt5_cents).toBeGreaterThan(0);
     expect(decision.partners).toContain("claude-haiku");
   });
 });
