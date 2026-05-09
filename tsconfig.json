@@ -7,6 +7,9 @@
     "external/packages/classifier/src/**/*.ts",
     "external/packages/shared-types/src/**/*.ts"
   ],
+  "exclude": [
+    "external/**/*.test.ts"
+  ],
   "compilerOptions": {
     "target": "ES2022",
     "jsx": "react-jsx",
