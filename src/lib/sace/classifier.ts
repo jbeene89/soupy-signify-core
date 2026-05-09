@@ -1,22 +1,22 @@
 /**
- * Heuristic SACE classifier — turns a build prompt into a full demo result.
+ * UI-facing wrapper around the canonical SACE classifier.
  *
- * Pure function. No I/O. The server function persists the result; the UI
- * renders it. Swap this module for an LLM-backed implementation later
- * without touching the call sites.
+ * The router/contract lives in `@soupy-together/classifier` and emits the
+ * RouteDecision shape. This module re-shapes that decision into the richer
+ * ClassifierResult the marketing /demo page renders (tier label, reasoning,
+ * partner labels, mock output, etc.) without diverging on tier, partners,
+ * or cost numbers.
  */
 
 import {
+  classifyPrompt as routerClassify,
   extractFeatures,
-  tierFromComplexity,
-  routePartners,
   estimateOutputTokens,
-  estimateCosts,
   estimateEtaSeconds,
   PARTNERS,
   type PartnerId,
   type PromptFeatures,
-} from "./partners";
+} from "@soupy-together/classifier";
 
 export interface ClassifierResult {
   tier: 0 | 1 | 2 | 3;
@@ -65,9 +65,7 @@ function buildReasoning(tier: 0 | 1 | 2 | 3, f: PromptFeatures): string {
 }
 
 function buildMockOutput(prompt: string, tier: 0 | 1 | 2 | 3, partners: PartnerId[]): string {
-  const partnerName = partners.length
-    ? PARTNERS[partners[0]].label
-    : "Local SACE";
+  const partnerName = partners.length ? PARTNERS[partners[0]].label : "Local SACE";
   if (tier === 0) {
     return `[${partnerName}]\n\n✓ Recognized common pattern. Returning cached scaffold.\n\n— No external call. Cost: $0.00. Latency: ~120ms.`;
   }
@@ -83,11 +81,11 @@ function buildMockOutput(prompt: string, tier: 0 | 1 | 2 | 3, partners: PartnerI
 
 export function classifyPrompt(rawPrompt: string): ClassifierResult {
   const prompt = rawPrompt.trim();
+  const decision = routerClassify(prompt);
   const features = extractFeatures(prompt);
-  const tier = tierFromComplexity(features.complexity);
-  const partners = routePartners(tier, features);
+  const partners = decision.partners as PartnerId[];
+  const tier = decision.tier;
   const estOutputTokens = estimateOutputTokens(tier, features);
-  const { baselineCents, soupyCents } = estimateCosts(tier, partners, estOutputTokens);
   const etaSeconds = estimateEtaSeconds(partners, estOutputTokens);
 
   return {
@@ -98,13 +96,13 @@ export function classifyPrompt(rawPrompt: string): ClassifierResult {
     partners,
     partnerLabels: partners.map((id) => ({
       id,
-      label: PARTNERS[id].label,
-      vendor: PARTNERS[id].vendor,
+      label: PARTNERS[id]?.label ?? id,
+      vendor: PARTNERS[id]?.vendor ?? "SACE-routed",
     })),
     estOutputTokens,
-    baselineCostCents: baselineCents,
-    soupyCostCents: soupyCents,
-    savedCents: Math.max(0, baselineCents - soupyCents),
+    baselineCostCents: decision.baseline_gpt5_cents,
+    soupyCostCents: decision.est_cost_cents,
+    savedCents: Math.max(0, decision.baseline_gpt5_cents - decision.est_cost_cents),
     etaSeconds,
     mockOutput: buildMockOutput(prompt, tier, partners),
   };
