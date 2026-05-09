@@ -14,7 +14,9 @@ describe("router scaffold", () => {
   });
 
   it("returns a real cost for a tier-1 build prompt", () => {
-    const decision = previewRoute("build a login form with email and password");
+    const decision = previewRoute(
+      "Build a responsive React login form component with email validation, password input, and OAuth sign-in buttons"
+    );
     expect(decision.tier).toBe(1);
     expect(decision.est_cost_cents).toBeGreaterThan(0);
     expect(decision.partners).toContain("claude-haiku");

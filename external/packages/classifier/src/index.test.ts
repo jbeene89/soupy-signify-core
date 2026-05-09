@@ -21,7 +21,9 @@ describe("classifier", () => {
   });
 
   it("routes a single-specialist build at tier 1 to Claude Haiku", () => {
-    const decision = classifyPrompt("build a login form with email and password");
+    const decision = classifyPrompt(
+      "Build a responsive React login form component with email validation, password input, and OAuth sign-in buttons"
+    );
     expect(decision.tier).toBe(1);
     expect(decision.partners).toContain("claude-haiku");
     expect(decision.est_cost_cents).toBeGreaterThan(0);
@@ -29,7 +31,7 @@ describe("classifier", () => {
 
   it("escalates a complex multi-feature build to tier 2 or 3", () => {
     const decision = classifyPrompt(
-      "Build a multi-tenant SaaS billing dashboard with Stripe webhooks, per-org analytics, RLS, dark mode, and Postgres aggregate reports across 12 tables."
+      "Plan and architect a multi-tenant SaaS billing dashboard with Stripe webhooks, per-org analytics, role-based permissions, RLS, dark mode toggle, responsive layout, Postgres schema with 12 tables, aggregate report queries, refactor of existing auth module, and a complex multi-step migration strategy across services with security tradeoff analysis."
     );
     expect(decision.tier).toBeGreaterThanOrEqual(2);
     expect(decision.partners.length).toBeGreaterThan(0);
