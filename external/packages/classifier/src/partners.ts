@@ -127,7 +127,7 @@ export function routePartners(tier: 0 | 1 | 2 | 3, f: PromptFeatures): PartnerId
 }
 
 export function estimateOutputTokens(tier: 0 | 1 | 2 | 3, f: PromptFeatures): number {
-  const base = [180, 600, 1800, 4500][tier];
+  const base = [180, 600, 1800, 4500][tier] ?? 180;
   return Math.round(base * (0.6 + f.complexity * 0.8));
 }
 
