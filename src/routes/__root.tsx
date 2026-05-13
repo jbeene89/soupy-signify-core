@@ -54,6 +54,28 @@ export const Route = createRootRoute({
         href: appCss,
       },
     ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "Organization",
+              name: "Soupy Lab LLC",
+              url: "https://soupytogether.com",
+              brand: "Soupy Together",
+            },
+            {
+              "@type": "WebSite",
+              name: "Soupy Together",
+              url: "https://soupytogether.com",
+              description: "Cost-disciplined multi-agent orchestration for AI coding.",
+            },
+          ],
+        }),
+      },
+    ],
   }),
   shellComponent: RootShell,
   component: RootComponent,
