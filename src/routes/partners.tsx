@@ -5,19 +5,21 @@ import { EmailForm } from "@/components/site/EmailForm";
 export const Route = createFileRoute("/partners")({
   head: () => ({
     meta: [
-      { title: "Partners — Soupy Together" },
+      { title: "Partners — join the SACE roster · Soupy Together" },
       {
         name: "description",
         content:
           "How AI labs and tool vendors join the Soupy Together roster. Ranking is based only on measured rubric scores. No pay-to-win.",
       },
-      { property: "og:title", content: "Partners — Soupy Together" },
+      { property: "og:title", content: "Partners — join the SACE roster" },
       {
         property: "og:description",
         content:
           "Join the SACE partner roster. Ranking is based only on measured rubric scores — no pay-to-win, ever.",
       },
+      { property: "og:url", content: "https://soupytogether.com/partners" },
     ],
+    links: [{ rel: "canonical", href: "https://soupytogether.com/partners" }],
   }),
   component: PartnersPage,
 });
