@@ -1,0 +1,10 @@
+# Soupy Together
+
+> Cost-disciplined multi-agent orchestration for AI coding. SACE classifies each request, routes it to the cheapest tool that can handle it, and publishes side-by-side build-offs with measured cost, time, and quality.
+
+## Pages
+
+- [Home](/): Architecture overview, tier system, pricing comparison, papers.
+- [Try Demo](/demo): Live tier classification and partner routing for any build prompt.
+- [Build-Off](/build-off): Public benchmarks — same prompt through every integrated AI coding tool, scored on cost, fidelity, correctness.
+- [Partners](/partners): How AI labs and tool vendors join the SACE roster. No pay-to-win.

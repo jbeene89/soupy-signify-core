@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as PartnersRouteImport } from './routes/partners'
 import { Route as DemoRouteImport } from './routes/demo'
 import { Route as BuildOffOperatorRouteImport } from './routes/build-off-operator'
@@ -21,6 +22,11 @@ import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/em
 import { Route as ApiBadgeCategoryRankToolRouteImport } from './routes/api/badge/$category/$rank/$tool'
 import { Route as ApiPublicBuildOffPreviewIdToolRouteImport } from './routes/api/public/build-off/preview.$id.$tool'
 
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PartnersRoute = PartnersRouteImport.update({
   id: '/partners',
   path: '/partners',
@@ -86,6 +92,7 @@ export interface FileRoutesByFullPath {
   '/build-off-operator': typeof BuildOffOperatorRoute
   '/demo': typeof DemoRoute
   '/partners': typeof PartnersRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/api/sace/complete': typeof ApiSaceCompleteRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
@@ -99,6 +106,7 @@ export interface FileRoutesByTo {
   '/build-off-operator': typeof BuildOffOperatorRoute
   '/demo': typeof DemoRoute
   '/partners': typeof PartnersRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/api/sace/complete': typeof ApiSaceCompleteRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
@@ -113,6 +121,7 @@ export interface FileRoutesById {
   '/build-off-operator': typeof BuildOffOperatorRoute
   '/demo': typeof DemoRoute
   '/partners': typeof PartnersRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/api/sace/complete': typeof ApiSaceCompleteRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
@@ -128,6 +137,7 @@ export interface FileRouteTypes {
     | '/build-off-operator'
     | '/demo'
     | '/partners'
+    | '/sitemap.xml'
     | '/api/sace/complete'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
@@ -141,6 +151,7 @@ export interface FileRouteTypes {
     | '/build-off-operator'
     | '/demo'
     | '/partners'
+    | '/sitemap.xml'
     | '/api/sace/complete'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
@@ -154,6 +165,7 @@ export interface FileRouteTypes {
     | '/build-off-operator'
     | '/demo'
     | '/partners'
+    | '/sitemap.xml'
     | '/api/sace/complete'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
@@ -168,6 +180,7 @@ export interface RootRouteChildren {
   BuildOffOperatorRoute: typeof BuildOffOperatorRoute
   DemoRoute: typeof DemoRoute
   PartnersRoute: typeof PartnersRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   ApiSaceCompleteRoute: typeof ApiSaceCompleteRoute
   LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
   LovableEmailAuthWebhookRoute: typeof LovableEmailAuthWebhookRoute
@@ -178,6 +191,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/partners': {
       id: '/partners'
       path: '/partners'
@@ -264,6 +284,7 @@ const rootRouteChildren: RootRouteChildren = {
   BuildOffOperatorRoute: BuildOffOperatorRoute,
   DemoRoute: DemoRoute,
   PartnersRoute: PartnersRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   ApiSaceCompleteRoute: ApiSaceCompleteRoute,
   LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
   LovableEmailAuthWebhookRoute: LovableEmailAuthWebhookRoute,

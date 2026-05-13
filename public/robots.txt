@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+Disallow: /build-off-operator
+Disallow: /lovable/
+Disallow: /api/
+
+Sitemap: https://soupytogether.com/sitemap.xml
