@@ -8,6 +8,16 @@ import { HomeBuildOff } from "@/components/site/HomeBuildOff";
 
 export const Route = createFileRoute("/")({
   component: Index,
+  head: () => ({
+    meta: [
+      { title: "Soupy Together — Cost-disciplined AI orchestration" },
+      { name: "description", content: "SACE classifies each AI coding task and routes it to the cheapest tool that can do it well. Four tiers, transparent pricing, public build-offs." },
+      { property: "og:title", content: "Soupy Together — Cost-disciplined AI orchestration" },
+      { property: "og:description", content: "Four-tier routing, transparent pricing, public build-offs. Stop paying frontier prices for trivial work." },
+      { property: "og:url", content: "https://soupytogether.com/" },
+    ],
+    links: [{ rel: "canonical", href: "https://soupytogether.com/" }],
+  }),
 });
 
 const tiers = [

@@ -30,17 +30,33 @@ export const Route = createFileRoute("/build-off")({
   validateSearch: (search) => SearchSchema.parse(search),
   head: () => ({
     meta: [
-      { title: "Build-Off — Soupy Together" },
+      { title: "Build-Off — public AI coding benchmarks · Soupy Together" },
       {
         name: "description",
         content:
-          "A public, side-by-side benchmark of every integrated AI coding tool building the same thing. Same prompt, same evaluation criteria, published receipts.",
+          "Side-by-side benchmark of every integrated AI coding tool building the same thing. Same prompt, same evaluation, published receipts.",
       },
-      { property: "og:title", content: "Build-Off — Soupy Together" },
+      { property: "og:title", content: "Build-Off — public AI coding benchmarks" },
       {
         property: "og:description",
         content:
           "Same prompt through every AI coding tool. Cost, time, fidelity, correctness — all measured in public.",
+      },
+      { property: "og:url", content: "https://soupytogether.com/build-off" },
+    ],
+    links: [{ rel: "canonical", href: "https://soupytogether.com/build-off" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          name: "Soupy Together Build-Offs",
+          description:
+            "Public benchmarks comparing AI coding tools on identical prompts.",
+          url: "https://soupytogether.com/build-off",
+          isPartOf: { "@type": "WebSite", name: "Soupy Together", url: "https://soupytogether.com" },
+        }),
       },
     ],
   }),

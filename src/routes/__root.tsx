@@ -29,15 +29,16 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Soupy Together — Stop paying frontier prices for trivial work" },
-      { name: "description", content: "Soupy Together routes AI coding tasks to the tool best suited for each one. $29/month plus only what you actually use." },
+      { title: "Soupy Together — Cost-disciplined AI orchestration" },
+      { name: "description", content: "SACE routes each AI coding task to the cheapest tool that can do it well. $29/month plus only what you actually use." },
       { name: "author", content: "Soupy Lab LLC" },
-      { property: "og:title", content: "Soupy Together — Stop paying frontier prices for trivial work" },
-      { property: "og:description", content: "Soupy Together routes AI coding tasks to the tool best suited for each one. $29/month plus only what you actually use." },
+      { property: "og:site_name", content: "Soupy Together" },
+      { property: "og:title", content: "Soupy Together — Cost-disciplined AI orchestration" },
+      { property: "og:description", content: "SACE routes each AI coding task to the cheapest tool that can do it well." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
-      { name: "twitter:title", content: "Soupy Together — Stop paying frontier prices for trivial work" },
-      { name: "twitter:description", content: "Soupy Together routes AI coding tasks to the tool best suited for each one. $29/month plus only what you actually use." },
+      { name: "twitter:title", content: "Soupy Together — Cost-disciplined AI orchestration" },
+      { name: "twitter:description", content: "SACE routes each AI coding task to the cheapest tool that can do it well." },
       { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/0724c1d2-594c-45dd-b97b-017c5b7aa33f" },
       { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/0724c1d2-594c-45dd-b97b-017c5b7aa33f" },
     ],
@@ -51,6 +52,28 @@ export const Route = createRootRoute({
       {
         rel: "stylesheet",
         href: appCss,
+      },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "Organization",
+              name: "Soupy Lab LLC",
+              url: "https://soupytogether.com",
+              brand: "Soupy Together",
+            },
+            {
+              "@type": "WebSite",
+              name: "Soupy Together",
+              url: "https://soupytogether.com",
+              description: "Cost-disciplined multi-agent orchestration for AI coding.",
+            },
+          ],
+        }),
       },
     ],
   }),
