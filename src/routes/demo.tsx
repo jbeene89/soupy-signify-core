@@ -14,19 +14,21 @@ import { readPicks, subscribe } from "@/lib/picks";
 export const Route = createFileRoute("/demo")({
   head: () => ({
     meta: [
-      { title: "Try SACE — Soupy Together Demo" },
+      { title: "Try SACE — live tier classification demo" },
       {
         name: "description",
         content:
           "Drop a build prompt in. Watch SACE classify the tier, route partners, and quote a real cost vs. always-frontier baseline.",
       },
-      { property: "og:title", content: "Try SACE — Soupy Together Demo" },
+      { property: "og:title", content: "Try SACE — live tier classification demo" },
       {
         property: "og:description",
         content:
           "Live tier classification, partner routing, and cost breakdown for any build request.",
       },
+      { property: "og:url", content: "https://soupytogether.com/demo" },
     ],
+    links: [{ rel: "canonical", href: "https://soupytogether.com/demo" }],
   }),
   loader: async () => {
     const [savings, sace] = await Promise.all([
