@@ -167,35 +167,83 @@ export const tier0InferRoute = createServerFn({ method: "POST" })
     };
   });
 
+export interface Tier0Checkpoint {
+  id: string;
+  name: string;
+  model_family: string;
+  is_active: boolean;
+  measured_cost_per_mtoken_micros: number;
+  measured_tokens_per_sec: number;
+  trained_on_samples: number;
+  eval_pass_rate: number | null;
+  notes: string | null;
+  created_at: string;
+}
+export interface Tier0Run {
+  id: string;
+  latency_ms: number;
+  tokens_out: number;
+  cost_micros: number;
+  baseline_gpt5_micros: number;
+  status: string;
+  created_at: string;
+}
+export interface Tier0TrainingMetric {
+  step: number;
+  loss: number | null;
+  eval_score: number | null;
+  samples_per_sec: number | null;
+  created_at: string;
+  checkpoint_id: string | null;
+}
+export interface Tier0LiveStats {
+  checkpoint_id: string;
+  checkpoint_name: string;
+  total_runs: number;
+  avg_latency_ms: number;
+  avg_tokens_per_sec: number;
+  cost_per_mtoken_micros: number;
+  total_saved_micros: number;
+}
+export interface Tier0Dashboard {
+  checkpoints: Tier0Checkpoint[];
+  liveStats: Tier0LiveStats | null;
+  recentRuns: Tier0Run[];
+  trainingMetrics: Tier0TrainingMetric[];
+  configured: boolean;
+}
+
 /**
  * Dashboard read: active checkpoint + 24h stats + recent training metrics.
  * Safe to call from the browser via useServerFn — no secrets returned.
  */
-export const getTier0Dashboard = createServerFn({ method: "GET" }).handler(async () => {
-  const [checkpointRes, statsRes, recentRunsRes, trainingRes] = await Promise.all([
-    supabaseAdmin
-      .from("tier0_checkpoints")
-      .select("id, name, model_family, is_active, measured_cost_per_mtoken_micros, measured_tokens_per_sec, trained_on_samples, eval_pass_rate, notes, created_at")
-      .order("created_at", { ascending: false })
-      .limit(10),
-    supabaseAdmin.rpc("get_tier0_live_stats"),
-    supabaseAdmin
-      .from("tier0_runs")
-      .select("id, latency_ms, tokens_out, cost_micros, baseline_gpt5_micros, status, created_at")
-      .order("created_at", { ascending: false })
-      .limit(50),
-    supabaseAdmin
-      .from("tier0_training_metrics")
-      .select("step, loss, eval_score, samples_per_sec, created_at, checkpoint_id")
-      .order("created_at", { ascending: false })
-      .limit(200),
-  ]);
+export const getTier0Dashboard = createServerFn({ method: "GET" }).handler(
+  async (): Promise<Tier0Dashboard> => {
+    const [checkpointRes, statsRes, recentRunsRes, trainingRes] = await Promise.all([
+      supabaseAdmin
+        .from("tier0_checkpoints")
+        .select("id, name, model_family, is_active, measured_cost_per_mtoken_micros, measured_tokens_per_sec, trained_on_samples, eval_pass_rate, notes, created_at")
+        .order("created_at", { ascending: false })
+        .limit(10),
+      supabaseAdmin.rpc("get_tier0_live_stats"),
+      supabaseAdmin
+        .from("tier0_runs")
+        .select("id, latency_ms, tokens_out, cost_micros, baseline_gpt5_micros, status, created_at")
+        .order("created_at", { ascending: false })
+        .limit(50),
+      supabaseAdmin
+        .from("tier0_training_metrics")
+        .select("step, loss, eval_score, samples_per_sec, created_at, checkpoint_id")
+        .order("created_at", { ascending: false })
+        .limit(200),
+    ]);
 
-  return {
-    checkpoints: checkpointRes.data ?? [],
-    liveStats: statsRes.data?.[0] ?? null,
-    recentRuns: recentRunsRes.data ?? [],
-    trainingMetrics: trainingRes.data ?? [],
-    configured: Boolean(process.env.AMD_INFERENCE_URL && process.env.AMD_INFERENCE_KEY),
-  };
-});
+    return {
+      checkpoints: (checkpointRes.data ?? []) as unknown as Tier0Checkpoint[],
+      liveStats: ((statsRes.data as unknown as Tier0LiveStats[])?.[0] ?? null),
+      recentRuns: (recentRunsRes.data ?? []) as unknown as Tier0Run[],
+      trainingMetrics: (trainingRes.data ?? []) as unknown as Tier0TrainingMetric[],
+      configured: Boolean(process.env.AMD_INFERENCE_URL && process.env.AMD_INFERENCE_KEY),
+    };
+  },
+);
