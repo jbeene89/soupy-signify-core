@@ -74,8 +74,9 @@ function Index() {
               Stop paying frontier prices for trivial work.
             </h1>
             <p className="mt-8 font-serif italic text-xl md:text-2xl text-cream/90 max-w-3xl leading-snug">
-              Soupy Together routes your AI coding tasks to the tool best suited for each one — and handles most of the work itself, before any external API call. You pay $29/month, plus only what you actually use.
+              Soupy Together routes your AI coding tasks to the tool best suited for each one. An in-house layer that absorbs routine work before any external API call is in active development — until it ships, we route everything to the cheapest capable partner. You pay $29/month, plus only what you actually use.
             </p>
+
             <p className="mt-10 font-mono text-[12px] uppercase tracking-[0.14em] text-muted-foreground max-w-3xl">
               § POWERED BY SACE — A PUBLISHED COGNITIVE ARCHITECTURE FOR SIGNIFICANCE-AWARE AI ORCHESTRATION
             </p>
