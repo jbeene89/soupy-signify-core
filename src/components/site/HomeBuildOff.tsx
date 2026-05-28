@@ -73,7 +73,18 @@ export function HomeBuildOff() {
 
   return (
     <div>
+      {/* HONESTY NOTE */}
+      <div className="mt-8 border-l-4 border-cyan-accent pl-5 py-3 max-w-3xl bg-foreground/[0.02]">
+        <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-cyan-accent">
+          § SAMPLE DATA · SOUPY ISN'T A CONTESTANT YET
+        </div>
+        <p className="font-body text-[15px] text-cream/80 mt-2 leading-relaxed">
+          These podiums are plausible estimates, shown to demonstrate the rubric — not yet verified live runs. Soupy Together is the router, not a ranked tool: it has no in-house engine competing here yet, so it appears only as an honorable mention describing where it would route your work. Once our in-house tier is live and a verified round is published, the rankings here become real.
+        </p>
+      </div>
+
       {/* CATEGORY TABS */}
+
       <div
         role="tablist"
         aria-label="Build-Off categories"
