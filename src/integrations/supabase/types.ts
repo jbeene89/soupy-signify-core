@@ -251,6 +251,154 @@ export type Database = {
         }
         Relationships: []
       }
+      tier0_checkpoints: {
+        Row: {
+          created_at: string
+          endpoint_url: string | null
+          eval_pass_rate: number | null
+          id: string
+          is_active: boolean
+          measured_cost_per_mtoken_micros: number
+          measured_tokens_per_sec: number
+          model_family: string
+          name: string
+          notes: string | null
+          trained_on_samples: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          endpoint_url?: string | null
+          eval_pass_rate?: number | null
+          id?: string
+          is_active?: boolean
+          measured_cost_per_mtoken_micros?: number
+          measured_tokens_per_sec?: number
+          model_family: string
+          name: string
+          notes?: string | null
+          trained_on_samples?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          endpoint_url?: string | null
+          eval_pass_rate?: number | null
+          id?: string
+          is_active?: boolean
+          measured_cost_per_mtoken_micros?: number
+          measured_tokens_per_sec?: number
+          model_family?: string
+          name?: string
+          notes?: string | null
+          trained_on_samples?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      tier0_runs: {
+        Row: {
+          baseline_gpt5_micros: number
+          checkpoint_id: string | null
+          cost_micros: number
+          created_at: string
+          error_message: string | null
+          id: string
+          ip_hash: string | null
+          latency_ms: number
+          prompt_hash: string
+          prompt_length: number
+          status: string
+          tokens_in: number
+          tokens_out: number
+          ttft_ms: number | null
+        }
+        Insert: {
+          baseline_gpt5_micros?: number
+          checkpoint_id?: string | null
+          cost_micros?: number
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          ip_hash?: string | null
+          latency_ms?: number
+          prompt_hash: string
+          prompt_length: number
+          status?: string
+          tokens_in?: number
+          tokens_out?: number
+          ttft_ms?: number | null
+        }
+        Update: {
+          baseline_gpt5_micros?: number
+          checkpoint_id?: string | null
+          cost_micros?: number
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          ip_hash?: string | null
+          latency_ms?: number
+          prompt_hash?: string
+          prompt_length?: number
+          status?: string
+          tokens_in?: number
+          tokens_out?: number
+          ttft_ms?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tier0_runs_checkpoint_id_fkey"
+            columns: ["checkpoint_id"]
+            isOneToOne: false
+            referencedRelation: "tier0_checkpoints"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tier0_training_metrics: {
+        Row: {
+          checkpoint_id: string | null
+          created_at: string
+          eval_score: number | null
+          gpu_util_pct: number | null
+          id: string
+          loss: number | null
+          notes: string | null
+          samples_per_sec: number | null
+          step: number
+        }
+        Insert: {
+          checkpoint_id?: string | null
+          created_at?: string
+          eval_score?: number | null
+          gpu_util_pct?: number | null
+          id?: string
+          loss?: number | null
+          notes?: string | null
+          samples_per_sec?: number | null
+          step: number
+        }
+        Update: {
+          checkpoint_id?: string | null
+          created_at?: string
+          eval_score?: number | null
+          gpu_util_pct?: number | null
+          id?: string
+          loss?: number | null
+          notes?: string | null
+          samples_per_sec?: number | null
+          step?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tier0_training_metrics_checkpoint_id_fkey"
+            columns: ["checkpoint_id"]
+            isOneToOne: false
+            referencedRelation: "tier0_checkpoints"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -263,6 +411,18 @@ export type Database = {
       enqueue_email: {
         Args: { payload: Json; queue_name: string }
         Returns: number
+      }
+      get_tier0_live_stats: {
+        Args: never
+        Returns: {
+          avg_latency_ms: number
+          avg_tokens_per_sec: number
+          checkpoint_id: string
+          checkpoint_name: string
+          cost_per_mtoken_micros: number
+          total_runs: number
+          total_saved_micros: number
+        }[]
       }
       get_tier0_savings_this_week: { Args: never; Returns: number }
       move_to_dlq: {

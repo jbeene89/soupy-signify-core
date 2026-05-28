@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as Tier0RouteImport } from './routes/tier0'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as PartnersRouteImport } from './routes/partners'
 import { Route as DemoRouteImport } from './routes/demo'
@@ -16,12 +17,18 @@ import { Route as BuildOffOperatorRouteImport } from './routes/build-off-operato
 import { Route as BuildOffRouteImport } from './routes/build-off'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiSaceCompleteRouteImport } from './routes/api/sace/complete'
+import { Route as ApiPublicTier0MetricsRouteImport } from './routes/api/public/tier0-metrics'
 import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
 import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
 import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
 import { Route as ApiBadgeCategoryRankToolRouteImport } from './routes/api/badge/$category/$rank/$tool'
 import { Route as ApiPublicBuildOffPreviewIdToolRouteImport } from './routes/api/public/build-off/preview.$id.$tool'
 
+const Tier0Route = Tier0RouteImport.update({
+  id: '/tier0',
+  path: '/tier0',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
@@ -55,6 +62,11 @@ const IndexRoute = IndexRouteImport.update({
 const ApiSaceCompleteRoute = ApiSaceCompleteRouteImport.update({
   id: '/api/sace/complete',
   path: '/api/sace/complete',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicTier0MetricsRoute = ApiPublicTier0MetricsRouteImport.update({
+  id: '/api/public/tier0-metrics',
+  path: '/api/public/tier0-metrics',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LovableEmailQueueProcessRoute =
@@ -93,6 +105,8 @@ export interface FileRoutesByFullPath {
   '/demo': typeof DemoRoute
   '/partners': typeof PartnersRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/tier0': typeof Tier0Route
+  '/api/public/tier0-metrics': typeof ApiPublicTier0MetricsRoute
   '/api/sace/complete': typeof ApiSaceCompleteRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
@@ -107,6 +121,8 @@ export interface FileRoutesByTo {
   '/demo': typeof DemoRoute
   '/partners': typeof PartnersRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/tier0': typeof Tier0Route
+  '/api/public/tier0-metrics': typeof ApiPublicTier0MetricsRoute
   '/api/sace/complete': typeof ApiSaceCompleteRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
@@ -122,6 +138,8 @@ export interface FileRoutesById {
   '/demo': typeof DemoRoute
   '/partners': typeof PartnersRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/tier0': typeof Tier0Route
+  '/api/public/tier0-metrics': typeof ApiPublicTier0MetricsRoute
   '/api/sace/complete': typeof ApiSaceCompleteRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
@@ -138,6 +156,8 @@ export interface FileRouteTypes {
     | '/demo'
     | '/partners'
     | '/sitemap.xml'
+    | '/tier0'
+    | '/api/public/tier0-metrics'
     | '/api/sace/complete'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
@@ -152,6 +172,8 @@ export interface FileRouteTypes {
     | '/demo'
     | '/partners'
     | '/sitemap.xml'
+    | '/tier0'
+    | '/api/public/tier0-metrics'
     | '/api/sace/complete'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
@@ -166,6 +188,8 @@ export interface FileRouteTypes {
     | '/demo'
     | '/partners'
     | '/sitemap.xml'
+    | '/tier0'
+    | '/api/public/tier0-metrics'
     | '/api/sace/complete'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
@@ -181,6 +205,8 @@ export interface RootRouteChildren {
   DemoRoute: typeof DemoRoute
   PartnersRoute: typeof PartnersRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  Tier0Route: typeof Tier0Route
+  ApiPublicTier0MetricsRoute: typeof ApiPublicTier0MetricsRoute
   ApiSaceCompleteRoute: typeof ApiSaceCompleteRoute
   LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
   LovableEmailAuthWebhookRoute: typeof LovableEmailAuthWebhookRoute
@@ -191,6 +217,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/tier0': {
+      id: '/tier0'
+      path: '/tier0'
+      fullPath: '/tier0'
+      preLoaderRoute: typeof Tier0RouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sitemap.xml': {
       id: '/sitemap.xml'
       path: '/sitemap.xml'
@@ -240,6 +273,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiSaceCompleteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/tier0-metrics': {
+      id: '/api/public/tier0-metrics'
+      path: '/api/public/tier0-metrics'
+      fullPath: '/api/public/tier0-metrics'
+      preLoaderRoute: typeof ApiPublicTier0MetricsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/lovable/email/queue/process': {
       id: '/lovable/email/queue/process'
       path: '/lovable/email/queue/process'
@@ -285,6 +325,8 @@ const rootRouteChildren: RootRouteChildren = {
   DemoRoute: DemoRoute,
   PartnersRoute: PartnersRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  Tier0Route: Tier0Route,
+  ApiPublicTier0MetricsRoute: ApiPublicTier0MetricsRoute,
   ApiSaceCompleteRoute: ApiSaceCompleteRoute,
   LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
   LovableEmailAuthWebhookRoute: LovableEmailAuthWebhookRoute,
