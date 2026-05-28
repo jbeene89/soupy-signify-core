@@ -1,13 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { getTier0Dashboard } from "@/functions/tier0-inference.functions";
-
-const tier0QueryOptions = queryOptions({
-  queryKey: ["tier0-dashboard"],
-  queryFn: () => getTier0Dashboard(),
-  staleTime: 30_000,
-});
 
 export const Route = createFileRoute("/tier0")({
   head: () => ({
@@ -20,7 +14,7 @@ export const Route = createFileRoute("/tier0")({
     ],
     links: [{ rel: "canonical", href: "https://soupytogether.com/tier0" }],
   }),
-  loader: ({ context }) => context.queryClient.ensureQueryData(tier0QueryOptions),
+  loader: () => getTier0Dashboard(),
   component: Tier0Page,
 });
 
@@ -31,8 +25,14 @@ function microsToCents(m: number | null | undefined): string {
 }
 
 function Tier0Page() {
-  const { data, refetch } = useSuspenseQuery(tier0QueryOptions);
+  const initial = Route.useLoaderData();
   const refresh = useServerFn(getTier0Dashboard);
+  const { data = initial, refetch } = useQuery({
+    queryKey: ["tier0-dashboard"],
+    queryFn: () => refresh(),
+    initialData: initial,
+    staleTime: 30_000,
+  });
 
   const active = data.checkpoints.find((c) => c.is_active);
   const stats = data.liveStats;
