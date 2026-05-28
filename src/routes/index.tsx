@@ -295,8 +295,9 @@ function Index() {
 
             <div className="mt-12 border border-cyan-accent p-8">
               <p className="font-serif italic text-xl leading-snug text-cream">
-                Soupy Together is cheaper because most of what you ask AI to do — rename a variable, add a route, write a query, scaffold a component — doesn't need a $200/month frontier model. We handle the small stuff in-house and only call premium tools when you actually need premium output. You stop paying frontier prices for trivial work.
+                Soupy Together aims to be cheaper because most of what you ask AI to do — rename a variable, add a route, write a query, scaffold a component — doesn't need a $200/month frontier model. Today we route the small stuff to the cheapest capable tool; an in-house tier to absorb it for near-zero cost is in development. Either way, we only reach for premium tools when you actually need premium output — so you stop paying frontier prices for trivial work.
               </p>
+
             </div>
           </FadeIn>
         </section>
