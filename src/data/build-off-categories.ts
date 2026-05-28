@@ -144,8 +144,11 @@ export const CATEGORY_RANKS: Record<CategoryId, CategoryRanks> = {
     status: "sample",
     podium: [
       { tool: "Claude Code", note: "Schema + aggregate query correct first pass, three rounds running." },
-      { tool: "Soupy Together", note: "Up from 3rd — routes data work to GPT-5 mini at a fraction of cost." },
       { tool: "Cursor", note: "Ships cleanly when the developer drives the schema design." },
+      { tool: "Lovable Pro", note: "Solid Supabase wiring, occasional invented column on edits." },
+    ],
+    honorableMentions: [
+      { tool: "Soupy Together", note: "Not ranked — routes data work to the cheapest capable specialist. No in-house model competing yet." },
     ],
   },
   "honesty-under-uncertainty": {
@@ -155,11 +158,11 @@ export const CATEGORY_RANKS: Record<CategoryId, CategoryRanks> = {
     status: "sample",
     podium: [
       { tool: "Claude Code", note: "Asked clarifying questions on every ambiguous brief. No confabulation." },
-      { tool: "Soupy Together", note: "Returns labeled estimates with uncertainty bands by default." },
       { tool: "Cursor", note: "Surfaces ambiguity in plan mode — better than autonomous mode." },
+      { tool: "v0 by Vercel", note: "Improved R2→R3 — now flags missing brand context instead of guessing." },
     ],
     honorableMentions: [
-      { tool: "v0 by Vercel", note: "Improved R2→R3 — now flags missing brand context instead of guessing." },
+      { tool: "Soupy Together", note: "Not ranked — the platform itself labels estimates with uncertainty, but it isn't a contestant in this category yet." },
     ],
   },
   "cost-per-output": {
@@ -168,11 +171,15 @@ export const CATEGORY_RANKS: Record<CategoryId, CategoryRanks> = {
     date: "2026-05-01",
     status: "sample",
     podium: [
-      { tool: "Soupy Together", note: "Tier 0/1 absorbs ~90% of work. Cheapest by an order of magnitude." },
-      { tool: "Bolt", note: "Cheap on small tasks, capped quickly on bigger ones." },
+      { tool: "Bolt", note: "Cheapest on small tasks, capped quickly on bigger ones." },
       { tool: "v0 by Vercel", note: "Reasonable per-output cost on UI-only work." },
+      { tool: "Lovable Pro", note: "Mid-range cost, strongest when the task is frontend-heavy." },
+    ],
+    honorableMentions: [
+      { tool: "Soupy Together", note: "Not ranked yet — the cost edge depends on an in-house absorption tier that's still in development. We measure it once it's live." },
     ],
   },
+
 };
 
 /** All categories, in featured-rotation order. */
