@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { getTier0Dashboard } from "@/functions/tier0-inference.functions";
+import { getTier0Dashboard, type Tier0Dashboard } from "@/functions/tier0-inference.functions";
 
 export const Route = createFileRoute("/tier0")({
   head: () => ({
