@@ -25,11 +25,11 @@ function microsToCents(m: number | null | undefined): string {
 }
 
 function Tier0Page() {
-  const initial = Route.useLoaderData();
+  const initial = Route.useLoaderData() as Tier0Dashboard;
   const refresh = useServerFn(getTier0Dashboard);
-  const { data = initial, refetch } = useQuery({
+  const { data = initial, refetch } = useQuery<Tier0Dashboard>({
     queryKey: ["tier0-dashboard"],
-    queryFn: () => refresh(),
+    queryFn: () => refresh() as Promise<Tier0Dashboard>,
     initialData: initial,
     staleTime: 30_000,
   });
