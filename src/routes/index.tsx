@@ -21,11 +21,12 @@ export const Route = createFileRoute("/")({
 });
 
 const tiers = [
-  { tier: "TIER 0", title: "Local Absorption", pct: "60%", desc: "In-house model handles trivial work. No external API call." },
+  { tier: "TIER 0", title: "Local Absorption", pct: "—", desc: "Target: an in-house model handles trivial work with no external API call. In development — not live yet." },
   { tier: "TIER 1", title: "Single Partner", pct: "30%", desc: "Routed to the partner tool best matched to the task." },
   { tier: "TIER 2", title: "Multi-Partner", pct: "9%", desc: "Composed across two or more specialized tools." },
   { tier: "TIER 3", title: "Cortex Escalation", pct: "1%", desc: "Frontier model invoked only on significance interrupt." },
 ];
+
 
 const pricingRows = [
   { tool: "ChatGPT Plus", price: "$20", notes: "Conversational only — no orchestration" },
