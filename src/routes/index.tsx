@@ -205,9 +205,10 @@ function Index() {
             <h2 id="arch-heading" className="font-serif text-4xl md:text-5xl leading-tight max-w-3xl">
               Anatomy over monolith.
             </h2>
-            <div className="grid md:grid-cols-2 gap-12 md:gap-20 mt-16">
-              <div>
                 <p className="font-body text-[18px] leading-[1.75] text-cream/90">
+                  Soupy Together is built on SACE — the Significance-Aware Cognitive Engine, a published cognitive architecture that mirrors how biological nervous systems handle attention. Most processing is meant to happen in small specialized models near the sensor stream, with expensive frontier models dormant by default and woken only on interrupt — when consensus across modalities indicates a significant event. The design target is a system that handles 60% of requests in-house for cents, escalates 30% to specialized partners, composes 9% across multiple tools, and only invokes a frontier model on the rare 1% that genuinely require it. Today the routing and partner layers are live; the in-house Tier 0 model is still in development, so that 60% is currently routed to the cheapest capable partner rather than absorbed locally.
+                </p>
+
                   Soupy Together is built on SACE — the Significance-Aware Cognitive Engine, a published cognitive architecture that mirrors how biological nervous systems handle attention. Most processing happens in small specialized models near the sensor stream. The expensive frontier models are dormant by default and woken only on interrupt — when consensus across modalities indicates a significant event. The result is a system that handles 60% of requests for cents, escalates 30% to specialized partners, composes 9% across multiple tools, and only invokes a frontier model on the rare 1% that genuinely require it.
                 </p>
                 <div className="mt-8 border border-rule">
