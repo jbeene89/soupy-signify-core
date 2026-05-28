@@ -21,11 +21,12 @@ export const Route = createFileRoute("/")({
 });
 
 const tiers = [
-  { tier: "TIER 0", title: "Local Absorption", pct: "60%", desc: "In-house model handles trivial work. No external API call." },
+  { tier: "TIER 0", title: "Local Absorption", pct: "—", desc: "Target: an in-house model handles trivial work with no external API call. In development — not live yet." },
   { tier: "TIER 1", title: "Single Partner", pct: "30%", desc: "Routed to the partner tool best matched to the task." },
   { tier: "TIER 2", title: "Multi-Partner", pct: "9%", desc: "Composed across two or more specialized tools." },
   { tier: "TIER 3", title: "Cortex Escalation", pct: "1%", desc: "Frontier model invoked only on significance interrupt." },
 ];
+
 
 const pricingRows = [
   { tool: "ChatGPT Plus", price: "$20", notes: "Conversational only — no orchestration" },
@@ -74,8 +75,9 @@ function Index() {
               Stop paying frontier prices for trivial work.
             </h1>
             <p className="mt-8 font-serif italic text-xl md:text-2xl text-cream/90 max-w-3xl leading-snug">
-              Soupy Together routes your AI coding tasks to the tool best suited for each one — and handles most of the work itself, before any external API call. You pay $29/month, plus only what you actually use.
+              Soupy Together routes your AI coding tasks to the tool best suited for each one. An in-house layer that absorbs routine work before any external API call is in active development — until it ships, we route everything to the cheapest capable partner. You pay $29/month, plus only what you actually use.
             </p>
+
             <p className="mt-10 font-mono text-[12px] uppercase tracking-[0.14em] text-muted-foreground max-w-3xl">
               § POWERED BY SACE — A PUBLISHED COGNITIVE ARCHITECTURE FOR SIGNIFICANCE-AWARE AI ORCHESTRATION
             </p>
@@ -205,9 +207,11 @@ function Index() {
             </h2>
             <div className="grid md:grid-cols-2 gap-12 md:gap-20 mt-16">
               <div>
+
                 <p className="font-body text-[18px] leading-[1.75] text-cream/90">
-                  Soupy Together is built on SACE — the Significance-Aware Cognitive Engine, a published cognitive architecture that mirrors how biological nervous systems handle attention. Most processing happens in small specialized models near the sensor stream. The expensive frontier models are dormant by default and woken only on interrupt — when consensus across modalities indicates a significant event. The result is a system that handles 60% of requests for cents, escalates 30% to specialized partners, composes 9% across multiple tools, and only invokes a frontier model on the rare 1% that genuinely require it.
+                  Soupy Together is built on SACE — the Significance-Aware Cognitive Engine, a published cognitive architecture that mirrors how biological nervous systems handle attention. Most processing is meant to happen in small specialized models near the sensor stream, with expensive frontier models dormant by default and woken only on interrupt — when consensus across modalities indicates a significant event. The design target is a system that handles 60% of requests in-house for cents, escalates 30% to specialized partners, composes 9% across multiple tools, and only invokes a frontier model on the rare 1% that genuinely require it. Today the routing and partner layers are live; the in-house Tier 0 model is still in development, so that 60% is currently routed to the cheapest capable partner rather than absorbed locally.
                 </p>
+
                 <div className="mt-8 border border-rule">
                   {tiers.map((t, i) => (
                     <div
@@ -291,8 +295,9 @@ function Index() {
 
             <div className="mt-12 border border-cyan-accent p-8">
               <p className="font-serif italic text-xl leading-snug text-cream">
-                Soupy Together is cheaper because most of what you ask AI to do — rename a variable, add a route, write a query, scaffold a component — doesn't need a $200/month frontier model. We handle the small stuff in-house and only call premium tools when you actually need premium output. You stop paying frontier prices for trivial work.
+                Soupy Together aims to be cheaper because most of what you ask AI to do — rename a variable, add a route, write a query, scaffold a component — doesn't need a $200/month frontier model. Today we route the small stuff to the cheapest capable tool; an in-house tier to absorb it for near-zero cost is in development. Either way, we only reach for premium tools when you actually need premium output — so you stop paying frontier prices for trivial work.
               </p>
+
             </div>
           </FadeIn>
         </section>
