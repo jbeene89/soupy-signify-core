@@ -5,6 +5,7 @@ import { FadeIn } from "@/components/site/FadeIn";
 import { EmailForm } from "@/components/site/EmailForm";
 import { SaceEngineDemo } from "@/components/site/SaceEngineDemo";
 import { HomeBuildOff } from "@/components/site/HomeBuildOff";
+import { SoupySites } from "@/components/site/SoupySites";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -429,8 +430,11 @@ function Index() {
         </section>
       </main>
 
+      <SoupySites />
+
       {/* FOOTER */}
       <footer className="border-t border-rule">
+
         <div className="max-w-[1200px] mx-auto px-6 md:px-10 py-20 grid md:grid-cols-3 gap-12">
           {[
             {
