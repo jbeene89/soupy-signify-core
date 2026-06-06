@@ -430,8 +430,11 @@ function Index() {
         </section>
       </main>
 
+      <SoupySites />
+
       {/* FOOTER */}
       <footer className="border-t border-rule">
+
         <div className="max-w-[1200px] mx-auto px-6 md:px-10 py-20 grid md:grid-cols-3 gap-12">
           {[
             {
