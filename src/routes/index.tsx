@@ -5,6 +5,7 @@ import { FadeIn } from "@/components/site/FadeIn";
 import { EmailForm } from "@/components/site/EmailForm";
 import { SaceEngineDemo } from "@/components/site/SaceEngineDemo";
 import { HomeBuildOff } from "@/components/site/HomeBuildOff";
+import { SoupySites } from "@/components/site/SoupySites";
 
 export const Route = createFileRoute("/")({
   component: Index,
